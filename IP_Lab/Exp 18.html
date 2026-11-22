@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AgriMart – Farm supplies, delivered</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f4ec;--surface:#fff;--ink:#23301f;--muted:#5f6e5a;--line:#d4dccd;--brand:#2d6a3e;--brand-ink:#fff;--sun:#f2b705;--bad:#b83a2a;--soft:#e1ebd9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a10;--surface:#1b2619;--ink:#e6efe0;--muted:#a3b39c;--line:#2f4029;--brand:#7fcf8f;--brand-ink:#0d1a0f;--sun:#f5c431;--bad:#ff8a78;--soft:#243420}}
+:root[data-theme="dark"]{--bg:#121a10;--surface:#1b2619;--ink:#e6efe0;--muted:#a3b39c;--line:#2f4029;--brand:#7fcf8f;--brand-ink:#0d1a0f;--sun:#f5c431;--bad:#ff8a78;--soft:#243420}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Nunito Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Bitter,Georgia,serif;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}h2{font-size:clamp(1.5rem,3.5vw,2.1rem)}h3{font-size:1.1rem}
+p{margin:0 0 1em}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brand-ink)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:10px}
+.logo{font-family:Bitter,serif;font-weight:800;font-size:1.3rem}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:none;border:0;color:var(--brand-ink);font:600 .95rem "Nunito Sans",sans-serif;padding:8px 10px;border-radius:6px;cursor:pointer}
+nav button[aria-current="true"]{background:rgba(255,255,255,.2)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:10px 18px;font:700 .98rem "Nunito Sans",sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.sm{padding:5px 11px;font-size:.85rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
+.hero{padding:40px 0 14px}
+.hero p{max-width:60ch;color:var(--muted)}
+.demo{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.88rem;margin:10px 0}
+label{display:block;font-weight:700;font-size:.88rem;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.bar input{flex:1;min-width:200px}.bar select{width:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.tile{height:120px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:3rem;overflow:hidden;margin-bottom:10px}
+.tile img{width:100%;height:100%;object-fit:cover}
+.price{font-family:Bitter,serif;font-weight:700;color:var(--brand)}
+.muted{color:var(--muted);font-size:.9rem}
+.pill{display:inline-block;padding:1px 10px;border-radius:99px;font-size:.78rem;background:var(--soft);color:var(--brand);font-weight:700}
+.msg{min-height:1.3em;font-size:.9rem;margin-top:8px;color:var(--brand)}.msg.err{color:var(--bad)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.line input[type=number]{width:80px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td input[type=number]{width:84px}
+.view{padding:20px 0 40px}
+.hidden{display:none}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);max-width:460px;width:92%;padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.ship{display:flex;gap:4px;margin:6px 0}.ship i{flex:1;height:6px;border-radius:3px;background:var(--line)}.ship i.on{background:var(--brand)}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:.88rem}
+@media(max-width:780px){.two{grid-template-columns:1fr}.logo{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo">AgriMart</span>
+<nav id="nav"><button data-a="nav" data-v="shop" aria-current="true">Shop</button><button data-a="nav" data-v="cart" id="cartbtn">Cart (0)</button><button data-a="nav" data-v="account">My account</button><button data-a="nav" data-v="farmer">Farmer desk</button></nav></div></header>
+
+<main class="wrap">
+<div class="hero"><h1>Seeds, tools and feed from farmers near you.</h1>
+<p>Search by crop need, add items to your cart and follow each order until it reaches your gate.</p>
+<div class="demo"><b>Demo logins:</b> shopper 9000000001 · farmer 9000000002. The OTP shows on screen because this page cannot send SMS.</div></div>
+
+<div id="v-shop" class="view">
+ <div class="bar"><input id="q" placeholder="Search seeds, fertilizers, tools…" aria-label="Search products"><select id="cf" aria-label="Category"></select></div>
+ <div id="recs"></div>
+ <div class="grid" id="grid"></div>
+</div>
+
+<div id="v-cart" class="view hidden">
+ <h2>Your cart</h2>
+ <div class="two"><div class="card" id="cartbox"></div><div class="card" id="checkout"></div></div>
+</div>
+
+<div id="v-account" class="view hidden">
+ <div id="auth-shopper" class="card"></div><div id="acct"></div>
+</div>
+
+<div id="v-farmer" class="view hidden">
+ <div id="auth-farmer" class="card"></div><div id="fdesk"></div>
+</div>
+</main>
+<dialog id="dlg"></dialog>
+<footer><div class="wrap">AgriMart demo · Products, farmers and payments are simulated. Data stays in this tab and resets on reload.</div></footer>
+
+<script>
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function rs(n){return "₹"+Number(n).toLocaleString("en-IN")}
+var CATS=["Seeds","Fertilizers","Pesticides","Equipment","Tools"],ICON={Seeds:"🌱",Fertilizers:"🧪",Pesticides:"🧴",Equipment:"🚜",Tools:"🛠️"};
+var OST=["Placed","Confirmed","Rejected"],SST=["Not shipped","Packed","In transit","Delivered"];
+var users=[{phone:"9000000001",name:"Ravi",role:"shopper",wallet:2000,addr:"12 Lake Road, Thanjavur"},{phone:"9000000002",name:"Green Acres Farm",role:"farmer",wallet:0,addr:""}];
+var F="9000000002";
+var P=[
+ {id:1,name:"Hybrid paddy seed 5 kg",cat:"Seeds",price:420,stock:40,farmer:F,img:"",desc:"High-yield paddy seed, 125-day variety, treated against seed-borne fungus."},
+ {id:2,name:"Tomato seed packet",cat:"Seeds",price:90,stock:120,farmer:F,img:"",desc:"Disease-tolerant hybrid, about 3,000 seeds per packet."},
+ {id:3,name:"Vermicompost 10 kg",cat:"Fertilizers",price:260,stock:60,farmer:F,img:"",desc:"Organic compost that improves soil structure. Suits vegetables and fruit trees."},
+ {id:4,name:"Neem oil 1 litre",cat:"Pesticides",price:340,stock:35,farmer:F,img:"",desc:"Cold-pressed neem oil for sap-sucking pests. Mix 5 ml per litre of water."},
+ {id:5,name:"Manual seed drill",cat:"Equipment",price:3200,stock:8,farmer:F,img:"",desc:"Push-type seed drill with adjustable row spacing."},
+ {id:6,name:"Pruning shears",cat:"Tools",price:280,stock:50,farmer:F,img:"",desc:"Hardened steel blades with a non-slip handle."}];
+var orders=[],cart=[],U=null,nid=7,oid=5001,pend="",cat="",view="shop";
+var AS={shopper:{mode:"login",step:0,msg:"",err:0},farmer:{mode:"login",step:0,msg:"",err:0}};
+function uname(p){var u=users.filter(function(x){return x.phone==p})[0];return u?u.name:p}
+function tile(p){return '<div class="tile">'+(p.img?'<img src="'+p.img+'" alt="'+esc(p.name)+'">':ICON[p.cat])+'</div>'}
+function go(v){view=v;["shop","cart","account","farmer"].forEach(function(x){$("v-"+x).classList.toggle("hidden",x!=v)});
+ document.querySelectorAll("#nav button").forEach(function(b){b.setAttribute("aria-current",b.dataset.v==v)});draw()}
+function draw(){shop();cartR();authR("shopper");authR("farmer");acct();fdesk();
+ var n=cart.reduce(function(s,c){return s+c.qty},0);$("cartbtn").textContent="Cart ("+n+")"}
+function card(p){return '<div class="card">'+tile(p)+'<b>'+esc(p.name)+'</b><br><span class="pill">'+p.cat+'</span><p class="muted" style="margin:4px 0">Sold by '+esc(uname(p.farmer))+'</p><span class="price">'+rs(p.price)+'</span> <span class="muted">· '+(p.stock?p.stock+' in stock':'Out of stock')+'</span><p style="margin:10px 0 0"><button class="btn alt sm" data-a="det" data-id="'+p.id+'">Details</button> <button class="btn sm" data-a="add" data-id="'+p.id+'"'+(p.stock?'':' disabled')+'>Add to cart</button></p></div>'}
+function shop(){var q=$("q").value.toLowerCase(),c=$("cf").value;
+ var l=P.filter(function(p){return(!c||p.cat==c)&&(p.name+p.desc+p.cat).toLowerCase().indexOf(q)>-1});
+ $("grid").innerHTML=l.map(card).join("")||'<p class="muted">No products match. Try a different word or clear the category.</p>';
+ var r="";if(U&&U.role=="shopper"){var bought={};orders.filter(function(o){return o.buyer==U.phone}).forEach(function(o){o.items.forEach(function(i){var p=P.filter(function(x){return x.id==i.pid})[0];if(p)bought[p.cat]=1})});
+  var rec=P.filter(function(p){return bought[p.cat]&&p.stock&&!orders.some(function(o){return o.buyer==U.phone&&o.items.some(function(i){return i.pid==p.id})})}).slice(0,3);
+  if(rec.length)r='<h3>Recommended for you</h3><div class="grid" style="margin-bottom:22px">'+rec.map(card).join("")+'</div><h3>All products</h3>'}
+ $("recs").innerHTML=r}
+$("cf").innerHTML='<option value="">All categories</option>'+CATS.map(function(c){return'<option>'+c+'</option>'}).join("");
+$("q").oninput=shop;$("cf").onchange=shop;
+function total(){return cart.reduce(function(s,c){var p=P.filter(function(x){return x.id==c.pid})[0];return s+(p?p.price*c.qty:0)},0)}
+function cartR(){cart=cart.filter(function(c){return P.some(function(p){return p.id==c.pid})});
+ $("cartbox").innerHTML=cart.length?cart.map(function(c){var p=P.filter(function(x){return x.id==c.pid})[0];return '<div class="line"><span><b>'+esc(p.name)+'</b><br><span class="muted">'+rs(p.price)+' each</span></span><span><input type="number" min="1" max="'+p.stock+'" value="'+c.qty+'" data-ch="qty" data-id="'+p.id+'" aria-label="Quantity"> <button class="btn alt sm" data-a="rm" data-id="'+p.id+'">Remove</button></span></div>'}).join("")+'<p style="margin:12px 0 0"><b>Total: '+rs(total())+'</b></p>':'<p class="muted">Your cart is empty. Add something from the shop.</p><button class="btn" data-a="nav" data-v="shop">Browse products</button>';
+ var h='<h3>Delivery and payment</h3>';
+ if(U&&U.role=="shopper")h+='<label for="addr">Shipping address</label><textarea id="addr" rows="3">'+esc(U.addr)+'</textarea><p class="muted" style="margin-top:6px">Wallet balance: <b>'+rs(U.wallet)+'</b></p><button class="btn" data-a="order"'+(cart.length?'':' disabled')+'>Pay from wallet and order</button>';
+ else h+='<p class="muted">Log in as a shopper in My account to place your order. Your cart will wait for you.</p><button class="btn" data-a="nav" data-v="account">Go to login</button>';
+ $("checkout").innerHTML=h+'<div class="msg'+(AS.cm&&AS.ce?' err':'')+'" id="cmsg">'+(AS.cm||"")+'</div>'}
+function cmsg(m,e){AS.cm=m;AS.ce=e;$("cmsg").textContent=m;$("cmsg").className="msg"+(e?" err":"")}
+function authR(r){var a=AS[r],e=$("auth-"+r),lab=r=="farmer"?"Farmer":"Shopper";
+ if(U&&U.role==r){e.classList.add("hidden");return}e.classList.remove("hidden");
+ if(U){e.innerHTML='<p style="margin:0">You are logged in as '+esc(U.name)+' ('+U.role+'). Log out first to use a '+r+' account.</p><p style="margin:10px 0 0"><button class="btn" data-a="out">Log out</button></p>';return}
+ var h='<h3>'+lab+(a.mode=="login"?" login":" registration")+'</h3>';
+ if(a.step==0){h+='<button class="btn'+(a.mode=="login"?'':' alt')+' sm" data-a="mode" data-r="'+r+'" data-v="login">Login</button> <button class="btn'+(a.mode=="register"?'':' alt')+' sm" data-a="mode" data-r="'+r+'" data-v="register">Register</button><label for="ph-'+r+'">Mobile number</label><input id="ph-'+r+'" inputmode="numeric" maxlength="10">'+(a.mode=="register"?'<label for="nm-'+r+'">Your name</label><input id="nm-'+r+'">':'')+'<p style="margin-top:12px"><button class="btn" data-a="otp" data-r="'+r+'">Send OTP</button></p>'}
+ else h+='<div class="demo">Demo OTP: <b>'+a.otp+'</b></div><label for="ot-'+r+'">Enter OTP</label><input id="ot-'+r+'" inputmode="numeric" maxlength="6"><p style="margin-top:12px"><button class="btn" data-a="verify" data-r="'+r+'">Verify and continue</button></p>';
+ e.innerHTML=h+'<div class="msg'+(a.err?' err':'')+'">'+a.msg+'</div>'}
+function steps(o){return '<div class="ship" aria-label="Shipping progress">'+SST.map(function(s,i){return'<i class="'+(i<=o.ship&&o.status!=2?'on':'')+'"></i>'}).join("")+'</div>'}
+function acct(){var e=$("acct");if(!U||U.role!="shopper"){e.innerHTML="";return}
+ var my=orders.filter(function(o){return o.buyer==U.phone}).reverse();
+ e.innerHTML='<div class="two" style="margin-top:18px"><div class="card"><h3>Hello, '+esc(U.name)+'</h3><p class="muted">Mobile '+U.phone+'</p><p>Wallet balance: <span class="price">'+rs(U.wallet)+'</span></p><button class="btn alt sm" data-a="top" data-v="500">Add ₹500</button> <button class="btn alt sm" data-a="top" data-v="1000">Add ₹1,000</button><label for="aaddr">Shipping address</label><textarea id="aaddr" rows="3">'+esc(U.addr)+'</textarea><p style="margin:10px 0 0"><button class="btn sm" data-a="saddr">Save address</button> <button class="btn alt sm" data-a="out">Log out</button></p><div class="msg" id="amsg"></div></div>'+
+ '<div class="card"><h3>My orders</h3>'+(my.map(function(o){return '<div class="line" style="display:block"><b>#'+o.id+'</b> · '+rs(o.total)+' <span class="pill">'+OST[o.status]+'</span><br><span class="muted">'+o.items.map(function(i){return esc(i.name)+' × '+i.qty}).join(", ")+'<br>Shipping: '+SST[o.ship]+'</span>'+steps(o)+'</div>'}).join("")||'<p class="muted">No orders yet. Your orders and their shipping status will show here.</p>')+'</div></div>'}
+function fdesk(){var e=$("fdesk");if(!U||U.role!="farmer"){e.innerHTML="";return}
+ var mp=P.filter(function(p){return p.farmer==U.phone}),mo=orders.filter(function(o){return o.farmer==U.phone}).reverse(),rev=0,un=0;
+ mo.forEach(function(o){if(o.status!=2){rev+=o.total;o.items.forEach(function(i){un+=i.qty})}});
+ e.innerHTML='<div class="card" style="margin-top:18px"><h3>My sales</h3><p style="margin:0"><span class="price">'+rs(rev)+'</span> from '+un+' units across '+mo.length+' orders. <button class="btn alt sm" data-a="out">Log out</button></p></div>'+
+ '<div class="two" style="margin-top:18px"><div class="card"><h3>Add product</h3><label for="fn">Name</label><input id="fn"><label for="fc">Category</label><select id="fc">'+CATS.map(function(c){return'<option>'+c+'</option>'}).join("")+'</select><div class="two" style="gap:10px"><div><label for="fp">Price (₹)</label><input id="fp" type="number" min="1"></div><div><label for="fs">Stock</label><input id="fs" type="number" min="0"></div></div><label for="fd">Description</label><textarea id="fd" rows="2"></textarea><label for="fi">Product image</label><input id="fi" type="file" accept="image/*" data-ch="pimg"><p style="margin:12px 0 0"><button class="btn" data-a="padd">Add product</button></p><div class="msg" id="fmsg"></div></div>'+
+ '<div class="card"><h3>My products</h3><div class="scroll"><table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th></th></tr></thead><tbody>'+mp.map(function(p){return '<tr><td>'+(p.img?'🖼️ ':'')+esc(p.name)+'<br><input type="file" accept="image/*" data-ch="rimg" data-id="'+p.id+'" aria-label="Replace image" style="padding:2px;width:170px;font-size:.75rem"></td><td><input type="number" id="pp'+p.id+'" value="'+p.price+'"></td><td><input type="number" id="ps'+p.id+'" value="'+p.stock+'"></td><td><button class="btn sm" data-a="psave" data-id="'+p.id+'">Save</button> <button class="btn alt sm" data-a="pdel" data-id="'+p.id+'">Delete</button></td></tr>'}).join("")+'</tbody></table></div></div></div>'+
+ '<div class="card" style="margin-top:18px"><h3>Orders to manage</h3>'+(mo.map(function(o){return '<div class="line"><span><b>#'+o.id+'</b> · '+esc(uname(o.buyer))+' · '+rs(o.total)+'<br><span class="muted">'+o.items.map(function(i){return esc(i.name)+' × '+i.qty}).join(", ")+' → '+esc(o.addr)+'</span></span><span><select data-ch="ost" data-id="'+o.id+'" aria-label="Order status">'+OST.map(function(s,i){return'<option value="'+i+'"'+(o.status==i?' selected':'')+'>'+s+'</option>'}).join("")+'</select> <select data-ch="ssh" data-id="'+o.id+'" aria-label="Shipping status">'+SST.map(function(s,i){return'<option value="'+i+'"'+(o.ship==i?' selected':'')+'>'+s+'</option>'}).join("")+'</select></span></div>'}).join("")||'<p class="muted">No orders yet. New orders for your products will appear here.</p>')+'</div>'}
+function say(id,m,e){var x=$(id);if(x){x.textContent=m;x.className="msg"+(e?" err":"")}}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-a]");if(!b)return;var d=b.dataset,a=d.a,id=+d.id,r=d.r,p;
+ if(a=="nav")go(d.v);
+ if(a=="mode"){AS[r].mode=d.v;AS[r].msg="";authR(r)}
+ if(a=="otp"){var ph=$("ph-"+r).value.trim(),f=users.filter(function(x){return x.phone==ph})[0],s=AS[r];s.err=1;
+  if(!/^\d{10}$/.test(ph))s.msg="Enter a 10-digit mobile number.";
+  else if(s.mode=="login"&&(!f||f.role!=r))s.msg="No "+r+" account with that number. Use Register, or try the demo number above.";
+  else if(s.mode=="register"&&f)s.msg="That number is already registered. Use Login instead.";
+  else if(s.mode=="register"&&!$("nm-"+r).value.trim())s.msg="Enter your name to register.";
+  else{s.err=0;s.msg="";s.ph=ph;s.nm=s.mode=="register"?$("nm-"+r).value.trim():"";s.otp=String(Math.floor(100000+Math.random()*900000));s.step=1}authR(r)}
+ if(a=="verify"){var s2=AS[r];if($("ot-"+r).value!=s2.otp){s2.err=1;s2.msg="That OTP is wrong. Check the code and try again.";authR(r);return}
+  var u=users.filter(function(x){return x.phone==s2.ph})[0];if(!u){u={phone:s2.ph,name:s2.nm,role:r,wallet:0,addr:""};users.push(u)}
+  U=u;s2.step=0;s2.msg="";draw()}
+ if(a=="out"){U=null;draw()}
+ if(a=="det"){p=P.filter(function(x){return x.id==id})[0];$("dlg").innerHTML=tile(p)+'<h3>'+esc(p.name)+'</h3><p><span class="pill">'+p.cat+'</span> <span class="price">'+rs(p.price)+'</span></p><p>'+esc(p.desc)+'</p><p class="muted">Sold by '+esc(uname(p.farmer))+' · '+p.stock+' in stock</p><button class="btn" data-a="add" data-id="'+p.id+'" data-close="1"'+(p.stock?'':' disabled')+'>Add to cart</button> <button class="btn alt" data-a="close">Close</button>';$("dlg").showModal()}
+ if(a=="close")$("dlg").close();
+ if(a=="add"){p=P.filter(function(x){return x.id==id})[0];var c=cart.filter(function(x){return x.pid==id})[0];if(c){if(c.qty<p.stock)c.qty++}else cart.push({pid:id,qty:1});if(d.close)$("dlg").close();draw()}
+ if(a=="rm"){cart=cart.filter(function(x){return x.pid!=id});draw()}
+ if(a=="order"){var ad=$("addr").value.trim();if(!ad)return cmsg("Enter a shipping address first.",1);
+  for(var i=0;i<cart.length;i++){p=P.filter(function(x){return x.id==cart[i].pid})[0];if(cart[i].qty>p.stock)return cmsg(p.name+" has only "+p.stock+" left. Lower the quantity.",1)}
+  var t=total();if(t>U.wallet)return cmsg("Wallet balance is "+rs(U.wallet)+", but the order is "+rs(t)+". Add money in My account.",1);
+  var g={};cart.forEach(function(c){var p=P.filter(function(x){return x.id==c.pid})[0];p.stock-=c.qty;(g[p.farmer]=g[p.farmer]||[]).push({pid:p.id,name:p.name,qty:c.qty,price:p.price})});
+  Object.keys(g).forEach(function(fm){orders.push({id:oid++,buyer:U.phone,farmer:fm,items:g[fm],total:g[fm].reduce(function(s,i){return s+i.price*i.qty},0),addr:ad,status:0,ship:0})});
+  U.wallet-=t;U.addr=ad;cart=[];AS.cm="Order placed. Track it in My account.";AS.ce=0;draw()}
+ if(a=="top"){U.wallet+=+d.v;acct();say("amsg","Added "+rs(d.v)+" to your wallet (demo money).")}
+ if(a=="saddr"){U.addr=$("aaddr").value.trim();say("amsg","Address saved.")}
+ if(a=="padd"){var n=$("fn").value.trim(),pr=+$("fp").value,st=+$("fs").value;if(!n||pr<1||$("fs").value==="")return say("fmsg","Enter a name, a price and the stock count.",1);
+  P.push({id:nid++,name:n,cat:$("fc").value,price:pr,stock:st,farmer:U.phone,img:pend,desc:$("fd").value.trim()||"No description yet."});pend="";draw();say("fmsg","Product added to the shop.")}
+ if(a=="psave"){p=P.filter(function(x){return x.id==id})[0];p.price=+$("pp"+id).value;p.stock=+$("ps"+id).value;draw()}
+ if(a=="pdel"){P=P.filter(function(x){return x.id!=id});draw()}});
+document.addEventListener("change",function(ev){var t=ev.target,k=t.dataset.ch;if(!k)return;
+ if(k=="qty"){var c=cart.filter(function(x){return x.pid==t.dataset.id})[0],p=P.filter(function(x){return x.id==t.dataset.id})[0];c.qty=Math.max(1,Math.min(p.stock,+t.value||1));draw()}
+ if(k=="pimg"||k=="rimg"){var f=t.files[0];if(!f)return;var r=new FileReader();r.onload=function(){if(k=="pimg")pend=r.result;else{P.filter(function(x){return x.id==t.dataset.id})[0].img=r.result;draw()}};r.readAsDataURL(f)}
+ if(k=="ost"||k=="ssh"){var o=orders.filter(function(x){return x.id==t.dataset.id})[0];
+  if(k=="ost"){var nv=+t.value;if(nv==2&&o.status!=2){var by=users.filter(function(x){return x.phone==o.buyer})[0];by.wallet+=o.total}o.status=nv}else o.ship=+t.value;draw()}});
+draw();
+</script>
+</body>
+</html>

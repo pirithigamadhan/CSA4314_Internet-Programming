@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JobHunt Hub</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+:root{--y:#ffd43b;--k:#111;--p:#ff6b9d;--b:#4dabf7}
+body{font-family:'Space Grotesk',system-ui,sans-serif;background:#fff8e1 radial-gradient(#0002 1.5px,transparent 1.5px) 0 0/18px 18px;color:var(--k);max-width:940px;margin:0 auto;padding:16px}
+.hero{background:var(--y);border:3px solid var(--k);box-shadow:8px 8px 0 var(--k);padding:18px 22px;transform:rotate(-.6deg);margin:6px 0 20px}
+.hero h1{margin:0;font-size:2.4rem;letter-spacing:-1.5px}.hero p{margin:4px 0 0;font-weight:700}
+nav{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+nav a{background:#fff;border:3px solid var(--k);padding:6px 12px;font-weight:700;color:var(--k);text-decoration:none;box-shadow:3px 3px 0 var(--k);transition:.1s}
+nav a:hover{background:var(--p);transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--k)}
+h2{display:inline-block;background:var(--b);border:3px solid var(--k);padding:2px 10px;box-shadow:4px 4px 0 var(--k)}
+h3,h4{margin:.3em 0}
+label{font-weight:700}
+input,select,textarea{display:block;width:100%;padding:10px;margin:4px 0 12px;border:3px solid var(--k);background:#fff;color:var(--k);font:inherit;box-shadow:3px 3px 0 var(--k)}
+button{background:var(--p);color:var(--k);border:3px solid var(--k);padding:8px 14px;font:inherit;font-weight:700;cursor:pointer;box-shadow:3px 3px 0 var(--k)}
+button:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--k)}
+.card{background:#fff;border:3px solid var(--k);box-shadow:6px 6px 0 var(--k);padding:14px;margin:18px 0}
+.card:nth-child(even){background:#e7f5ff}.card:nth-child(3n){background:#fff0f6}
+table{width:100%;border-collapse:collapse;background:#fff;border:3px solid var(--k)}
+th{background:var(--y)}td,th{border:2px solid var(--k);padding:8px;text-align:left}
+#msg{min-height:1.5em;font-weight:700}#msg:not(:empty){background:var(--k);color:var(--y);padding:4px 10px;display:inline-block}
+.row{display:flex;gap:10px}
+</style></head><body>
+<div class="hero"><h1>💼 JobHunt Hub</h1><p>Find it. Post it. Land it.</p></div><nav id="nav"></nav><div id="msg"></div><div id="main"></div>
+<script>
+/* ===== core (same in all 5 projects): localStorage acts as the database ===== */
+const P='P21_',$=s=>document.querySelector(s);
+const L=k=>JSON.parse(localStorage.getItem(P+k)||'[]'),S=(k,v)=>localStorage.setItem(P+k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),id=()=>Date.now()+Math.floor(Math.random()*999);
+const lk=u=>/^https?:/.test(u||'')?`<a target=_blank href="${esc(u)}">Resume</a>`:'';
+let me=JSON.parse(sessionStorage.getItem('me'+P)||'null');const V={},H={},AFTER={};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',3500)};
+function fm(name,fields,btn,hid={}){return `<form onsubmit="return go(event,'${name}')">`+Object.entries(hid).map(([k,v])=>`<input type=hidden name=${k} value="${esc(v)}">`).join('')+fields.map(([n,l,t='text',o])=>`<label>${l}</label>`+(t=='select'?`<select name=${n}>${o.map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t=='textarea'?`<textarea name=${n} ${n[0]=='_'?'':'required'}></textarea>`:`<input name=${n} type=${t} step=any ${n[0]=='_'?'':'required'}>`)).join('')+`<button>${btn}</button></form>`}
+function go(e,n){e.preventDefault();H[n](Object.fromEntries(new FormData(e.target)));return false}
+function show(v,a){$('#main').innerHTML=V[v](a);nav();AFTER[v]&&AFTER[v](a)}
+function nav(){$('#nav').innerHTML=(me?MENU[me.role]:PUB).map(([l,v,a])=>`<a href="#" onclick="show('${v}'${a?`,'${a}'`:''});return false">${l}</a>`).join('')+(me?`<a href="#" onclick="logout();return false">Logout (${me.role})</a>`:'')}
+function logout(){me=null;sessionStorage.removeItem('me'+P);show('home')}
+V.login=r=>`<h2>${r[0].toUpperCase()+r.slice(1)} Login</h2>`+fm('login',[['u','Email / Username'],['p','Password','password']],'Login',{r});
+H.login=d=>{const t=L(d.r).find(x=>(x.email||x.username)==d.u&&x.password==d.p);if(!t)return msg('Invalid credentials');if(t.status&&t.status!='approved')return msg('Account not approved yet');me={role:d.r,id:t.id};sessionStorage.setItem('me'+P,JSON.stringify(me));show(d.r+'_home')};
+V.reg=r=>`<h2>Register ${r}</h2>`+fm('reg',REGF[r],'Register',{r});
+H.reg=d=>{const r=d.r;delete d.r;const a=L(r);if(a.some(x=>x.email==d.email))return msg('Email already registered');a.push({id:id(),...d,...(EXTRA[r]||{})});S(r,a);msg('Registered. Please login.'+(EXTRA[r]?' Wait for admin approval.':''));show('login',r)};
+const tb=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+if(!L('admin').length)S('admin',[{id:1,username:'admin',password:'admin123'}]);
+
+/* ===== project 21 ===== */
+const MENU={user:[['Browse / Search','home'],['My Applications','user_home'],['Saved Jobs','saved']],
+director:[['Post Vacancy','post'],['My Vacancies & Applicants','director_home'],['Browse Resumes','resumes']],
+admin:[['Approve Directors','admin_home'],['View Users','users'],['View Report','report']]};
+const PUB=[['Home','home'],['User Login','login','user'],['User Register','reg','user'],['Director Login','login','director'],['Director Register','reg','director'],['Admin Login','login','admin']];
+const REGF={user:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['_resume','Resume link (optional, http...)']],
+director:[['name','Company name'],['email','Email','email'],['password','Password','password'],['phone','Phone']]};
+const EXTRA={director:{status:'pending'}};
+const comp=d=>esc(L('director').find(x=>x.id==d)?.name);
+const card=v=>`<div class=card>${v._image?`<img src="${esc(v._image)}" style="max-width:100%;max-height:160px">`:''}<h3>${esc(v.title)}</h3><b>${comp(v.did)}</b> | ${esc(v.location)} | ${esc(v.category)}<p>${esc(v.description)}</p><small>Contact: ${esc(v.contact)}</small><br><br><button onclick="apply(${v.id})">Apply</button> <button onclick="save(${v.id})">Save</button></div>`;
+V.home=()=>`<h2>Vacancies</h2><div class=row><input id=q placeholder="Search title / keyword" oninput=res()><input id=l placeholder="Filter: location" oninput=res()><input id=c placeholder="Filter: category" oninput=res()></div><div id=res></div>`;
+function res(){const q=$('#q').value.toLowerCase(),l=$('#l').value.toLowerCase(),c=$('#c').value.toLowerCase(),ok=L('director').filter(d=>d.status=='approved').map(d=>d.id);
+$('#res').innerHTML=L('vacancy').filter(v=>ok.includes(v.did)&&(v.title+v.description).toLowerCase().includes(q)&&v.location.toLowerCase().includes(l)&&v.category.toLowerCase().includes(c)).map(card).join('')||'<p>No vacancies found.</p>'}
+AFTER.home=res;
+const need=()=>{if(me?.role!='user'){msg('Please login as a user first');show('login','user');return 1}};
+const apply=v=>{if(need())return;const a=L('app');if(a.some(x=>x.vid==v&&x.uid==me.id))return msg('Already applied');a.push({id:id(),vid:v,uid:me.id,on:new Date().toLocaleString()});S('app',a);msg('Applied successfully')};
+const save=v=>{if(need())return;const a=L('saved');if(!a.some(x=>x.vid==v&&x.uid==me.id)){a.push({vid:v,uid:me.id});S('saved',a)}msg('Job saved')};
+V.user_home=()=>`<h2>My Applications</h2>`+(L('app').filter(a=>a.uid==me.id).map(a=>{const v=L('vacancy').find(x=>x.id==a.vid);return v?`<div class=card>${esc(v.title)} - ${comp(v.did)}<br><small>Applied: ${a.on}</small></div>`:''}).join('')||'<p>None yet.</p>');
+V.saved=()=>`<h2>Saved Jobs</h2>`+(L('saved').filter(s=>s.uid==me.id).map(s=>L('vacancy').find(v=>v.id==s.vid)).filter(Boolean).map(card).join('')||'<p>None saved.</p>');
+V.post=()=>`<h2>Post Vacancy</h2>`+fm('post',[['title','Job title'],['category','Category'],['location','Location'],['description','Description','textarea'],['contact','Contact'],['_image','Image URL (optional)']],'Post');
+H.post=d=>{const a=L('vacancy');a.push({id:id(),did:me.id,...d});S('vacancy',a);msg('Vacancy posted');show('director_home')};
+V.director_home=()=>`<h2>My Vacancies & Applicants</h2>`+(L('vacancy').filter(v=>v.did==me.id).map(v=>`<div class=card><h3>${esc(v.title)}</h3>${esc(v.location)} | ${esc(v.category)} <button onclick="delV(${v.id})">Delete</button><h4>Applicants</h4>`+(L('app').filter(a=>a.vid==v.id).map(a=>{const u=L('user').find(x=>x.id==a.uid);return `<div>${esc(u.name)} - ${esc(u.email)} - ${esc(u.phone)} ${lk(u._resume)}</div>`}).join('')||'<small>No applicants</small>')+`</div>`).join('')||'<p>No vacancies posted.</p>');
+const delV=v=>{S('vacancy',L('vacancy').filter(x=>x.id!=v));S('app',L('app').filter(x=>x.vid!=v));show('director_home')};
+V.resumes=()=>`<h2>Posted Resumes</h2>`+tb(['Name','Email','Phone','Resume'],L('user').map(u=>[esc(u.name),esc(u.email),esc(u.phone),lk(u._resume)||'-']));
+V.admin_home=()=>`<h2>Directors</h2>`+(L('director').map(d=>`<div class=card>${esc(d.name)} (${esc(d.email)}) - <b>${d.status}</b> <button onclick="setSt(${d.id},'approved')">Approve</button> <button onclick="setSt(${d.id},'rejected')">Reject</button></div>`).join('')||'<p>None registered.</p>');
+const setSt=(i,s)=>{S('director',L('director').map(d=>d.id==i?{...d,status:s}:d));show('admin_home')};
+V.users=()=>`<h2>Users</h2>`+tb(['Name','Email','Phone'],L('user').map(u=>[esc(u.name),esc(u.email),esc(u.phone)]));
+V.report=()=>`<h2>Report</h2>`+tb(['Users','Directors','Vacancies','Applications'],[[L('user').length,L('director').length,L('vacancy').length,L('app').length]]);
+
+/* ===== built-in database viewer ===== */
+const tbls=()=>Object.keys(localStorage).filter(k=>k.startsWith(P)).map(k=>k.slice(P.length)).sort();
+const cols=r=>[...new Set(r.flatMap(o=>Object.keys(o)))];
+const dl=(n,t)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()};
+const dlJSON=()=>dl('database.json',JSON.stringify(Object.fromEntries(tbls().map(k=>[k,L(k)])),null,2));
+const sq=v=>typeof v=='number'?v:`'${String(typeof v=='object'?JSON.stringify(v):v??'').replace(/'/g,"''")}'`;
+const dlSQL=()=>dl('database.sql',tbls().map(k=>{const r=L(k);if(!r.length)return `-- ${k}: empty`;const c=cols(r);return r.map(o=>`INSERT INTO \`${k}\` (${c.map(x=>'`'+x+'`').join(',')}) VALUES (${c.map(x=>sq(o[x])).join(',')});`).join('\n')}).join('\n\n'));
+V.db=()=>`<h2>🗄️ Database Viewer</h2><p>Live data stored in this browser: <b>${tbls().length}</b> tables. Passwords are masked.</p><button onclick="dlSQL()">Download SQL (INSERTs)</button> <button onclick="dlJSON()">Download JSON</button> <button onclick="show('db')">Refresh</button> <button onclick="if(confirm('Delete ALL data in this project?')){tbls().forEach(k=>localStorage.removeItem(P+k));sessionStorage.clear();location.reload()}">Reset database</button>`+
+(tbls().map(k=>{const r=L(k),c=cols(r);return `<h3>${esc(k)} <small>(${r.length} rows)</small></h3>`+(r.length?`<div style="overflow-x:auto">`+tb(c.map(esc),r.map(o=>c.map(x=>x=='password'?'••••••':esc(typeof o[x]=='object'?JSON.stringify(o[x]):o[x]))))+`</div>`:'<small>empty table</small>')}).join('')||'<p>No data yet.</p>');
+const _nav=nav;nav=function(){_nav();$('#nav').innerHTML+=`<a href="#" onclick="show('db');return false">🗄️ Database</a>`};
+show(me?me.role+'_home':'home');
+</script></body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wanderlust Travels</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Caveat:wght@600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{font-family:Georgia,'Times New Roman',serif;background:linear-gradient(#bde0fe,#fff1e6 340px,#fff1e6);min-height:100vh;color:#264653;max-width:920px;margin:0 auto;padding:14px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(#4cc9f0,#a8dadc);border-radius:26px;padding:34px 24px 26px;border:4px solid #fff;box-shadow:0 10px 24px #26465333}
+.hero h1{margin:0;font-family:'Playfair Display',Georgia,serif;font-size:2.6rem;color:#fff;text-shadow:3px 3px 0 #264653}
+.hero p{margin:2px 0 0;font-family:'Caveat',cursive;font-size:1.7rem;color:#264653}
+.cloud{position:absolute;font-size:2.2rem;opacity:.85;animation:drift 22s linear infinite}.c1{top:8px;left:-60px}.c2{top:44px;left:-200px;animation-duration:30s}
+.plane{position:absolute;top:14px;font-size:2rem;animation:fly 9s ease-in-out infinite}
+@keyframes drift{to{left:110%}}@keyframes fly{0%{left:-5%;top:60px;transform:rotate(-12deg)}100%{left:100%;top:6px;transform:rotate(-12deg)}}
+.stamp{position:absolute;right:20px;bottom:14px;width:92px;height:92px;border:3px double #e76f51;border-radius:50%;color:#e76f51;font:700 .8rem/1.15 Georgia,serif;display:grid;place-items:center;text-align:center;transform:rotate(14deg);letter-spacing:2px;background:#fff9;padding-top:8px}
+nav{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+nav a{background:#fff;border:2px solid #264653;border-radius:6px 6px 14px 14px;padding:6px 14px;color:#264653;text-decoration:none;font-weight:700;transition:.2s}
+nav a:nth-child(odd){transform:rotate(-1.5deg)}nav a:nth-child(even){transform:rotate(1.5deg)}
+nav a:hover{background:#e76f51;color:#fff;transform:rotate(0) translateY(-3px)}
+h2{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;margin-bottom:6px}
+h4{text-transform:capitalize}
+label{font-family:'Caveat',cursive;font-size:1.25rem}
+input,select,textarea{display:block;width:100%;padding:10px;margin:2px 0 12px;border:2px dashed #2a9d8f;border-radius:10px;background:#fffdf7;color:#264653;font:inherit}
+input:focus,select:focus,textarea:focus{outline:3px solid #f4a26166}
+button{background:#2a9d8f;color:#fff;border:0;border-radius:999px;padding:9px 20px;font:700 1rem Georgia,serif;cursor:pointer;transition:.15s}
+button:hover{background:#e76f51;transform:scale(1.05)}
+.card{position:relative;background:#fffdf7;border:2px dashed #e76f51;border-left:14px solid #e76f51;border-radius:14px;padding:14px 56px 14px 16px;margin:16px 0;box-shadow:0 8px 18px #26465322}
+.card::before{content:"✈";position:absolute;right:14px;top:10px;font-size:2rem;color:#e76f51;opacity:.35;transform:rotate(45deg)}
+.card::after{content:"";position:absolute;right:56px;top:6px;bottom:6px;border-right:2px dotted #e76f5166}
+table{width:100%;border-collapse:collapse;background:#fffdf7;border:2px solid #264653}
+th{background:#264653;color:#ffd6a5}td,th{padding:8px;text-align:left;border-bottom:1px dashed #2a9d8f}
+#msg{min-height:1.4em;font-family:'Caveat',cursive;font-size:1.4rem;color:#e76f51}
+.row{display:flex;gap:8px}
+</style></head><body>
+<div class="hero"><span class="cloud c1">☁️</span><span class="cloud c2">☁️</span><span class="plane">✈️</span><h1>Wanderlust Travels</h1><p>Pack light. Wander far.</p><div class="stamp">WANDER<br>LUST<br>★ 2026 ★</div></div><nav id="nav"></nav><div id="msg"></div><div id="main"></div>
+<script>
+/* ===== core (same in all 5 projects): localStorage acts as the database ===== */
+const P='P24_',$=s=>document.querySelector(s);
+const L=k=>JSON.parse(localStorage.getItem(P+k)||'[]'),S=(k,v)=>localStorage.setItem(P+k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),id=()=>Date.now()+Math.floor(Math.random()*999);
+let me=JSON.parse(sessionStorage.getItem('me'+P)||'null');const V={},H={},AFTER={};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',3500)};
+function fm(name,fields,btn,hid={}){return `<form onsubmit="return go(event,'${name}')">`+Object.entries(hid).map(([k,v])=>`<input type=hidden name=${k} value="${esc(v)}">`).join('')+fields.map(([n,l,t='text',o])=>`<label>${l}</label>`+(t=='select'?`<select name=${n}>${o.map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t=='textarea'?`<textarea name=${n} ${n[0]=='_'?'':'required'}></textarea>`:`<input name=${n} type=${t} step=any ${n[0]=='_'?'':'required'}>`)).join('')+`<button>${btn}</button></form>`}
+function go(e,n){e.preventDefault();H[n](Object.fromEntries(new FormData(e.target)));return false}
+function show(v,a){$('#main').innerHTML=V[v](a);nav();AFTER[v]&&AFTER[v](a)}
+function nav(){$('#nav').innerHTML=(me?MENU[me.role]:PUB).map(([l,v,a])=>`<a href="#" onclick="show('${v}'${a?`,'${a}'`:''});return false">${l}</a>`).join('')+(me?`<a href="#" onclick="logout();return false">Logout (${me.role})</a>`:'')}
+function logout(){me=null;sessionStorage.removeItem('me'+P);show('home')}
+V.login=r=>`<h2>${r[0].toUpperCase()+r.slice(1)} Login</h2>`+fm('login',[['u','Email / Username'],['p','Password','password']],'Login',{r});
+H.login=d=>{const t=L(d.r).find(x=>(x.email||x.username)==d.u&&x.password==d.p);if(!t)return msg('Invalid credentials');if(t.status&&t.status!='approved')return msg('Account not approved yet');me={role:d.r,id:t.id};sessionStorage.setItem('me'+P,JSON.stringify(me));show(d.r+'_home')};
+V.reg=r=>`<h2>Register ${r}</h2>`+fm('reg',REGF[r],'Register',{r});
+H.reg=d=>{const r=d.r;delete d.r;const a=L(r);if(a.some(x=>x.email==d.email))return msg('Email already registered');a.push({id:id(),...d,...(EXTRA[r]||{})});S(r,a);msg('Registered. Please login.');show('login',r)};
+const tb=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+if(!L('admin').length)S('admin',[{id:1,username:'admin',password:'admin123'}]);
+
+/* ===== project 24 ===== */
+const MENU={user:[['View Food Details','food'],['View Hotel / Hostel Details','hotels'],['View Route Details','routes'],['My Accommodation Bookings','user_home']],
+admin:[['Manage Tourism / Food / Hotels / Routes','admin_home'],['View Booking Details','abook']]};
+const PUB=[['Home','home'],['User Login','login','user'],['User Register','reg','user'],['Admin Login','login','admin']];
+const REGF={user:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone']]};
+const EXTRA={};
+const hn=i=>esc(L('hotel').find(h=>h.id==i)?.name);
+V.home=()=>`<h2>Destinations</h2>`+(L('place').map(p=>`<div class=card>${p._image?`<img src="${esc(p._image)}" style="max-width:100%;max-height:180px">`:''}<h3>${esc(p.place)}</h3><p>${esc(p.description)}</p></div>`).join('')||'<p>No destinations yet. Login as admin (admin / admin123) to add some.</p>');
+const sb=ph=>`<input id=q placeholder="${ph}" oninput=flt()><div id=res></div>`;
+V.food=()=>`<h2>Food Details</h2>`+sb('Search place or food');
+V.hotels=()=>`<h2>Hotel / Hostel Details</h2>`+sb('Search place or hotel');
+let cur='food';AFTER.food=()=>{cur='food';flt()};AFTER.hotels=()=>{cur='hotels';flt()};
+function flt(){const q=$('#q').value.toLowerCase();$('#res').innerHTML=cur=='food'?
+(L('food').filter(f=>(f.name+f.place).toLowerCase().includes(q)).map(f=>`<div class=card><b>${esc(f.name)}</b> (${esc(f.place)}) - Rs ${f.price}<p>${esc(f.description)}</p></div>`).join('')||'<p>No results.</p>'):
+(L('hotel').filter(h=>(h.name+h.place).toLowerCase().includes(q)).map(h=>`<div class=card><b>${esc(h.name)}</b> (${esc(h.place)}) | ${esc(h.address)}<br>Rs ${h.price}/night | Rooms left: ${h.rooms}<div class=row><input type=date id=ci${h.id}><input type=date id=co${h.id}><button onclick="book(${h.id})">Book</button></div></div>`).join('')||'<p>No results.</p>')}
+const book=i=>{const h=L('hotel').find(x=>x.id==i),a=$('#ci'+i).value,b=$('#co'+i).value,n=(new Date(b)-new Date(a))/864e5;if(!a||!b||!(n>0))return msg('Check-out must be after check-in');if(h.rooms<1)return msg('No rooms available');
+const bk=L('booking');bk.push({id:id(),uid:me.id,hid:i,ci:a,co:b,total:n*h.price,status:'confirmed'});S('booking',bk);S('hotel',L('hotel').map(x=>x.id==i?{...x,rooms:x.rooms-1}:x));msg('Booking confirmed! Total Rs '+n*h.price);show('user_home')};
+V.routes=()=>`<h2>Route Details</h2>`+tb(['From','To','Mode','Fare (Rs)','Duration'],L('route').map(r=>[esc(r.source),esc(r.destination),esc(r.mode),r.fare,esc(r.duration)]));
+V.user_home=()=>`<h2>My Accommodation Bookings</h2>`+(L('booking').filter(b=>b.uid==me.id).map(b=>`<div class=card>${hn(b.hid)} | ${b.ci} to ${b.co} | Rs ${b.total} | <b>${b.status}</b> ${b.status=='confirmed'?`<button onclick="cancel(${b.id})">Cancel</button>`:''}</div>`).join('')||'<p>No bookings yet.</p>');
+const cancel=i=>{const b=L('booking').find(x=>x.id==i);S('booking',L('booking').map(x=>x.id==i?{...x,status:'cancelled'}:x));S('hotel',L('hotel').map(h=>h.id==b.hid?{...h,rooms:h.rooms+1}:h));show('user_home')};
+/* admin */
+const places=()=>L('place').map(p=>p.place);
+const add=(c,d)=>{const a=L(c);a.push({id:id(),...d});S(c,a);msg('Saved');show('admin_home')};
+V.admin_home=()=>`<h2>Post Tourism Details</h2>`+fm('place',[['place','Place'],['description','Description','textarea'],['_image','Image URL (optional)']],'Add')
++`<h2>Manage Food</h2>`+fm('food',[['place','Place','select',places()],['name','Food name'],['description','Description'],['price','Price','number']],'Add')
++`<h2>Manage Hotels</h2>`+fm('hotel',[['place','Place','select',places()],['name','Hotel name'],['address','Address'],['price','Price per night','number'],['rooms','Rooms available','number']],'Add')
++`<h2>Manage Routes</h2>`+fm('route',[['source','From'],['destination','To'],['mode','Mode','select',['flight','train','bus','car']],['fare','Fare','number'],['duration','Duration']],'Add')
++`<h2>Existing Records</h2>`+[['place','place'],['food','name'],['hotel','name'],['route','source']].map(([c,k])=>`<h4>${c}</h4>`+(L(c).map(r=>`<div class=card>${esc(r[k])}${c=='route'?' → '+esc(r.destination):''} <button onclick="del('${c}',${r.id})">Delete</button></div>`).join('')||'<small>none</small>')).join('');
+H.place=d=>add('place',d);H.food=d=>add('food',{...d,price:+d.price});H.hotel=d=>add('hotel',{...d,price:+d.price,rooms:+d.rooms});H.route=d=>add('route',{...d,fare:+d.fare});
+const del=(c,i)=>{S(c,L(c).filter(r=>r.id!=i));show('admin_home')};
+V.abook=()=>`<h2>Booking Details</h2>`+tb(['ID','User','Hotel','Check-in','Check-out','Amount','Status'],L('booking').map(b=>[String(b.id).slice(-5),esc(L('user').find(u=>u.id==b.uid)?.name),hn(b.hid),b.ci,b.co,b.total,b.status]));
+
+/* ===== built-in database viewer ===== */
+const tbls=()=>Object.keys(localStorage).filter(k=>k.startsWith(P)).map(k=>k.slice(P.length)).sort();
+const cols=r=>[...new Set(r.flatMap(o=>Object.keys(o)))];
+const dl=(n,t)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()};
+const dlJSON=()=>dl('database.json',JSON.stringify(Object.fromEntries(tbls().map(k=>[k,L(k)])),null,2));
+const sq=v=>typeof v=='number'?v:`'${String(typeof v=='object'?JSON.stringify(v):v??'').replace(/'/g,"''")}'`;
+const dlSQL=()=>dl('database.sql',tbls().map(k=>{const r=L(k);if(!r.length)return `-- ${k}: empty`;const c=cols(r);return r.map(o=>`INSERT INTO \`${k}\` (${c.map(x=>'`'+x+'`').join(',')}) VALUES (${c.map(x=>sq(o[x])).join(',')});`).join('\n')}).join('\n\n'));
+V.db=()=>`<h2>🗄️ Database Viewer</h2><p>Live data stored in this browser: <b>${tbls().length}</b> tables. Passwords are masked.</p><button onclick="dlSQL()">Download SQL (INSERTs)</button> <button onclick="dlJSON()">Download JSON</button> <button onclick="show('db')">Refresh</button> <button onclick="if(confirm('Delete ALL data in this project?')){tbls().forEach(k=>localStorage.removeItem(P+k));sessionStorage.clear();location.reload()}">Reset database</button>`+
+(tbls().map(k=>{const r=L(k),c=cols(r);return `<h3>${esc(k)} <small>(${r.length} rows)</small></h3>`+(r.length?`<div style="overflow-x:auto">`+tb(c.map(esc),r.map(o=>c.map(x=>x=='password'?'••••••':esc(typeof o[x]=='object'?JSON.stringify(o[x]):o[x]))))+`</div>`:'<small>empty table</small>')}).join('')||'<p>No data yet.</p>');
+const _nav=nav;nav=function(){_nav();$('#nav').innerHTML+=`<a href="#" onclick="show('db');return false">🗄️ Database</a>`};
+show(me?me.role+'_home':'home');
+</script></body></html>

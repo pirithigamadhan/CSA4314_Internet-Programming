@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library Management System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f0e8;
+    color: #29251f;
+}
+
+header {
+    background: #263c35;
+    color: white;
+    padding: 22px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 25px;
+}
+
+nav button {
+    padding: 10px 16px;
+    margin-left: 7px;
+    border: none;
+    border-radius: 5px;
+    background: #d6a85c;
+    color: #263c35;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+nav button:hover {
+    background: #f0c77e;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+.hero {
+    background: #e6ddca;
+    padding: 35px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.hero h2 {
+    color: #263c35;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #c7bdab;
+    border-radius: 5px;
+}
+
+button {
+    padding: 11px 17px;
+    background: #36594b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #263c35;
+}
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 10px #00000012;
+}
+
+h2 {
+    color: #263c35;
+    margin-bottom: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 18px;
+}
+
+.card {
+    background: #f4f0e8;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #d6a85c;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: #263c35;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th, td {
+    padding: 13px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #263c35;
+    color: white;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+form {
+    max-width: 600px;
+}
+
+footer {
+    background: #263c35;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+@media(max-width:600px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    nav button {
+        margin: 4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 Campus Library</h1>
+    <nav id="navigation">
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('books')">Books</button>
+        <button onclick="showSection('login')">Login</button>
+        <button onclick="showSection('register')">Register</button>
+        <button onclick="showSection('contact')">Contact</button>
+    </nav>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
+    <div class="hero">
+        <h2>Welcome to Campus Library</h2>
+        <p>Discover, Borrow and Explore Knowledge.</p>
+        <br>
+        <button onclick="showSection('books')">Explore Books</button>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>📖 Book Collection</h3>
+            <p>Search and explore available books.</p>
+        </div>
+        <div class="card">
+            <h3>🎓 Student Portal</h3>
+            <p>Manage your borrowing history.</p>
+        </div>
+        <div class="card">
+            <h3>📚 Study Materials</h3>
+            <p>Access year and semester-wise materials.</p>
+        </div>
+        <div class="card">
+            <h3>📋 Admin Dashboard</h3>
+            <p>Manage books, students and fines.</p>
+        </div>
+    </div>
+</section>
+
+<!-- BOOK SEARCH -->
+<section id="books" class="section hidden">
+    <h2>Search Books</h2>
+    <input type="text" id="search" placeholder="Search by title or author..." oninput="displayBooks()">
+    <div id="bookList" class="grid"></div>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="section hidden">
+    <h2>Login</h2>
+    <form onsubmit="login(event)">
+        <label>Email</label>
+        <input type="email" id="email" required>
+
+        <label>Password</label>
+        <input type="password" id="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+    <p>Admin: admin@library.com / admin123</p>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="section hidden">
+    <h2>Student Registration</h2>
+    <form onsubmit="register(event)">
+        <label>Student Name</label>
+        <input type="text" id="name" required>
+
+        <label>Register Number</label>
+        <input type="text" id="regno" required>
+
+        <label>Email</label>
+        <input type="email" id="regemail" required>
+
+        <label>Password</label>
+        <input type="password" id="regpassword" required>
+
+        <label>Department</label>
+        <input type="text" id="department" required>
+
+        <button type="submit">Register</button>
+    </form>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="admin" class="hidden">
+    <div class="section">
+        <h2>Librarian Admin Dashboard</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Total Books</h3>
+                <h2 id="totalBooks">0</h2>
+            </div>
+            <div class="card">
+                <h3>Available Books</h3>
+                <h2 id="availableBooks">0</h2>
+            </div>
+            <div class="card">
+                <h3>Issued Books</h3>
+                <h2 id="issuedBooks">0</h2>
+            </div>
+            <div class="card">
+                <h3>Students</h3>
+                <h2 id="totalStudents">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Add Book</h2>
+        <form onsubmit="addBook(event)">
+            <input id="title" placeholder="Book Title" required>
+            <input id="author" placeholder="Author Name" required>
+            <input id="isbn" placeholder="ISBN">
+            <select id="category">
+                <option>Science</option>
+                <option>Technology</option>
+                <option>Medical</option>
+                <option>Literature</option>
+                <option>Other</option>
+            </select>
+            <input id="quantity" type="number" min="1" placeholder="Number of Copies" required>
+            <button>Add Book</button>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2>Manage Books</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminBookList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Issue Book</h2>
+        <form onsubmit="issueBook(event)">
+            <select id="studentSelect" required></select>
+            <select id="bookSelect" required></select>
+            <label>Expected Return Date</label>
+            <input type="date" id="dueDate" required>
+            <button>Issue Book</button>
+        </form>
+    </div>
+
+    <div class="section">
+        <h2>Return Book / Fine Management</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Fine</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="issueList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Upload Study Material</h2>
+        <form onsubmit="uploadMaterial(event)">
+            <input id="materialName" placeholder="Material Name" required>
+            <select id="year">
+                <option>1</option><option>2</option>
+                <option>3</option><option>4</option>
+            </select>
+            <select id="semester">
+                <option>1</option><option>2</option>
+                <option>3</option><option>4</option>
+                <option>5</option><option>6</option>
+                <option>7</option><option>8</option>
+            </select>
+            <input type="file" id="materialFile" required>
+            <button>Upload Material</button>
+        </form>
+        <div id="adminMaterials"></div>
+    </div>
+
+    <div class="section">
+        <h2>Registered Students</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Register Number</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody id="studentList"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- STUDENT DASHBOARD -->
+<section id="student" class="hidden">
+    <div class="section">
+        <h2>Student Dashboard</h2>
+        <h3 id="studentWelcome"></h3>
+    </div>
+
+    <div class="section">
+        <h2>My Borrow History</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Expected Return</th>
+                        <th>Status</th>
+                        <th>Fine</th>
+                    </tr>
+                </thead>
+                <tbody id="myHistory"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Check Fine</h2>
+        <h3 id="myFine">₹0</h3>
+    </div>
+
+    <div class="section">
+        <h2>Search Study Materials</h2>
+        <div class="grid">
+            <select id="filterYear" onchange="displayMaterials()">
+                <option value="">All Years</option>
+                <option>1</option><option>2</option>
+                <option>3</option><option>4</option>
+            </select>
+            <select id="filterSemester" onchange="displayMaterials()">
+                <option value="">All Semesters</option>
+                <option>1</option><option>2</option>
+                <option>3</option><option>4</option>
+                <option>5</option><option>6</option>
+                <option>7</option><option>8</option>
+            </select>
+        </div>
+        <div id="materialList"></div>
+    </div>
+
+    <div class="section">
+        <h2>My Profile</h2>
+        <p id="profileDetails"></p>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section hidden">
+    <h2>Contact Library</h2>
+    <form onsubmit="contact(event)">
+        <input placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" required></textarea>
+        <button>Submit</button>
+    </form>
+</section>
+
+</div>
+
+<footer>
+    <p>© 2026 Campus Library Management System</p>
+</footer>
+
+<script>
+let books = JSON.parse(localStorage.getItem("books")) || [
+    {id:1,title:"Biomedical Engineering",author:"John Enderle",isbn:"101",category:"Medical",quantity:5,available:5},
+    {id:2,title:"Database Management Systems",author:"Raghu Ramakrishnan",isbn:"102",category:"Technology",quantity:4,available:4},
+    {id:3,title:"Biology",author:"Campbell",isbn:"103",category:"Science",quantity:3,available:3}
+];
+
+let users = JSON.parse(localStorage.getItem("users")) || [
+    {id:1,name:"Admin",regno:"ADMIN",email:"admin@library.com",password:"admin123",department:"Library",role:"admin"}
+];
+
+let issues = JSON.parse(localStorage.getItem("issues")) || [];
+let materials = JSON.parse(localStorage.getItem("materials")) || [];
+let currentUser = null;
+
+function saveData() {
+    localStorage.setItem("books",JSON.stringify(books));
+    localStorage.setItem("users",JSON.stringify(users));
+    localStorage.setItem("issues",JSON.stringify(issues));
+    localStorage.setItem("materials",JSON.stringify(materials));
+}
+
+function showSection(id) {
+    document.querySelectorAll(".container > section").forEach(s=>s.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+    if(id==="books") displayBooks();
+}
+
+function register(e) {
+    e.preventDefault();
+    if(users.some(u=>u.email===regemail.value)) {
+        alert("Email already registered");
+        return;
+    }
+
+    users.push({
+        id:Date.now(),
+        name:name.value,
+        regno:regno.value,
+        email:regemail.value,
+        password:regpassword.value,
+        department:department.value,
+        role:"student"
+    });
+
+    saveData();
+    alert("Registration successful!");
+    showSection("login");
+}
+
+function login(e) {
+    e.preventDefault();
+
+    let user=users.find(u=>u.email===email.value && u.password===password.value);
+
+    if(!user) {
+        alert("Invalid Login Details");
+        return;
+    }
+
+    currentUser=user;
+    document.querySelectorAll(".container > section").forEach(s=>s.classList.add("hidden"));
+
+    if(user.role==="admin") {
+        document.getElementById("admin").classList.remove("hidden");
+        displayAdmin();
+    } else {
+        document.getElementById("student").classList.remove("hidden");
+        displayStudent();
+    }
+
+    document.getElementById("navigation").innerHTML=
+    '<button onclick="showSection(\\'home\\')">Home</button><button onclick="logout()">Logout</button>';
+}
+
+function logout() {
+    currentUser=null;
+    location.reload();
+}
+
+function displayBooks() {
+    let q=document.getElementById("search").value.toLowerCase();
+
+    document.getElementById("bookList").innerHTML=books
+    .filter(b=>b.title.toLowerCase().includes(q)||b.author.toLowerCase().includes(q))
+    .map(b=>`
+        <div class="card">
+            <h3>${b.title}</h3>
+            <p>Author: ${b.author}</p>
+            <p>ISBN: ${b.isbn}</p>
+            <p>Category: ${b.category}</p>
+            <p>Available: ${b.available}</p>
+        </div>
+    `).join("");
+}
+
+function addBook(e) {
+    e.preventDefault();
+
+    books.push({
+        id:Date.now(),
+        title:title.value,
+        author:author.value,
+        isbn:isbn.value,
+        category:category.value,
+        quantity:Number(quantity.value),
+        available:Number(quantity.value)
+    });
+
+    saveData();
+    displayAdmin();
+    e.target.reset();
+    alert("Book Added Successfully");
+}
+
+function displayAdmin() {
+    totalBooks.innerText=books.reduce((a,b)=>a+b.quantity,0);
+    availableBooks.innerText=books.reduce((a,b)=>a+b.available,0);
+    issuedBooks.innerText=issues.filter(i=>i.status==="Issued").length;
+    totalStudents.innerText=users.filter(u=>u.role==="student").length;
+
+    adminBookList.innerHTML=books.map(b=>`
+        <tr>
+            <td>${b.title}</td>
+            <td>${b.author}</td>
+            <td>${b.isbn}</td>
+            <td>${b.available}</td>
+            <td>
+                <button onclick="editBook(${b.id})">Edit</button>
+                <button onclick="deleteBook(${b.id})">Delete</button>
+            </td>
+        </tr>
+    `).join("");
+
+    studentSelect.innerHTML=users.filter(u=>u.role==="student")
+    .map(u=>`<option value="${u.id}">${u.name}</option>`).join("");
+
+    bookSelect.innerHTML=books.filter(b=>b.available>0)
+    .map(b=>`<option value="${b.id}">${b.title}</option>`).join("");
+
+    issueList.innerHTML=issues.map(i=>{
+        let u=users.find(x=>x.id===i.userId);
+        let b=books.find(x=>x.id===i.bookId);
+        return `<tr>
+            <td>${u?.name||"Unknown"}</td>
+            <td>${b?.title||"Unknown"}</td>
+            <td>${i.issue}</td>
+            <td>${i.due}</td>
+            <td>${i.status}</td>
+            <td>₹${calculateFine(i)}</td>
+            <td>${i.status==="Issued"?`<button onclick="returnBook(${i.id})">Return</button>`:"Completed"}</td>
+        </tr>`;
+    }).join("");
+
+    studentList.innerHTML=users.filter(u=>u.role==="student").map(u=>`
+        <tr>
+            <td>${u.name}</td>
+            <td>${u.regno}</td>
+            <td>${u.email}</td>
+            <td>${u.department}</td>
+        </tr>
+    `).join("");
+
+    adminMaterials.innerHTML=materials.map(m=>`<p>${m.name} - Year ${m.year}, Semester ${m.semester}</p>`).join("");
+}
+
+function editBook(id) {
+    let b=books.find(x=>x.id===id);
+    let newTitle=prompt("Enter Book Title",b.title);
+    if(newTitle===null)return;
+    let newAuthor=prompt("Enter Author",b.author);
+    if(newAuthor===null)return;
+    b.title=newTitle;
+    b.author=newAuthor;
+    saveData();
+    displayAdmin();
+}
+
+function deleteBook(id) {
+    if(issues.some(i=>i.bookId===id&&i.status==="Issued")) {
+        alert("This book is currently issued.");
+        return;
+    }
+    if(confirm("Delete this book?")) {
+        books=books.filter(b=>b.id!==id);
+        saveData();
+        displayAdmin();
+    }
+}
+
+function issueBook(e) {
+    e.preventDefault();
+
+    let book=books.find(b=>b.id==bookSelect.value);
+    if(!book||book.available<1) {
+        alert("Book not available");
+        return;
+    }
+
+    book.available--;
+
+    issues.push({
+        id:Date.now(),
+        userId:Number(studentSelect.value),
+        bookId:book.id,
+        issue:new Date().toISOString().slice(0,10),
+        due:dueDate.value,
+        status:"Issued"
+    });
+
+    saveData();
+    displayAdmin();
+    alert("Book Issued Successfully");
+}
+
+function calculateFine(i) {
+    if(i.status==="Returned")return i.fine||0;
+    let days=Math.max(0,Math.floor((new Date()-new Date(i.due))/(1000*60*60*24)));
+    return days*5;
+}
+
+function returnBook(id) {
+    let i=issues.find(x=>x.id===id);
+    let fine=calculateFine(i);
+    if(!confirm("Return book? Fine: ₹"+fine))return;
+
+    i.status="Returned";
+    i.fine=fine;
+    let b=books.find(x=>x.id===i.bookId);
+    if(b)b.available++;
+
+    saveData();
+    displayAdmin();
+}
+
+function displayStudent() {
+    studentWelcome.innerText="Welcome "+currentUser.name;
+
+    let mine=issues.filter(i=>i.userId===currentUser.id);
+
+    myHistory.innerHTML=mine.map(i=>{
+        let b=books.find(x=>x.id===i.bookId);
+        return `<tr>
+            <td>${b?.title||"Unknown"}</td>
+            <td>${i.issue}</td>
+            <td>${i.due}</td>
+            <td>${i.status}</td>
+            <td>₹${calculateFine(i)}</td>
+        </tr>`;
+    }).join("");
+
+    myFine.innerText="₹"+mine.reduce((a,i)=>a+calculateFine(i),0);
+
+    profileDetails.innerHTML=`
+        Name: ${currentUser.name}<br>
+        Register Number: ${currentUser.regno}<br>
+        Email: ${currentUser.email}<br>
+        Department: ${currentUser.department}
+    `;
+
+    displayMaterials();
+}
+
+function uploadMaterial(e) {
+    e.preventDefault();
+    let file=materialFile.files[0];
+    if(!file)return;
+
+    if(file.size>2*1024*1024) {
+        alert("Please select a file smaller than 2 MB.");
+        return;
+    }
+
+    let reader=new FileReader();
+
+    reader.onload=function() {
+        materials.push({
+            name:materialName.value,
+            year:year.value,
+            semester:semester.value,
+            fileName:file.name,
+            data:reader.result
+        });
+
+        saveData();
+        displayAdmin();
+        e.target.reset();
+        alert("Material Uploaded Successfully");
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function displayMaterials() {
+    let y=document.getElementById("filterYear").value;
+    let s=document.getElementById("filterSemester").value;
+
+    materialList.innerHTML=materials.filter(m=>
+        (!y||m.year===y)&&(!s||m.semester===s)
+    ).map(m=>`
+        <div class="card">
+            <h3>${m.name}</h3>
+            <p>Year: ${m.year} | Semester: ${m.semester}</p>
+            <a href="${m.data}" download="${m.fileName}">Download Material</a>
+        </div>
+    `).join("")||"No materials available.";
+}
+
+function contact(e) {
+    e.preventDefault();
+    alert("Thank you! Your message has been submitted.");
+    e.target.reset();
+}
+
+displayBooks();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RentRide – Rent a vehicle in minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eceff3;--surface:#fff;--ink:#172230;--muted:#5b6877;--line:#d3dae2;--brand:#0b4f5c;--brand-ink:#fff;--go:#ff6a1a;--ok:#1d8a52;--bad:#c23b2e;--soft:#dde7ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1820;--surface:#18242f;--ink:#e8eef4;--muted:#9fb0bf;--line:#2c3e4d;--brand:#4cc0d4;--brand-ink:#06232a;--go:#ff8a45;--ok:#4cd08b;--bad:#ff8878;--soft:#203342}}
+:root[data-theme="dark"]{--bg:#0f1820;--surface:#18242f;--ink:#e8eef4;--muted:#9fb0bf;--line:#2c3e4d;--brand:#4cc0d4;--brand-ink:#06232a;--go:#ff8a45;--ok:#4cd08b;--bad:#ff8878;--soft:#203342}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "DM Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Outfit,sans-serif;line-height:1.12;margin:0 0 .5em}
+h1{font-size:clamp(2.3rem,6vw,3.7rem);font-weight:800;letter-spacing:-.01em}h2{font-size:clamp(1.4rem,3.2vw,1.9rem)}h3{font-size:1.1rem}
+p{margin:0 0 1em}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brand-ink)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:Outfit,sans-serif;font-weight:800;font-size:1.35rem}
+nav button{background:none;border:0;color:var(--brand-ink);font:700 .95rem "DM Sans",sans-serif;padding:8px 11px;border-radius:6px;cursor:pointer}
+nav button[aria-current="true"]{background:rgba(255,255,255,.2)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--go);outline-offset:2px}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:10px 18px;font:700 .95rem "DM Sans",sans-serif;cursor:pointer}
+.btn.go{background:var(--go);color:#1b1006}
+.btn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.sm{padding:5px 11px;font-size:.84rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.hero{padding:40px 0 10px}
+.hero p{color:var(--muted);max-width:56ch}
+.search{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;border-top:5px solid var(--go)}
+.search label{margin-top:0}
+label{display:block;font-weight:700;font-size:.86rem;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:20px 0}
+.grid .card{margin:0}
+.tile{height:130px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:3.6rem;overflow:hidden;margin-bottom:10px}
+.tile img{width:100%;height:100%;object-fit:cover}
+.price{font-family:Outfit,sans-serif;font-weight:700;font-size:1.15rem;color:var(--brand)}
+.pill{display:inline-block;padding:1px 10px;border-radius:99px;font-size:.78rem;font-weight:700;background:var(--soft);color:var(--brand)}
+.pill.ok{background:var(--ok);color:#fff}.pill.warn{background:#f6d77a;color:#3a2c00}.pill.bad{background:var(--bad);color:#fff}
+.muted{color:var(--muted);font-size:.9rem}
+.msg{min-height:1.3em;font-size:.9rem;margin-top:8px;color:var(--ok)}.msg.err{color:var(--bad)}
+.demo{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.88rem;margin:10px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.portal{display:grid;grid-template-columns:180px 1fr;gap:22px;padding:22px 0 40px}
+.side{display:flex;flex-direction:column;gap:4px}
+.side button{text-align:left;background:none;border:0;border-left:4px solid transparent;padding:9px 12px;font:700 .95rem "DM Sans",sans-serif;color:var(--muted);cursor:pointer}
+.side button[aria-current="true"]{border-color:var(--go);color:var(--ink);background:var(--surface)}
+.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td input,td select{padding:4px 6px;min-width:80px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);max-width:480px;width:92%;padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.hidden{display:none}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:.88rem}
+@media(max-width:780px){.two,.portal{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto}.side button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent}.side button[aria-current="true"]{border-bottom-color:var(--go)}.logo{font-size:1.15rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo">RentRide</span><nav id="nav"><button data-a="page" data-v="rent" aria-current="true">Rent a vehicle</button><button data-a="page" data-v="user">My account</button><button data-a="page" data-v="admin">Admin</button></nav></div></header>
+<main class="wrap">
+<div id="v-rent">
+ <div class="hero"><h1>Pick a vehicle. Pick a day. Drive.</h1><p>Search cars, SUVs and trucks by location and dates. Book in a minute and get a pickup time from the rental desk.</p></div>
+ <div class="search"><div><label for="st">Vehicle type</label><select id="st"><option value="">Any type</option><option>Car</option><option>SUV</option><option>Truck</option></select></div>
+ <div><label for="sl">Location</label><select id="sl"></select></div>
+ <div><label for="sd">Pickup date</label><input id="sd" type="date"></div>
+ <div><label for="sn">Days</label><input id="sn" type="number" min="1" max="30" value="2"></div>
+ <div><label for="sp">Max price per day (₹)</label><input id="sp" type="number" min="0" placeholder="Any"></div></div>
+ <p class="muted" id="scount" style="margin:12px 0 0"></p>
+ <div class="grid" id="grid"></div>
+ <div class="demo"><b>Demo logins:</b> customer rider / ride123 · admin admin / admin123. Payments are simulated.</div>
+</div>
+<div id="v-user" class="hidden"></div>
+<div id="v-admin" class="hidden"></div>
+</main>
+<dialog id="dlg"></dialog>
+<footer><div class="wrap">RentRide demo · 24/7 support: 1800 000 000 · Vehicles, bookings and payments are simulated. Data stays in this tab and resets on reload.</div></footer>
+
+<script>
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function find(a,k,v){return a.filter(function(x){return x[k]==v})[0]}
+function rs(n){return "₹"+Number(n).toLocaleString("en-IN")}
+function ymd(d){return d.toISOString().slice(0,10)}
+function plus(s,n){var d=new Date(s+"T00:00:00Z");d.setUTCDate(d.getUTCDate()+n);return ymd(d)}
+function endOf(s,n){return plus(s,n-1)}
+var IC={Car:"🚗",SUV:"🚙",Truck:"🚚"},LOCS=["Chennai","Coimbatore","Madurai"];
+var today=ymd(new Date());
+var V=[{id:1,name:"Hyundai i20",type:"Car",loc:"Chennai",price:1800,seats:5,trans:"Manual",desc:"Compact hatchback. Easy in city traffic, good mileage.",img:"",on:1},
+{id:2,name:"Honda City",type:"Car",loc:"Coimbatore",price:2400,seats:5,trans:"Automatic",desc:"Comfortable sedan for long highway drives.",img:"",on:1},
+{id:3,name:"Toyota Innova",type:"SUV",loc:"Chennai",price:3800,seats:7,trans:"Manual",desc:"Seven-seat family vehicle with large boot space.",img:"",on:1},
+{id:4,name:"Mahindra Thar",type:"SUV",loc:"Madurai",price:3500,seats:4,trans:"Manual",desc:"Rugged 4x4 for rough roads and hill trips.",img:"",on:1},
+{id:5,name:"Tata Ace pickup",type:"Truck",loc:"Chennai",price:2800,seats:2,trans:"Manual",desc:"Small pickup truck, 750 kg load capacity.",img:"",on:1},
+{id:6,name:"Eicher 14 ft truck",type:"Truck",loc:"Coimbatore",price:6200,seats:3,trans:"Manual",desc:"Medium truck for house shifting and goods.",img:"",on:1}];
+var users=[{id:1,name:"Rider Kumar",user:"rider",pw:"ride123",phone:"9876500001",addr:"4 Beach Road, Chennai"},{id:2,name:"Anita Raj",user:"anita",pw:"x",phone:"9876500002",addr:"22 Race Course, Coimbatore"}];
+var admin={name:"RentRide Admin",user:"admin",pw:"admin123",phone:"1800 000 000"};
+var B=[{id:1,u:1,v:2,name:"Rider Kumar",cust:"9876500001",addr:"4 Beach Road, Chennai",start:"2026-10-02",days:2,slot:"09:00",sched:"09:30",pay:"UPI",total:4800,st:"Completed",ci:{lic:"TN01 2015 0001",odo:"23410",notes:"No scratches."}},
+{id:2,u:2,v:1,name:"Anita Raj",cust:"9876500002",addr:"22 Race Course, Coimbatore",start:ymd(new Date(Date.now()+3*864e5)),days:3,slot:"10:00",sched:"",pay:"Pay at pickup",total:5400,st:"Pending",ci:null}];
+var R=[{id:1,v:1,u:2,rate:4,text:"Clean car and smooth pickup.",hide:0}];
+var bid=3,vid=7,rid=2,CU=null,AD=false,pg="rent",UT="bk",AT="bk",AM="login",flash={},pimg="";
+function st(b){return {Pending:"warn",Approved:"ok","Checked-in":"ok",Completed:"",Rejected:"bad",Cancelled:"bad"}[b]}
+function busy(vid2,s,n,skip){var e=endOf(s,n);return B.some(function(b){return b.v==vid2&&b.id!=skip&&(b.st=="Approved"||b.st=="Checked-in")&&b.start<=e&&endOf(b.start,b.days)>=s})}
+function avg(v){var l=R.filter(function(r){return r.v==v&&!r.hide});return l.length?(l.reduce(function(s,r){return s+r.rate},0)/l.length).toFixed(1):""}
+function tile(v){return '<div class="tile">'+(v.img?'<img src="'+v.img+'" alt="'+esc(v.name)+'">':IC[v.type])+'</div>'}
+function msg(k){var f=flash[k];return '<div class="msg'+(f&&f[1]?' err':'')+'">'+(f?esc(f[0]):"")+'</div>'}
+function say(k,m,e){flash[k]=[m,e];draw()}
+$("sl").innerHTML='<option value="">Any location</option>'+LOCS.map(function(l){return'<option>'+l+'</option>'}).join("");
+$("sd").value=plus(today,1);$("sd").min=today;
+["st","sl","sd","sn","sp"].forEach(function(i){$(i).oninput=search});
+function search(){var t=$("st").value,l=$("sl").value,s=$("sd").value||plus(today,1),n=Math.max(1,+$("sn").value||1),mx=+$("sp").value||0;
+ var r=V.filter(function(v){return v.on&&(!t||v.type==t)&&(!l||v.loc==l)&&(!mx||v.price<=mx)&&!busy(v.id,s,n,0)});
+ $("scount").textContent=r.length+" vehicle"+(r.length==1?"":"s")+" available for "+n+" day"+(n==1?"":"s")+" from "+s;
+ $("grid").innerHTML=r.map(function(v){var a=avg(v.id);return '<div class="card">'+tile(v)+'<b>'+esc(v.name)+'</b> <span class="pill">'+v.type+'</span><p class="muted" style="margin:4px 0">'+esc(v.loc)+' · '+v.seats+' seats · '+v.trans+(a?' · ★ '+a:'')+'</p><span class="price">'+rs(v.price)+'</span><span class="muted"> per day · '+rs(v.price*n)+' total</span><p style="margin:12px 0 0"><button class="btn alt sm" data-a="det" data-id="'+v.id+'">Details</button> <button class="btn go sm" data-a="bk" data-id="'+v.id+'">Book</button></p></div>'}).join("")||'<p class="muted">No vehicles match. Try another date, location or a higher price limit.</p>'}
+function draw(){["rent","user","admin"].forEach(function(p){$("v-"+p).classList.toggle("hidden",p!=pg)});
+ document.querySelectorAll("#nav button").forEach(function(b){b.setAttribute("aria-current",b.dataset.v==pg)});
+ if(pg=="rent")search();if(pg=="user")$("v-user").innerHTML=!CU?'<div style="max-width:440px;margin:30px auto">'+auth("user")+'</div>':portal(UT,[["bk","My bookings"],["hi","Rental history"],["pr","My profile"]],CU.name,"Customer",utab());
+ if(pg=="admin")$("v-admin").innerHTML=!AD?'<div style="max-width:440px;margin:30px auto">'+auth("admin")+'</div>':portal(AT,[["bk","Manage bookings"],["pa","Past appointments"],["ve","Manage vehicles"],["rv","Reviews"],["pr","My profile"]],admin.name,"Administrator",atab())}
+function portal(cur,tabs,n,role,body){return '<div class="portal"><div><p style="margin:0 0 10px"><b>'+esc(n)+'</b><br><span class="muted">'+role+'</span></p><div class="side">'+tabs.map(function(t){return '<button data-a="tab" data-v="'+t[0]+'" aria-current="'+(cur==t[0])+'">'+t[1]+'</button>'}).join("")+'<button data-a="out">Log out</button></div></div><div>'+body+'</div></div>'}
+function auth(r){var m=r=="admin"?"login":AM,h='<div class="card"><h3>'+(r=="admin"?"Admin login":m=="login"?"Customer login":"Create your account")+'</h3>';
+ if(r=="user")h+='<button class="btn sm'+(m=="login"?'':' alt')+'" data-a="mode" data-v="login">Login</button> <button class="btn sm'+(m=="register"?'':' alt')+'" data-a="mode" data-v="register">Register</button>';
+ if(m=="register")h+='<label for="rn">Full name</label><input id="rn"><label for="rph">Mobile number</label><input id="rph" inputmode="numeric"><label for="rad">Address</label><input id="rad">';
+ return h+'<label for="ru">Username</label><input id="ru"><label for="rp">Password</label><input id="rp" type="password"><p style="margin-top:14px"><button class="btn" data-a="auth" data-r="'+r+'">'+(m=="login"?"Log in":"Create account")+'</button></p>'+msg("au"+r)+'</div>'}
+function bcard(b,adm){var v=find(V,"id",b.v);return '<div class="card"><b>#'+b.id+' · '+esc(v.name)+'</b> <span class="pill '+st(b)+'">'+b.st+'</span><p class="muted" style="margin:4px 0">'+(adm?esc(b.name)+' · '+esc(b.cust)+' · '+esc(b.addr)+'<br>':'')+b.start+' to '+endOf(b.start,b.days)+' ('+b.days+' days) · '+v.type+' · '+esc(v.loc)+'<br>Total '+rs(b.total)+' · '+b.pay+'<br>Pickup time: '+(b.sched?b.sched+' (confirmed)':b.slot+' (requested)')+'</p>'+(b.ci?'<div class="demo"><b>Check-in:</b> licence '+esc(b.ci.lic)+', odometer '+esc(b.ci.odo)+' km'+(b.ci.notes?'<br>'+esc(b.ci.notes):'')+'</div>':'')}
+function utab(){var t=UT,h="",my=B.filter(function(b){return b.u==CU.id}).reverse();
+ if(t=="bk"){var l=my.filter(function(b){return["Pending","Approved","Checked-in"].indexOf(b.st)>-1});h='<h2>My bookings</h2>'+(l.map(function(b){var x=bcard(b,0);if(b.st=="Approved"&&!b.ci)x+='<h3 style="font-size:1rem">Check-in form</h3><div class="two"><div><label for="cl'+b.id+'">Driving licence number</label><input id="cl'+b.id+'"></div><div><label for="co'+b.id+'">Odometer reading (km)</label><input id="co'+b.id+'" type="number"></div></div><label for="cn'+b.id+'">Notes on vehicle condition</label><input id="cn'+b.id+'"><p style="margin-top:12px"><button class="btn sm" data-a="ci" data-id="'+b.id+'">Submit check-in</button> ';
+  if(b.st=="Pending"||b.st=="Approved")x+=(b.st=="Pending"?'<p style="margin-top:12px">':'')+'<button class="btn alt sm" data-a="cancel" data-id="'+b.id+'">Cancel booking</button></p>';return x+'</div>'}).join("")||'<p class="muted">No active bookings. Search for a vehicle and book one.</p>')+msg("u")}
+ if(t=="hi"){var l2=my.filter(function(b){return["Completed","Rejected","Cancelled"].indexOf(b.st)>-1});h='<h2>Rental history</h2>'+(l2.map(function(b){var x=bcard(b,0),rv=R.filter(function(r){return r.v==b.v&&r.u==CU.id})[0];
+  if(b.st=="Completed")x+=rv?'<p>Your review: '+'★'.repeat(rv.rate)+' '+esc(rv.text)+'</p>':'<label for="rr'+b.id+'">Rate this rental</label><select id="rr'+b.id+'"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select><label for="rt'+b.id+'">Review</label><input id="rt'+b.id+'"><p style="margin-top:12px"><button class="btn sm" data-a="rv" data-id="'+b.id+'">Post review</button></p>';return x+'</div>'}).join("")||'<p class="muted">Finished rentals will appear here.</p>')+msg("u")}
+ if(t=="pr")h='<div class="card"><h3>My profile</h3><label for="pn">Name</label><input id="pn" value="'+esc(CU.name)+'"><label for="pph">Customer number</label><input id="pph" value="'+esc(CU.phone)+'"><label for="pa">Address</label><input id="pa" value="'+esc(CU.addr)+'"><p class="muted">Username: '+esc(CU.user)+'</p><button class="btn" data-a="psave">Save profile</button>'+msg("p")+'</div>';
+ return h}
+function atab(){var t=AT,h="";
+ if(t=="bk"){var l=B.filter(function(b){return["Pending","Approved","Checked-in"].indexOf(b.st)>-1}).reverse();h='<h2>Manage bookings</h2>'+(l.map(function(b){var x=bcard(b,1)+'<p style="margin:0">';
+  if(b.st=="Pending")x+='<button class="btn sm" data-a="apv" data-id="'+b.id+'">Approve</button> <button class="btn alt sm" data-a="rej" data-id="'+b.id+'">Reject</button> ';
+  if(b.st!="Checked-in")x+='<input type="time" id="tm'+b.id+'" value="'+(b.sched||b.slot)+'" style="width:130px;display:inline-block" aria-label="Pickup time"> <button class="btn alt sm" data-a="sched" data-id="'+b.id+'">Schedule time</button>';
+  if(b.st=="Checked-in")x+='<button class="btn sm" data-a="done" data-id="'+b.id+'">Mark returned</button>';return x+'</p></div>'}).join("")||'<p class="muted">No active bookings.</p>')+msg("a")}
+ if(t=="pa"){var l2=B.filter(function(b){return["Completed","Rejected","Cancelled"].indexOf(b.st)>-1}).reverse();h='<h2>Past appointments</h2>'+(l2.map(function(b){return bcard(b,1)+'<button class="btn alt sm" data-a="delb" data-id="'+b.id+'">Delete record</button></div>'}).join("")||'<p class="muted">Nothing here yet.</p>')}
+ if(t=="ve"){h='<h2>Manage vehicles</h2><div class="card"><h3>Add vehicle</h3><div class="two"><div><label for="vn">Name</label><input id="vn"></div><div><label for="vt">Type</label><select id="vt"><option>Car</option><option>SUV</option><option>Truck</option></select></div><div><label for="vl">Location</label><select id="vl">'+LOCS.map(function(l){return'<option>'+l+'</option>'}).join("")+'</select></div><div><label for="vp">Price per day (₹)</label><input id="vp" type="number" min="1"></div><div><label for="vs">Seats</label><input id="vs" type="number" value="5"></div><div><label for="vtr">Transmission</label><select id="vtr"><option>Manual</option><option>Automatic</option></select></div></div><label for="vd">Description</label><textarea id="vd" rows="2"></textarea><label for="vi">Photo</label><input id="vi" type="file" accept="image/*" data-ch="pimg"><p style="margin-top:12px"><button class="btn" data-a="vadd">Add vehicle</button></p>'+msg("v")+'</div><div class="card scroll"><table><thead><tr><th>Vehicle</th><th>Type</th><th>Location</th><th>₹/day</th><th>Photo</th><th></th></tr></thead><tbody>'+V.map(function(v){return '<tr><td><input id="en'+v.id+'" value="'+esc(v.name)+'"></td><td><select id="et'+v.id+'">'+["Car","SUV","Truck"].map(function(t2){return'<option'+(v.type==t2?' selected':'')+'>'+t2+'</option>'}).join("")+'</select></td><td><select id="el'+v.id+'">'+LOCS.map(function(l){return'<option'+(v.loc==l?' selected':'')+'>'+l+'</option>'}).join("")+'</select></td><td><input id="ep'+v.id+'" type="number" value="'+v.price+'" style="width:90px"></td><td><input type="file" accept="image/*" data-ch="rimg" data-id="'+v.id+'" aria-label="Replace photo" style="font-size:.75rem;width:150px"></td><td><button class="btn sm" data-a="vsave" data-id="'+v.id+'">Save</button> <button class="btn alt sm" data-a="vtog" data-id="'+v.id+'">'+(v.on?'Hide':'Show')+'</button> <button class="btn alt sm" data-a="vdel" data-id="'+v.id+'">Delete</button></td></tr>'}).join("")+'</tbody></table></div>'}
+ if(t=="rv")h='<h2>Reviews</h2>'+(R.map(function(r){return '<div class="card"><b>'+esc(find(V,"id",r.v).name)+'</b> · '+'★'.repeat(r.rate)+' <span class="muted">by '+esc(find(users,"id",r.u).name)+'</span> '+(r.hide?'<span class="pill bad">Hidden</span>':'')+'<p style="margin:6px 0">'+esc(r.text)+'</p><button class="btn alt sm" data-a="rvh" data-id="'+r.id+'">'+(r.hide?'Show':'Hide')+'</button> <button class="btn alt sm" data-a="rvd" data-id="'+r.id+'">Delete</button></div>'}).join("")||'<p class="muted">No reviews yet.</p>');
+ if(t=="pr")h='<div class="card"><h3>My profile</h3><label for="an">Name</label><input id="an" value="'+esc(admin.name)+'"><label for="aph">Support phone</label><input id="aph" value="'+esc(admin.phone)+'"><p style="margin-top:12px"><button class="btn" data-a="asave">Save profile</button></p>'+msg("p")+'</div>';
+ return h}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-a]");if(!b)return;var d=b.dataset,a=d.a,id=+d.id,x;flash={};
+ if(a=="page"){pg=d.v;draw()}
+ if(a=="tab"){if(pg=="admin")AT=d.v;else UT=d.v;draw()}
+ if(a=="mode"){AM=d.v;draw()}
+ if(a=="out"){if(pg=="admin")AD=false;else CU=null;draw()}
+ if(a=="close")$("dlg").close();
+ if(a=="auth"){var u=$("ru").value.trim(),p=$("rp").value,r=d.r;if(!u||!p)return say("au"+r,"Enter a username and password.",1);
+  if(r=="admin"){if(u!=admin.user||p!=admin.pw)return say("auadmin","Admin username or password is wrong.",1);AD=true}
+  else if(AM=="login"){x=find(users,"user",u);if(!x||x.pw!=p)return say("auuser","Username or password is wrong. Check both and try again.",1);CU=x}
+  else{if(find(users,"user",u))return say("auuser","That username is taken. Choose another.",1);if(!$("rn").value.trim()||!$("rph").value.trim())return say("auuser","Enter your name and mobile number.",1);
+   x={id:users.length+1,name:$("rn").value.trim(),user:u,pw:p,phone:$("rph").value.trim(),addr:$("rad").value.trim()};users.push(x);CU=x}
+  flash={};draw()}
+ if(a=="det"){var v=find(V,"id",id),rl=R.filter(function(r){return r.v==id&&!r.hide});$("dlg").innerHTML=tile(v)+'<h3>'+esc(v.name)+' <span class="pill">'+v.type+'</span></h3><p>'+esc(v.desc)+'</p><p class="muted">'+esc(v.loc)+' · '+v.seats+' seats · '+v.trans+' · <b>'+rs(v.price)+' per day</b></p><h3 style="font-size:1rem">Reviews'+(avg(id)?' (★ '+avg(id)+')':'')+'</h3>'+(rl.map(function(r){return '<p style="margin:0 0 6px">'+'★'.repeat(r.rate)+' '+esc(r.text)+'</p>'}).join("")||'<p class="muted">No reviews yet.</p>')+'<button class="btn go" data-a="bk" data-id="'+id+'">Book this vehicle</button> <button class="btn alt" data-a="close">Close</button>';$("dlg").showModal()}
+ if(a=="bk"){var v2=find(V,"id",id),s=$("sd").value||plus(today,1),n=Math.max(1,+$("sn").value||1);
+  if(!CU){$("dlg").innerHTML='<h3>Log in to book</h3><p>Create a free account or log in to book '+esc(v2.name)+'.</p><button class="btn" data-a="gologin">Go to login</button> <button class="btn alt" data-a="close">Close</button>';$("dlg").showModal();return}
+  $("dlg").innerHTML='<h3>Book '+esc(v2.name)+'</h3><label for="bn">Name</label><input id="bn" value="'+esc(CU.name)+'"><label for="bc">Customer number</label><input id="bc" value="'+esc(CU.phone)+'"><label for="ba">Address</label><input id="ba" value="'+esc(CU.addr)+'"><label for="bt">Vehicle type</label><input id="bt" value="'+v2.type+'" readonly><div class="two"><div><label for="bs">Pickup date</label><input id="bs" type="date" min="'+today+'" value="'+s+'"></div><div><label for="bd">Days</label><input id="bd" type="number" min="1" max="30" value="'+n+'"></div></div><label for="bl">Preferred pickup time</label><input id="bl" type="time" value="09:00"><label for="bp">Payment method (demo)</label><select id="bp"><option>UPI</option><option>Card</option><option>Pay at pickup</option></select><p style="margin-top:14px"><button class="btn go" data-a="bsub" data-id="'+id+'">Confirm booking</button> <button class="btn alt" data-a="close">Cancel</button></p><div class="msg err" id="bm"></div>';$("dlg").showModal()}
+ if(a=="gologin"){$("dlg").close();pg="user";draw()}
+ if(a=="bsub"){var v3=find(V,"id",id),bs=$("bs").value,bd=Math.max(1,+$("bd").value||1),e=function(m){$("bm").textContent=m};
+  if(!$("bn").value.trim()||!$("bc").value.trim()||!$("ba").value.trim())return e("Enter your name, customer number and address.");if(!bs||bs<today)return e("Choose a pickup date that is today or later.");if(busy(id,bs,bd,0))return e("This vehicle is already booked on those dates. Pick other dates.");
+  var nb={id:bid++,u:CU.id,v:id,name:$("bn").value.trim(),cust:$("bc").value.trim(),addr:$("ba").value.trim(),start:bs,days:bd,slot:$("bl").value||"09:00",sched:"",pay:$("bp").value,total:v3.price*bd,st:"Pending",ci:null};B.push(nb);
+  $("dlg").innerHTML='<h3>Booking received</h3><p>Reference <b>#'+nb.id+'</b>. '+esc(v3.name)+' from '+bs+' for '+bd+' day(s), total '+rs(nb.total)+'.</p><p class="muted">Status is Pending until the rental desk approves it. Track it in My account.</p><button class="btn" data-a="mine">View my bookings</button>';}
+ if(a=="mine"){$("dlg").close();pg="user";UT="bk";draw()}
+ if(a=="cancel"){find(B,"id",id).st="Cancelled";draw()}
+ if(a=="ci"){var l1=$("cl"+id).value.trim(),o=$("co"+id).value.trim();if(!l1||!o)return say("u","Enter your licence number and the odometer reading.",1);var bk=find(B,"id",id);bk.ci={lic:l1,odo:o,notes:$("cn"+id).value.trim()};bk.st="Checked-in";say("u","Check-in submitted. Collect your vehicle at the scheduled time.")}
+ if(a=="rv"){var bk2=find(B,"id",id);R.push({id:rid++,v:bk2.v,u:CU.id,rate:+$("rr"+id).value,text:$("rt"+id).value.trim()||"No comment.",hide:0});say("u","Thanks. Your review was posted.")}
+ if(a=="psave"){CU.name=$("pn").value.trim()||CU.name;CU.phone=$("pph").value.trim()||CU.phone;CU.addr=$("pa").value.trim();say("p","Profile saved.")}
+ if(a=="apv"){var q=find(B,"id",id);if(busy(q.v,q.start,q.days,q.id))return say("a","Another approved booking already uses this vehicle on those dates. Reject this one or reschedule.",1);q.st="Approved";say("a","Booking #"+id+" approved. The customer can now check in.")}
+ if(a=="rej"){find(B,"id",id).st="Rejected";draw()}
+ if(a=="sched"){find(B,"id",id).sched=$("tm"+id).value;say("a","Pickup time set for booking #"+id+".")}
+ if(a=="done"){find(B,"id",id).st="Completed";say("a","Booking #"+id+" marked returned and moved to past appointments.")}
+ if(a=="delb"){B=B.filter(function(q2){return q2.id!=id});draw()}
+ if(a=="vadd"){var nm=$("vn").value.trim(),pr=+$("vp").value;if(!nm||pr<1)return say("v","Enter a vehicle name and a price per day.",1);V.push({id:vid++,name:nm,type:$("vt").value,loc:$("vl").value,price:pr,seats:+$("vs").value||4,trans:$("vtr").value,desc:$("vd").value.trim()||"No description yet.",img:pimg,on:1});pimg="";say("v","Vehicle added.")}
+ if(a=="vsave"){var w=find(V,"id",id);w.name=$("en"+id).value.trim()||w.name;w.type=$("et"+id).value;w.loc=$("el"+id).value;w.price=+$("ep"+id).value||w.price;say("v","Vehicle details saved.")}
+ if(a=="vtog"){var w2=find(V,"id",id);w2.on=w2.on?0:1;draw()}
+ if(a=="vdel"){V=V.filter(function(q3){return q3.id!=id});draw()}
+ if(a=="rvh"){var r2=find(R,"id",id);r2.hide=r2.hide?0:1;draw()}
+ if(a=="rvd"){R=R.filter(function(q4){return q4.id!=id});draw()}
+ if(a=="asave"){admin.name=$("an").value.trim()||admin.name;admin.phone=$("aph").value.trim();say("p","Profile saved.")}});
+document.addEventListener("change",function(ev){var t=ev.target,k=t.dataset.ch;if(!k||!t.files[0])return;var r=new FileReader();r.onload=function(){if(k=="pimg")pimg=r.result;else{find(V,"id",t.dataset.id).img=r.result;draw()}};r.readAsDataURL(t.files[0])});
+draw();
+</script>
+</body>
+</html>

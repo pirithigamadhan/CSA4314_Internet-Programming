@@ -1,0 +1,1393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ÉLAN Beauty Studio</title>
+
+<style>
+:root {
+  --green:#173D35;
+  --deep:#102D27;
+  --gold:#B6A078;
+  --cream:#E9E2D5;
+  --ivory:#F8F6F0;
+  --white:#FFFFFF;
+  --text:#34433D;
+  --border:#DDD8CC;
+}
+
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body {
+  background:var(--ivory);
+  color:var(--text);
+}
+
+header {
+  background:var(--deep);
+  color:white;
+  padding:18px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.logo {
+  font-size:25px;
+  letter-spacing:2px;
+  font-weight:bold;
+}
+
+.logo span {
+  color:var(--gold);
+}
+
+nav {
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+nav button {
+  background:transparent;
+  color:white;
+  border:0;
+  padding:10px;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+nav button:hover {
+  background:var(--gold);
+  color:var(--deep);
+}
+
+.hero {
+  min-height:350px;
+  padding:85px 8%;
+  color:white;
+  text-align:center;
+  background:linear-gradient(120deg,#102D27,#315D4D);
+}
+
+.hero h1 {
+  font-size:43px;
+  letter-spacing:2px;
+  margin-bottom:18px;
+}
+
+.hero p {
+  font-size:17px;
+  margin-bottom:22px;
+}
+
+.container {
+  width:92%;
+  max-width:1150px;
+  margin:30px auto;
+}
+
+.section {
+  display:none;
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  margin-bottom:25px;
+  box-shadow:0 4px 16px #173d3510;
+}
+
+.section.active {
+  display:block;
+}
+
+h2 {
+  color:var(--green);
+  margin-bottom:20px;
+}
+
+h3 {
+  color:var(--green);
+  margin-bottom:12px;
+}
+
+label {
+  font-weight:bold;
+  color:var(--green);
+}
+
+input,select,textarea {
+  width:100%;
+  padding:12px;
+  margin:8px 0 15px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  background:white;
+  color:var(--text);
+}
+
+textarea {
+  min-height:85px;
+  resize:vertical;
+}
+
+.btn {
+  background:var(--green);
+  color:white;
+  border:0;
+  padding:12px 19px;
+  margin:5px 3px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+.btn:hover {
+  background:var(--gold);
+  color:var(--deep);
+}
+
+.gold-btn {
+  background:var(--gold);
+  color:var(--deep);
+}
+
+.gold-btn:hover {
+  background:var(--deep);
+  color:white;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+
+.card {
+  background:var(--ivory);
+  padding:18px;
+  border-radius:9px;
+  border-left:4px solid var(--gold);
+  margin:12px 0;
+}
+
+.service-card,.stylist-card {
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  background:white;
+}
+
+.service-card img,.stylist-card img {
+  width:100%;
+  height:190px;
+  object-fit:cover;
+}
+
+.card-content {
+  padding:15px;
+}
+
+.price {
+  color:var(--green);
+  font-weight:bold;
+  font-size:19px;
+}
+
+.badge {
+  display:inline-block;
+  background:var(--cream);
+  color:var(--green);
+  padding:5px 10px;
+  border-radius:15px;
+  font-size:12px;
+  margin:5px 0;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin:15px 0;
+  font-size:14px;
+}
+
+th,td {
+  padding:12px;
+  border:1px solid var(--border);
+  text-align:left;
+}
+
+th {
+  background:var(--green);
+  color:white;
+}
+
+.calendar {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  margin:15px 0;
+}
+
+.day {
+  padding:13px 4px;
+  background:var(--ivory);
+  border-radius:6px;
+  text-align:center;
+  cursor:pointer;
+  border:1px solid var(--border);
+}
+
+.day:hover {
+  background:var(--cream);
+}
+
+.day.selected {
+  background:var(--green);
+  color:white;
+}
+
+.day.disabled {
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+.day.has-booking {
+  border-bottom:4px solid var(--gold);
+}
+
+.day-name {
+  text-align:center;
+  font-weight:bold;
+  padding:10px 0;
+  color:var(--green);
+}
+
+.slots {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(95px,1fr));
+  gap:10px;
+  margin:15px 0;
+}
+
+.slot {
+  padding:12px 5px;
+  background:#E5F0E9;
+  color:var(--green);
+  border:1px solid #B6D2C1;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.slot.selected {
+  background:var(--green);
+  color:white;
+}
+
+.slot.unavailable {
+  background:#E8E8E8;
+  color:#999;
+  cursor:not-allowed;
+  text-decoration:line-through;
+}
+
+footer {
+  background:var(--deep);
+  color:white;
+  padding:28px;
+  text-align:center;
+  margin-top:40px;
+}
+
+.message {
+  margin:12px 0;
+  color:var(--green);
+  font-weight:bold;
+}
+
+@media(max-width:650px) {
+  header {
+    justify-content:center;
+  }
+  nav {
+    justify-content:center;
+  }
+  .hero h1 {
+    font-size:29px;
+  }
+  .section {
+    padding:16px;
+  }
+  .calendar {
+    gap:3px;
+  }
+  .day {
+    padding:10px 2px;
+    font-size:12px;
+  }
+  table {
+    font-size:11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">ÉLAN <span>BEAUTY</span></div>
+  <nav>
+    <button onclick="show('home')">Home</button>
+    <button onclick="show('services')">Services</button>
+    <button onclick="show('stylists')">Stylists</button>
+    <button onclick="show('booking')">Book Now</button>
+    <button onclick="show('login')">Login</button>
+    <button onclick="show('dashboard')">My Account</button>
+    <button onclick="show('adminlogin')">Admin</button>
+  </nav>
+</header>
+
+<div class="hero" id="hero">
+  <h1>BEAUTY BEGINS WITH YOU</h1>
+  <p>Discover luxury beauty treatments and personalized salon experiences.</p>
+  <button class="btn gold-btn" onclick="show('booking')">Reserve Your Appointment</button>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <h2>Welcome to ÉLAN Beauty Studio</h2>
+  <p>Experience professional beauty care, expert stylists and relaxing treatments. Book your preferred appointment in just a few steps.</p>
+
+  <br>
+  <div class="grid">
+    <div class="card">
+      <h3>✦ Premium Services</h3>
+      <p>Hair styling, facials, makeup and spa treatments.</p>
+    </div>
+    <div class="card">
+      <h3>✦ Expert Stylists</h3>
+      <p>Choose your preferred beauty professional.</p>
+    </div>
+    <div class="card">
+      <h3>✦ Easy Reservations</h3>
+      <p>Choose your preferred date and available time.</p>
+    </div>
+    <div class="card">
+      <h3>✦ Flexible Payments</h3>
+      <p>Choose full payment or a booking deposit.</p>
+    </div>
+  </div>
+
+  <br>
+  <h2>Our Popular Services</h2>
+  <div id="homeservices" class="grid"></div>
+</div>
+
+<!-- SERVICES -->
+<div id="services" class="section">
+  <h2>Our Beauty Services</h2>
+  <div id="servicelist" class="grid"></div>
+</div>
+
+<!-- STYLISTS -->
+<div id="stylists" class="section">
+  <h2>Meet Our Professionals</h2>
+  <div id="stylistlist" class="grid"></div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="section">
+  <h2>Create Your Account</h2>
+  <label>Full Name</label>
+  <input id="regname" placeholder="Your name">
+  <label>Email</label>
+  <input id="regemail" type="email" placeholder="Email address">
+  <label>Password</label>
+  <input id="regpass" type="password" placeholder="Create password">
+  <label>Phone Number</label>
+  <input id="regphone" placeholder="Phone number">
+  <button class="btn" onclick="register()">Create Account</button>
+  <p id="regmsg" class="message"></p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+  <h2>Customer Login</h2>
+  <label>Email</label>
+  <input id="loginemail" type="email" placeholder="Email">
+  <label>Password</label>
+  <input id="loginpass" type="password" placeholder="Password">
+  <button class="btn" onclick="login()">Login</button>
+  <p id="loginmsg" class="message"></p>
+</div>
+
+<!-- BOOKING -->
+<div id="booking" class="section">
+  <h2>Book Your Appointment</h2>
+
+  <label>Select Salon</label>
+  <select id="salon">
+    <option>ÉLAN Beauty Studio - Chennai</option>
+    <option>ÉLAN Beauty Studio - Coimbatore</option>
+    <option>ÉLAN Beauty Studio - Bangalore</option>
+  </select>
+
+  <label>Select Service</label>
+  <select id="service" onchange="updateBookingPrice()"></select>
+
+  <label>Select Stylist</label>
+  <select id="stylist"></select>
+
+  <div class="card">
+    <h3>Reservation Calendar</h3>
+    <div class="grid">
+      <div>
+        <label>Month</label>
+        <select id="month" onchange="renderCalendar()"></select>
+      </div>
+      <div>
+        <label>Year</label>
+        <select id="year" onchange="renderCalendar()"></select>
+      </div>
+    </div>
+
+    <div id="calendar" class="calendar"></div>
+    <p id="selecteddate" class="message">Select an appointment date.</p>
+
+    <h3>Available Time Slots</h3>
+    <div id="timeslots" class="slots"></div>
+  </div>
+
+  <h3>Booking Details</h3>
+  <label>Customer Name</label>
+  <input id="bookingname" placeholder="Full name">
+
+  <label>Phone Number</label>
+  <input id="bookingphone" placeholder="Phone number">
+
+  <label>Additional Instructions</label>
+  <textarea id="notes" placeholder="Any special requests?"></textarea>
+
+  <h3>Payment Options</h3>
+  <label>Payment Type</label>
+  <select id="paymenttype">
+    <option value="full">Full Payment</option>
+    <option value="deposit">Partial Deposit (30%)</option>
+    <option value="salon">Pay at Salon</option>
+  </select>
+
+  <label>Payment Platform</label>
+  <select id="platform">
+    <option>UPI Demo</option>
+    <option>Stripe Demo</option>
+    <option>PayPal Demo</option>
+    <option>Cash at Salon</option>
+  </select>
+
+  <div id="bookingprice" class="message"></div>
+
+  <button class="btn gold-btn" onclick="confirmBooking()">Confirm Appointment</button>
+  <p id="bookingmsg" class="message"></p>
+</div>
+
+<!-- CONFIRMATION -->
+<div id="confirmation" class="section">
+  <h2>Appointment Confirmed!</h2>
+  <div id="confirmationdetails" class="card"></div>
+  <button class="btn" onclick="show('dashboard')">View My Account</button>
+  <button class="btn gold-btn" onclick="window.print()">Print Confirmation</button>
+</div>
+
+<!-- CUSTOMER DASHBOARD -->
+<div id="dashboard" class="section">
+  <h2>My Personal Dashboard</h2>
+  <div id="profile" class="card"></div>
+
+  <h3>Upcoming Reservations</h3>
+  <div id="upcoming"></div>
+
+  <h3>Reservation History</h3>
+  <div id="history"></div>
+
+  <button class="btn" onclick="show('booking')">New Appointment</button>
+  <button class="btn gold-btn" onclick="show('feedback')">Leave Feedback</button>
+  <button class="btn" onclick="logout()">Logout</button>
+</div>
+
+<!-- EDIT BOOKING -->
+<div id="editbooking" class="section">
+  <h2>Reschedule Appointment</h2>
+  <input type="hidden" id="editid">
+
+  <label>New Date</label>
+  <input type="date" id="editdate">
+
+  <label>New Time</label>
+  <select id="edittime"></select>
+
+  <button class="btn" onclick="saveEdit()">Save Changes</button>
+  <p id="editmsg" class="message"></p>
+</div>
+
+<!-- FEEDBACK -->
+<div id="feedback" class="section">
+  <h2>Share Your Experience</h2>
+  <label>Rating</label>
+  <select id="rating">
+    <option>5 - Excellent</option>
+    <option>4 - Very Good</option>
+    <option>3 - Good</option>
+    <option>2 - Average</option>
+    <option>1 - Poor</option>
+  </select>
+
+  <label>Your Feedback</label>
+  <textarea id="feedbacktext" placeholder="Tell us about your experience"></textarea>
+
+  <button class="btn" onclick="submitFeedback()">Submit Feedback</button>
+  <p id="feedbackmsg" class="message"></p>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminlogin" class="section">
+  <h2>Salon Manager Login</h2>
+  <label>Email</label>
+  <input id="adminemail" placeholder="Admin email">
+  <label>Password</label>
+  <input id="adminpass" type="password" placeholder="Password">
+  <button class="btn" onclick="adminLogin()">Login</button>
+  <p id="adminmsg" class="message"></p>
+  <p>Demo: admin@elan.com / admin123</p>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin" class="section">
+  <h2>Salon Management Dashboard</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Total Appointments</h3>
+      <h2 id="totalappointments">0</h2>
+    </div>
+    <div class="card">
+      <h3>Customers</h3>
+      <h2 id="totalcustomers">0</h2>
+    </div>
+    <div class="card">
+      <h3>Services</h3>
+      <h2 id="totalservices">0</h2>
+    </div>
+  </div>
+
+  <h3>Reservation Calendar</h3>
+  <label>Select Date</label>
+  <input type="date" id="admindate" onchange="adminCalendar()">
+  <div id="admincalendar"></div>
+
+  <h3>Add New Service</h3>
+  <label>Service Name</label>
+  <input id="newservice" placeholder="Service name">
+  <label>Duration (minutes)</label>
+  <input id="newduration" type="number" value="60">
+  <label>Price (₹)</label>
+  <input id="newserviceprice" type="number">
+  <button class="btn" onclick="addService()">Add Service</button>
+
+  <h3>Manage Services</h3>
+  <div id="adminservices"></div>
+
+  <h3>Manage Stylists</h3>
+  <label>Stylist Name</label>
+  <input id="newstylist" placeholder="Stylist name">
+  <label>Specialization</label>
+  <input id="newspeciality" placeholder="Hair, Makeup, Facial etc.">
+  <button class="btn" onclick="addStylist()">Add Stylist</button>
+  <div id="adminstylists"></div>
+
+  <h3>Block Unavailable Hours</h3>
+  <label>Stylist</label>
+  <select id="blockstylist"></select>
+  <label>Date</label>
+  <input type="date" id="blockdate">
+  <label>Time</label>
+  <select id="blocktime"></select>
+  <button class="btn" onclick="blockSlot()">Block Time Slot</button>
+  <div id="blockedlist"></div>
+
+  <h3>All Reservations</h3>
+  <div id="adminappointments"></div>
+
+  <h3>Customer Accounts</h3>
+  <div id="admincustomers"></div>
+
+  <h3>Customer Feedback</h3>
+  <div id="adminfeedback"></div>
+
+  <button class="btn gold-btn" onclick="adminLogout()">Logout</button>
+</div>
+
+</div>
+
+<footer>
+  <h3>ÉLAN BEAUTY STUDIO</h3>
+  <p>Luxury Care. Professional Beauty. Personalized Experience.</p>
+  <p>Chennai | Coimbatore | Bangalore</p>
+  <p>© 2026 ÉLAN Beauty Studio</p>
+</footer>
+
+<script>
+
+// DATA
+let services = JSON.parse(localStorage.getItem("elanServices")) || [
+ {id:1,name:"Hair Styling",duration:60,price:800},
+ {id:2,name:"Facial Treatment",duration:60,price:1200},
+ {id:3,name:"Bridal Makeup",duration:120,price:4500},
+ {id:4,name:"Manicure & Pedicure",duration:60,price:1000},
+ {id:5,name:"Hair Spa",duration:90,price:1500},
+ {id:6,name:"Full Body Spa",duration:120,price:2500}
+];
+
+let stylists = JSON.parse(localStorage.getItem("elanStylists")) || [
+ {id:1,name:"Ananya",speciality:"Hair Styling"},
+ {id:2,name:"Meera",speciality:"Makeup Artist"},
+ {id:3,name:"Priya",speciality:"Skin Specialist"}
+];
+
+let users = JSON.parse(localStorage.getItem("elanUsers")) || [];
+let appointments = JSON.parse(localStorage.getItem("elanAppointments")) || [];
+let blocked = JSON.parse(localStorage.getItem("elanBlocked")) || [];
+let feedbacks = JSON.parse(localStorage.getItem("elanFeedback")) || [];
+
+let currentUser = JSON.parse(sessionStorage.getItem("elanUser")) || null;
+let selectedDate = "";
+let selectedTime = "";
+let editAppointmentId = null;
+
+const timeSlots = [
+ "09:00 AM","10:00 AM","11:00 AM",
+ "12:00 PM","01:00 PM","02:00 PM",
+ "03:00 PM","04:00 PM","05:00 PM",
+ "06:00 PM"
+];
+
+function saveData() {
+ localStorage.setItem("elanServices",JSON.stringify(services));
+ localStorage.setItem("elanStylists",JSON.stringify(stylists));
+ localStorage.setItem("elanUsers",JSON.stringify(users));
+ localStorage.setItem("elanAppointments",JSON.stringify(appointments));
+ localStorage.setItem("elanBlocked",JSON.stringify(blocked));
+ localStorage.setItem("elanFeedback",JSON.stringify(feedbacks));
+}
+
+function show(id) {
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("hero").style.display=id==="home"?"block":"none";
+
+ if(id==="dashboard") loadDashboard();
+ if(id==="admin") loadAdmin();
+ if(id==="booking") prepareBooking();
+}
+
+// REGISTRATION
+function register() {
+ let name=regname.value.trim();
+ let email=regemail.value.trim().toLowerCase();
+ let password=regpass.value;
+ let phone=regphone.value.trim();
+
+ if(!name || !email || !password || !phone) {
+  regmsg.innerText="Please complete all fields.";
+  return;
+ }
+
+ if(users.some(u=>u.email===email)) {
+  regmsg.innerText="Email already registered.";
+  return;
+ }
+
+ users.push({name,email,password,phone});
+ saveData();
+
+ regmsg.innerText="Account created successfully!";
+}
+
+// LOGIN
+function login() {
+ let email=loginemail.value.trim().toLowerCase();
+ let password=loginpass.value;
+
+ let user=users.find(u=>u.email===email && u.password===password);
+
+ if(!user) {
+  loginmsg.innerText="Invalid email or password.";
+  return;
+ }
+
+ currentUser=user;
+ sessionStorage.setItem("elanUser",JSON.stringify(user));
+
+ loginmsg.innerText="Welcome "+user.name;
+ show("dashboard");
+}
+
+// LOGOUT
+function logout() {
+ currentUser=null;
+ sessionStorage.removeItem("elanUser");
+ show("home");
+}
+
+function adminLogout() {
+ show("home");
+}
+
+// SERVICE AND STYLIST LISTS
+function renderServices() {
+ let html=services.map(s=>`
+  <div class="card">
+   <h3>${s.name}</h3>
+   <p>Duration: ${s.duration} minutes</p>
+   <p class="price">₹${s.price}</p>
+   <button class="btn" onclick="chooseService(${s.id})">Book Service</button>
+  </div>
+ `).join("");
+
+ servicelist.innerHTML=html;
+ homeservices.innerHTML=html;
+}
+
+function renderStylists() {
+ stylistlist.innerHTML=stylists.map(s=>`
+  <div class="stylist-card">
+   <div class="card-content">
+    <h3>${s.name}</h3>
+    <span class="badge">Professional Stylist</span>
+    <p>Specialization: ${s.speciality}</p>
+    <button class="btn" onclick="chooseStylist(${s.id})">Choose Stylist</button>
+   </div>
+  </div>
+ `).join("");
+
+ let options=stylists.map(s=>
+  `<option value="${s.id}">${s.name} - ${s.speciality}</option>`
+ ).join("");
+
+ stylist.innerHTML=options;
+ blockstylist.innerHTML=options;
+}
+
+// BOOKING SETUP
+function prepareBooking() {
+ if(currentUser) {
+  bookingname.value=currentUser.name;
+  bookingphone.value=currentUser.phone;
+ }
+
+ service.innerHTML=services.map(s=>
+  `<option value="${s.id}">${s.name} - ₹${s.price}</option>`
+ ).join("");
+
+ stylist.innerHTML=stylists.map(s=>
+  `<option value="${s.id}">${s.name}</option>`
+ ).join("");
+
+ let now=new Date();
+ let currentYear=now.getFullYear();
+
+ month.innerHTML="";
+ for(let i=0;i<12;i++) {
+  let option=document.createElement("option");
+  option.value=i;
+  option.text=new Date(2000,i,1).toLocaleString("en",{month:"long"});
+  if(i===now.getMonth()) option.selected=true;
+  month.appendChild(option);
+ }
+
+ year.innerHTML="";
+ for(let y=currentYear;y<=currentYear+1;y++) {
+  let option=document.createElement("option");
+  option.value=y;
+  option.text=y;
+  year.appendChild(option);
+ }
+
+ renderCalendar();
+ updateBookingPrice();
+}
+
+function chooseService(id) {
+ show("booking");
+ service.value=id;
+ updateBookingPrice();
+}
+
+function chooseStylist(id) {
+ show("booking");
+ stylist.value=id;
+}
+
+function updateBookingPrice() {
+ let s=services.find(x=>x.id==service.value);
+ if(!s) return;
+ bookingprice.innerText="Service Price: ₹"+s.price+
+  " | 30% Deposit: ₹"+Math.ceil(s.price*.30);
+}
+
+// CALENDAR
+function dateString(y,m,d) {
+ return y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+}
+
+function renderCalendar() {
+ let y=Number(year.value);
+ let m=Number(month.value);
+
+ if(!Number.isFinite(y) || !Number.isFinite(m)) return;
+
+ calendar.innerHTML="";
+ selectedDate="";
+ selectedTime="";
+ selecteddate.innerText="Select an appointment date.";
+ timeslots.innerHTML="";
+
+ ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(d=>{
+  let div=document.createElement("div");
+  div.className="day-name";
+  div.innerText=d;
+  calendar.appendChild(div);
+ });
+
+ let first=new Date(y,m,1).getDay();
+ let days=new Date(y,m+1,0).getDate();
+ let today=new Date();
+ today.setHours(0,0,0,0);
+
+ for(let i=0;i<first;i++) {
+  calendar.appendChild(document.createElement("div"));
+ }
+
+ for(let d=1;d<=days;d++) {
+  let date=dateString(y,m,d);
+  let div=document.createElement("div");
+  let dateObj=new Date(y,m,d);
+  let unavailable=dateObj<today;
+
+  div.className="day";
+  if(unavailable) div.classList.add("disabled");
+
+  if(appointments.some(a=>a.date===date && a.status==="Confirmed")) {
+   div.classList.add("has-booking");
+  }
+
+  div.innerText=d;
+
+  if(!unavailable) {
+   div.onclick=()=>selectDate(date,div);
+  }
+
+  calendar.appendChild(div);
+ }
+}
+
+function selectDate(date,element) {
+ selectedDate=date;
+ selectedTime="";
+
+ document.querySelectorAll("#calendar .day").forEach(d=>d.classList.remove("selected"));
+ element.classList.add("selected");
+
+ selecteddate.innerText="Selected Date: "+date;
+ renderSlots();
+}
+
+// AVAILABILITY
+function isUnavailable(date,time,stylistId,excludeId=null) {
+ let taken=appointments.some(a=>
+  a.date===date &&
+  a.time===time &&
+  String(a.stylistId)===String(stylistId) &&
+  a.status==="Confirmed" &&
+  a.id!==excludeId
+ );
+
+ let blockedSlot=blocked.some(b=>
+  b.date===date &&
+  b.time===time &&
+  String(b.stylistId)===String(stylistId)
+ );
+
+ return taken || blockedSlot;
+}
+
+function renderSlots() {
+ timeslots.innerHTML="";
+ let stylistId=stylist.value;
+
+ timeSlots.forEach(time=>{
+  let btn=document.createElement("button");
+  btn.className="slot";
+  btn.innerText=time;
+
+  if(isUnavailable(selectedDate,time,stylistId)) {
+   btn.classList.add("unavailable");
+   btn.disabled=true;
+  } else {
+   btn.onclick=()=>{
+    document.querySelectorAll(".slot").forEach(s=>s.classList.remove("selected"));
+    btn.classList.add("selected");
+    selectedTime=time;
+   };
+  }
+
+  timeslots.appendChild(btn);
+ });
+}
+
+// BOOK APPOINTMENT
+function confirmBooking() {
+ if(!currentUser) {
+  alert("Please login before booking.");
+  show("login");
+  return;
+ }
+
+ if(!selectedDate || !selectedTime) {
+  bookingmsg.innerText="Please select a date and available time.";
+  return;
+ }
+
+ let s=services.find(x=>x.id==service.value);
+ let st=stylists.find(x=>x.id==stylist.value);
+
+ if(!s || !st) {
+  bookingmsg.innerText="Please select a valid service and stylist.";
+  return;
+ }
+
+ if(!bookingname.value.trim() || !bookingphone.value.trim()) {
+  bookingmsg.innerText="Enter customer name and phone number.";
+  return;
+ }
+
+ if(isUnavailable(selectedDate,selectedTime,st.id)) {
+  bookingmsg.innerText="This slot is no longer available.";
+  renderSlots();
+  return;
+ }
+
+ let paymentMode=paymenttype.value;
+ let amount=paymentMode==="full" ? s.price :
+            paymentMode==="deposit" ? Math.ceil(s.price*.30) : 0;
+
+ let id="ELAN"+Math.floor(100000+Math.random()*900000);
+
+ let appointment={
+  id,
+  user:currentUser.email,
+  customer:bookingname.value.trim(),
+  phone:bookingphone.value.trim(),
+  service:s.name,
+  serviceId:s.id,
+  stylist:st.name,
+  stylistId:st.id,
+  date:selectedDate,
+  time:selectedTime,
+  notes:notes.value,
+  total:s.price,
+  paid:amount,
+  payment:platform.value,
+  status:"Confirmed",
+  paymentStatus:amount===0?"Pay at Salon":"Paid (Demo)"
+ };
+
+ appointments.push(appointment);
+ saveData();
+
+ confirmationdetails.innerHTML=`
+  <h3>ÉLAN BEAUTY STUDIO</h3>
+  <p><strong>Appointment ID:</strong> ${id}</p>
+  <p><strong>Customer:</strong> ${appointment.customer}</p>
+  <p><strong>Service:</strong> ${s.name}</p>
+  <p><strong>Stylist:</strong> ${st.name}</p>
+  <p><strong>Date:</strong> ${selectedDate}</p>
+  <p><strong>Time:</strong> ${selectedTime}</p>
+  <p><strong>Total Price:</strong> ₹${s.price}</p>
+  <p><strong>Amount Paid:</strong> ₹${amount}</p>
+  <p><strong>Payment Status:</strong> ${appointment.paymentStatus}</p>
+  <p><strong>Status:</strong> Confirmed</p>
+ `;
+
+ show("confirmation");
+}
+
+// CUSTOMER DASHBOARD
+function loadDashboard() {
+ if(!currentUser) {
+  profile.innerHTML="<p>Please login to view your account.</p>";
+  upcoming.innerHTML="";
+  history.innerHTML="";
+  return;
+ }
+
+ profile.innerHTML=`
+  <h3>Personal Information</h3>
+  <p>Name: ${currentUser.name}</p>
+  <p>Email: ${currentUser.email}</p>
+  <p>Phone: ${currentUser.phone}</p>
+ `;
+
+ let mine=appointments.filter(a=>a.user===currentUser.email);
+ let future=mine.filter(a=>a.status==="Confirmed" && a.date>=todayISO());
+ let past=mine.filter(a=>a.status!=="Confirmed" || a.date<todayISO());
+
+ upcoming.innerHTML=future.length ? future.map(a=>appointmentCard(a)).join("") :
+  "<p>No upcoming reservations.</p>";
+
+ history.innerHTML=past.length ? past.map(a=>appointmentCard(a)).join("") :
+  "<p>No reservation history.</p>";
+}
+
+function todayISO() {
+ let d=new Date();
+ return dateString(d.getFullYear(),d.getMonth(),d.getDate());
+}
+
+function appointmentCard(a) {
+ return `
+  <div class="card">
+   <h3>${a.service}</h3>
+   <p>Appointment ID: ${a.id}</p>
+   <p>Stylist: ${a.stylist}</p>
+   <p>Date: ${a.date} | ${a.time}</p>
+   <p>Amount Paid: ₹${a.paid}</p>
+   <p>Status: <strong>${a.status}</strong></p>
+   ${a.status==="Confirmed" ? `
+    <button class="btn" onclick="editAppointment('${a.id}')">Reschedule</button>
+    <button class="btn gold-btn" onclick="cancelAppointment('${a.id}')">Cancel</button>
+   `:""}
+  </div>
+ `;
+}
+
+// RESCHEDULE
+function editAppointment(id) {
+ let a=appointments.find(x=>x.id===id);
+
+ if(!a || a.user!==currentUser.email || a.status!=="Confirmed") return;
+
+ editAppointmentId=id;
+ editdate.min=todayISO();
+ editdate.value=a.date;
+
+ edittime.innerHTML="";
+ timeSlots.forEach(t=>{
+  let option=document.createElement("option");
+  option.value=t;
+  option.text=t;
+  edittime.appendChild(option);
+ });
+
+ edittime.value=a.time;
+ show("editbooking");
+}
+
+function saveEdit() {
+ let a=appointments.find(x=>x.id===editAppointmentId);
+ let date=editdate.value;
+ let time=edittime.value;
+
+ if(!a || !date || date<todayISO()) {
+  editmsg.innerText="Please select a valid future date.";
+  return;
+ }
+
+ if(isUnavailable(date,time,a.stylistId,a.id)) {
+  editmsg.innerText="Selected time is unavailable.";
+  return;
+ }
+
+ a.date=date;
+ a.time=time;
+ saveData();
+ editmsg.innerText="Appointment rescheduled successfully.";
+ loadDashboard();
+}
+
+// CANCEL
+function cancelAppointment(id) {
+ let a=appointments.find(x=>x.id===id);
+
+ if(!a || a.user!==currentUser.email) return;
+
+ if(confirm("Are you sure you want to cancel this appointment?")) {
+  a.status="Cancelled";
+  saveData();
+  loadDashboard();
+ }
+}
+
+// FEEDBACK
+function submitFeedback() {
+ if(!currentUser) {
+  alert("Please login first.");
+  show("login");
+  return;
+ }
+
+ if(!feedbacktext.value.trim()) {
+  feedbackmsg.innerText="Please enter your feedback.";
+  return;
+ }
+
+ feedbacks.push({
+  name:currentUser.name,
+  email:currentUser.email,
+  rating:rating.value,
+  comment:feedbacktext.value
+ });
+
+ saveData();
+ feedbackmsg.innerText="Thank you for your feedback!";
+ feedbacktext.value="";
+}
+
+// ADMIN LOGIN
+function adminLogin() {
+ if(adminemail.value==="admin@elan.com" && adminpass.value==="admin123") {
+  adminmsg.innerText="Login successful.";
+  show("admin");
+ } else {
+  adminmsg.innerText="Invalid administrator credentials.";
+ }
+}
+
+// ADMIN SERVICE MANAGEMENT
+function addService() {
+ let name=newservice.value.trim();
+ let duration=Number(newduration.value);
+ let price=Number(newserviceprice.value);
+
+ if(!name || duration<=0 || price<=0) {
+  alert("Enter valid service details.");
+  return;
+ }
+
+ services.push({
+  id:Date.now(),
+  name,
+  duration,
+  price
+ });
+
+ saveData();
+ renderServices();
+ loadAdmin();
+
+ newservice.value="";
+ newserviceprice.value="";
+ alert("Service added successfully.");
+}
+
+function deleteService(id) {
+ services=services.filter(s=>s.id!==id);
+ saveData();
+ loadAdmin();
+ renderServices();
+}
+
+// STYLIST MANAGEMENT
+function addStylist() {
+ let name=newstylist.value.trim();
+ let speciality=newspeciality.value.trim();
+
+ if(!name || !speciality) {
+  alert("Enter stylist details.");
+  return;
+ }
+
+ stylists.push({
+  id:Date.now(),
+  name,
+  speciality
+ });
+
+ saveData();
+ renderStylists();
+ loadAdmin();
+
+ newstylist.value="";
+ newspeciality.value="";
+}
+
+function deleteStylist(id) {
+ stylists=stylists.filter(s=>s.id!==id);
+ saveData();
+ renderStylists();
+ loadAdmin();
+}
+
+// BLOCK UNAVAILABLE HOURS
+function blockSlot() {
+ let stylistId=Number(blockstylist.value);
+ let date=blockdate.value;
+ let time=blocktime.value;
+
+ if(!date || date<todayISO()) {
+  alert("Choose a valid future date.");
+  return;
+ }
+
+ if(!stylists.some(s=>s.id===stylistId)) {
+  alert("Choose a valid stylist.");
+  return;
+ }
+
+ if(isUnavailable(date,time,stylistId)) {
+  alert("This slot is already booked or blocked.");
+  return;
+ }
+
+ blocked.push({stylistId,date,time});
+ saveData();
+ loadAdmin();
+ alert("Time slot blocked successfully.");
+}
+
+function unblockSlot(index) {
+ blocked.splice(index,1);
+ saveData();
+ loadAdmin();
+}
+
+// ADMIN CALENDAR
+function adminCalendar() {
+ let date=admindate.value;
+
+ let list=appointments.filter(a=>a.date===date);
+
+ admincalendar.innerHTML=list.length ? list.map(a=>`
+  <div class="card">
+   <h3>${a.time} - ${a.customer}</h3>
+   <p>${a.service} | ${a.stylist}</p>
+   <p>Phone: ${a.phone}</p>
+   <p>Status: ${a.status}</p>
+  </div>
+ `).join("") : "<p>No reservations for this date.</p>";
+}
+
+// ADMIN DASHBOARD
+function loadAdmin() {
+ totalappointments.innerText=appointments.length;
+ totalcustomers.innerText=users.length;
+ totalservices.innerText=services.length;
+
+ admindate.value=todayISO();
+ adminCalendar();
+
+ adminservices.innerHTML=`
+  <table>
+   <tr><th>Service</th><th>Duration</th><th>Price</th><th>Action</th></tr>
+   ${services.map(s=>`
+    <tr>
+     <td>${s.name}</td>
+     <td>${s.duration} min</td>
+     <td>₹${s.price}</td>
+     <td><button class="btn" onclick="deleteService(${s.id})">Delete</button></td>
+    </tr>
+   `).join("")}
+  </table>`;
+
+ adminstylists.innerHTML=`
+  <table>
+   <tr><th>Name</th><th>Speciality</th><th>Action</th></tr>
+   ${stylists.map(s=>`
+    <tr>
+     <td>${s.name}</td>
+     <td>${s.speciality}</td>
+     <td><button class="btn" onclick="deleteStylist(${s.id})">Delete</button></td>
+    </tr>
+   `).join("")}
+  </table>`;
+
+ adminappointments.innerHTML=appointments.length ? `
+  <table>
+   <tr>
+    <th>ID</th><th>Customer</th><th>Service</th>
+    <th>Date</th><th>Stylist</th><th>Status</th><th>Update</th>
+   </tr>
+   ${appointments.map(a=>`
+    <tr>
+     <td>${a.id}</td>
+     <td>${a.customer}</td>
+     <td>${a.service}</td>
+     <td>${a.date} ${a.time}</td>
+     <td>${a.stylist}</td>
+     <td>${a.status}</td>
+     <td>
+      <select onchange="adminUpdate('${a.id}',this.value)">
+       ${["Confirmed","Completed","Cancelled"].map(s=>
+        `<option ${a.status===s?"selected":""}>${s}</option>`
+       ).join("")}
+      </select>
+     </td>
+    </tr>
+   `).join("")}
+  </table>`:"<p>No appointments available.</p>";
+
+ admincustomers.innerHTML=users.length ? `
+  <table>
+   <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+   ${users.map(u=>`
+    <tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td></tr>
+   `).join("")}
+  </table>`:"<p>No customers registered.</p>";
+
+ adminfeedback.innerHTML=feedbacks.length ? `
+  ${feedbacks.map(f=>`
+   <div class="card">
+    <h3>${f.name} - ${f.rating}</h3>
+    <p>${f.comment}</p>
+   </div>
+  `).join("")}`:"<p>No feedback yet.</p>";
+
+ blockedlist.innerHTML=blocked.length ? blocked.map((b,i)=>`
+  <div class="card">
+   <p>${stylists.find(s=>s.id===b.stylistId)?.name || "Stylist"} - ${b.date} - ${b.time}</p>
+   <button class="btn" onclick="unblockSlot(${i})">Unblock</button>
+  </div>
+ `).join(""):"<p>No blocked slots.</p>";
+}
+
+function adminUpdate(id,status) {
+ let a=appointments.find(x=>x.id===id);
+ if(a) {
+  a.status=status;
+  saveData();
+  loadAdmin();
+ }
+}
+
+// INITIALIZATION
+blocktime.innerHTML=timeSlots.map(t=>`<option>${t}</option>`).join("");
+
+if(currentUser) {
+ currentUser=users.find(u=>u.email===currentUser.email) || null;
+ if(!currentUser) sessionStorage.removeItem("elanUser");
+}
+
+renderServices();
+renderStylists();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LifeLine Blood Network</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+<style>
+*{box-sizing:border-box}
+body{font-family:'Poppins',system-ui,sans-serif;background:radial-gradient(circle at 90% 0,#ffe3e3,transparent 40%),#fff8f8;color:#3b0d0d;max-width:920px;margin:0 auto;padding:14px}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#7f1020,#d7263d);color:#fff;border-radius:0 0 28px 28px;padding:24px 26px 56px;margin:-14px -14px 18px}
+.hero h1{margin:0;font-size:1.9rem}.hero p{margin:4px 0 0;opacity:.9}
+.ecgsvg{position:absolute;left:0;bottom:0;width:100%;height:46px}
+.ecg{fill:none;stroke:#fff;stroke-width:2.5;stroke-dasharray:700;stroke-dashoffset:700;animation:beat 3.2s linear infinite}
+@keyframes beat{to{stroke-dashoffset:0}}
+nav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid #f3c1c6;margin-bottom:14px}
+nav a{padding:9px 14px;text-decoration:none;color:#7f1020;font-weight:600;border-radius:12px 12px 0 0;transition:.15s}
+nav a:hover{background:#d7263d;color:#fff}
+h2{color:#b4142a}
+label{font-weight:600;font-size:.85rem;color:#7f1020}
+input,select,textarea{display:block;width:100%;padding:10px 12px;margin:4px 0 12px;border:2px solid #f3c1c6;border-radius:12px;background:#fff;color:#3b0d0d;font:inherit}
+input:focus,select:focus,textarea:focus{outline:3px solid #d7263d44;border-color:#d7263d}
+button{background:#d7263d;color:#fff;border:0;border-radius:12px;padding:9px 18px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 4px 0 #8f1024;transition:.1s}
+button:active{transform:translateY(3px);box-shadow:0 1px 0 #8f1024}
+.card{position:relative;background:#fff;border-radius:16px;border:1px solid #f3c1c6;border-left:8px solid #d7263d;padding:14px 16px 14px 54px;margin:12px 0;box-shadow:0 8px 20px #d7263d14}
+.card::before{content:"🩸";position:absolute;left:14px;top:12px;font-size:1.7rem}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden}
+th{background:#d7263d;color:#fff}td,th{padding:9px;text-align:left;border-bottom:1px solid #f3c1c6}
+#msg{min-height:1.4em;font-weight:600;color:#b4142a}
+.row{display:flex;gap:8px}
+</style></head><body>
+<div class="hero"><h1>🩸 LifeLine Blood Network</h1><p>Every drop connects a donor to a life.</p><svg class="ecgsvg" viewBox="0 0 400 60" preserveAspectRatio="none"><polyline class="ecg" points="0,30 70,30 85,30 95,6 108,54 120,30 190,30 205,30 215,6 228,54 240,30 310,30 325,30 335,6 348,54 360,30 400,30"/></svg></div><nav id="nav"></nav><div id="msg"></div><div id="main"></div>
+<script>
+/* ===== core (same in all 5 projects): localStorage acts as the database ===== */
+const P='P23_',$=s=>document.querySelector(s);
+const L=k=>JSON.parse(localStorage.getItem(P+k)||'[]'),S=(k,v)=>localStorage.setItem(P+k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),id=()=>Date.now()+Math.floor(Math.random()*999);
+let me=JSON.parse(sessionStorage.getItem('me'+P)||'null');const V={},H={},AFTER={};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',3500)};
+function fm(name,fields,btn,hid={}){return `<form onsubmit="return go(event,'${name}')">`+Object.entries(hid).map(([k,v])=>`<input type=hidden name=${k} value="${esc(v)}">`).join('')+fields.map(([n,l,t='text',o])=>`<label>${l}</label>`+(t=='select'?`<select name=${n}>${o.map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t=='textarea'?`<textarea name=${n} ${n[0]=='_'?'':'required'}></textarea>`:`<input name=${n} type=${t} step=any ${n[0]=='_'?'':'required'}>`)).join('')+`<button>${btn}</button></form>`}
+function go(e,n){e.preventDefault();H[n](Object.fromEntries(new FormData(e.target)));return false}
+function show(v,a){$('#main').innerHTML=V[v](a);nav();AFTER[v]&&AFTER[v](a)}
+function nav(){$('#nav').innerHTML=(me?MENU[me.role]:PUB).map(([l,v,a])=>`<a href="#" onclick="show('${v}'${a?`,'${a}'`:''});return false">${l}</a>`).join('')+(me?`<a href="#" onclick="logout();return false">Logout (${me.role})</a>`:'')}
+function logout(){me=null;sessionStorage.removeItem('me'+P);show('home')}
+V.login=r=>`<h2>${r[0].toUpperCase()+r.slice(1)} Login</h2>`+fm('login',[['u','Email / Username'],['p','Password','password']],'Login',{r});
+H.login=d=>{const t=L(d.r).find(x=>(x.email||x.username)==d.u&&x.password==d.p);if(!t)return msg('Invalid credentials');if(t.status&&t.status!='approved')return msg('Account not approved yet');me={role:d.r,id:t.id};sessionStorage.setItem('me'+P,JSON.stringify(me));show(d.r+'_home')};
+V.reg=r=>`<h2>Register ${r}</h2>`+fm('reg',REGF[r],'Register',{r});
+H.reg=d=>{const r=d.r;delete d.r;const a=L(r);if(a.some(x=>x.email==d.email))return msg('Email already registered');a.push({id:id(),...d,...(EXTRA[r]||{})});S(r,a);msg('Registered. Please login.');show('login',r)};
+const tb=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+
+/* ===== project 23 ===== */
+const G=['A+','A-','B+','B-','AB+','AB-','O+','O-'];
+const MENU={donor:[['Post Donor Info','dpost'],['My Donor Info','donor_home'],['Search Donor','dsearch'],['Search Blood Bank','bsearch']],
+hospital:[['Post Blood Bank','hpost'],['Update Blood Group Status','hstock'],['View Blood Bank Details','hospital_home']]};
+const PUB=[['Home','home'],['Donor Login','login','donor'],['Donor Register','reg','donor'],['Hospital Login','login','hospital'],['Hospital Register','reg','hospital']];
+const REGF={donor:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone']],
+hospital:[['name','Hospital name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['city','City'],['address','Address']]};
+const EXTRA={};
+const gsel=(i,any)=>`<select id=${i} onchange=run()>${any?'<option value="">Any group</option>':''}${G.map(g=>`<option>${g}</option>`).join('')}</select>`;
+V.home=()=>`<h2>Welcome</h2><p>Quick, secure access to donor records and blood bank stock. Donors register and post their details; hospitals publish blood bank stock.</p>`;
+/* donor */
+V.dpost=()=>`<h2>Post Donor Information</h2>`+fm('dpost',[['group','Blood group','select',G],['age','Age','number'],['city','City'],['_last','Last donated (optional)','date']],'Post');
+H.dpost=d=>{const a=L('dinfo');a.push({id:id(),did:me.id,...d});S('dinfo',a);msg('Information posted');show('donor_home')};
+V.donor_home=()=>`<h2>My Donor Info</h2>`+(L('dinfo').filter(x=>x.did==me.id).map(x=>`<div class=card>Group <b>${esc(x.group)}</b> | Age ${esc(x.age)} | ${esc(x.city)} | Last donated: ${esc(x._last||'-')} <button onclick="delD(${x.id})">Delete</button></div>`).join('')||'<p>Nothing posted yet.</p>');
+const delD=i=>{S('dinfo',L('dinfo').filter(x=>x.id!=i));show('donor_home')};
+V.dsearch=()=>`<h2>Search Donors</h2><div class=row>${gsel('g',1)}<input id=c placeholder="City" oninput=run()></div><div id=res></div>`;
+const run=()=>{const g=$('#g').value,c=$('#c')?.value.toLowerCase()||'';
+if($('#res').dataset.k=='d')$('#res').innerHTML=L('dinfo').filter(x=>(!g||x.group==g)&&x.city.toLowerCase().includes(c)).map(x=>{const d=L('donor').find(u=>u.id==x.did)||{};return `<div class=card><b>${esc(d.name)}</b> | ${esc(x.group)} | ${esc(x.city)} | Age ${esc(x.age)} | ${esc(d.phone)}</div>`}).join('')||'<p>No donors found.</p>';
+else bankList(L('bank').filter(b=>(!g||b.stock[g]>0)&&b.city.toLowerCase().includes(c)))};
+AFTER.dsearch=()=>{$('#res').dataset.k='d';run()};
+const bankList=a=>{$('#res').innerHTML=a.map(b=>`<div class=card><b>${esc(b.name)}</b> (${esc(L('hospital').find(h=>h.id==b.hid)?.name)}) | ${esc(b.city)} | ${esc(b.contact)}<br>Stock: ${G.map(g=>g+': '+b.stock[g]).join(' | ')}</div>`).join('')||'<p>No blood banks found.</p>'};
+V.bsearch=()=>`<h2>Search Blood Banks</h2><div class=row>${gsel('g',1)}<input id=c placeholder="City" oninput=run()></div><div id=res></div>`;
+AFTER.bsearch=()=>{$('#res').dataset.k='b';run()};
+/* hospital */
+V.hpost=()=>`<h2>Post Blood Bank Info</h2>`+fm('hpost',[['name','Blood bank name'],['contact','Contact'],['city','City']],'Post');
+H.hpost=d=>{const a=L('bank');a.push({id:id(),hid:me.id,...d,stock:Object.fromEntries(G.map(g=>[g,0]))});S('bank',a);msg('Blood bank posted');show('hospital_home')};
+V.hstock=()=>`<h2>Update Blood Group Status</h2><label>Blood bank</label><select id=sb>${L('bank').filter(b=>b.hid==me.id).map(b=>`<option value=${b.id}>${esc(b.name)}</option>`).join('')}</select><label>Blood group</label><select id=sg>${G.map(g=>`<option>${g}</option>`).join('')}</select><label>Units available</label><input id=su type=number min=0><button onclick="setStock()">Update</button>`;
+const setStock=()=>{const u=+$('#su').value,b=+$('#sb').value;if(!b||$('#su').value==='')return msg('Post a blood bank and enter units first');S('bank',L('bank').map(x=>x.id==b?{...x,stock:{...x.stock,[$('#sg').value]:u}}:x));msg('Stock updated');show('hospital_home')};
+V.hospital_home=()=>`<h2>My Blood Bank Details</h2>`+(L('bank').filter(b=>b.hid==me.id).map(b=>`<div class=card><b>${esc(b.name)}</b> | ${esc(b.city)} | ${esc(b.contact)}<br>Stock: ${G.map(g=>g+': '+b.stock[g]).join(' | ')}</div>`).join('')||'<p>No blood banks posted yet.</p>');
+
+/* ===== built-in database viewer ===== */
+const tbls=()=>Object.keys(localStorage).filter(k=>k.startsWith(P)).map(k=>k.slice(P.length)).sort();
+const cols=r=>[...new Set(r.flatMap(o=>Object.keys(o)))];
+const dl=(n,t)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()};
+const dlJSON=()=>dl('database.json',JSON.stringify(Object.fromEntries(tbls().map(k=>[k,L(k)])),null,2));
+const sq=v=>typeof v=='number'?v:`'${String(typeof v=='object'?JSON.stringify(v):v??'').replace(/'/g,"''")}'`;
+const dlSQL=()=>dl('database.sql',tbls().map(k=>{const r=L(k);if(!r.length)return `-- ${k}: empty`;const c=cols(r);return r.map(o=>`INSERT INTO \`${k}\` (${c.map(x=>'`'+x+'`').join(',')}) VALUES (${c.map(x=>sq(o[x])).join(',')});`).join('\n')}).join('\n\n'));
+V.db=()=>`<h2>🗄️ Database Viewer</h2><p>Live data stored in this browser: <b>${tbls().length}</b> tables. Passwords are masked.</p><button onclick="dlSQL()">Download SQL (INSERTs)</button> <button onclick="dlJSON()">Download JSON</button> <button onclick="show('db')">Refresh</button> <button onclick="if(confirm('Delete ALL data in this project?')){tbls().forEach(k=>localStorage.removeItem(P+k));sessionStorage.clear();location.reload()}">Reset database</button>`+
+(tbls().map(k=>{const r=L(k),c=cols(r);return `<h3>${esc(k)} <small>(${r.length} rows)</small></h3>`+(r.length?`<div style="overflow-x:auto">`+tb(c.map(esc),r.map(o=>c.map(x=>x=='password'?'••••••':esc(typeof o[x]=='object'?JSON.stringify(o[x]):o[x]))))+`</div>`:'<small>empty table</small>')}).join('')||'<p>No data yet.</p>');
+const _nav=nav;nav=function(){_nav();$('#nav').innerHTML+=`<a href="#" onclick="show('db');return false">🗄️ Database</a>`};
+show(me?me.role+'_home':'home');
+</script></body></html>

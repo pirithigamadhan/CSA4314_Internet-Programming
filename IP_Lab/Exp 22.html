@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EcoRoute</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap">
+<style>
+*{box-sizing:border-box}
+body{font-family:'Nunito',system-ui,sans-serif;background:linear-gradient(160deg,#e8f8ea,#d2efd9);color:#14391f;max-width:1080px;margin:0 auto;padding:14px;display:grid;grid-template-columns:240px 1fr;grid-template-rows:auto auto 1fr;grid-template-areas:"h h" "n m" "n c";column-gap:20px}
+.hero{grid-area:h;position:relative;overflow:hidden;background:linear-gradient(120deg,#14532d,#16a34a 60%,#84cc16);color:#fff;border-radius:22px;padding:22px 26px 34px;margin-bottom:16px}
+.hero h1{margin:0;font-size:2.1rem;font-weight:800}.hero p{margin:4px 0 0;opacity:.9}
+.truck{position:absolute;bottom:2px;left:-60px;font-size:1.8rem;animation:drive 11s linear infinite}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:repeating-linear-gradient(90deg,#fff8 0 18px,transparent 18px 36px)}
+@keyframes drive{to{left:105%}}
+nav{grid-area:n;align-self:start;display:flex;flex-direction:column;gap:6px;background:#14532d;border-radius:20px;padding:14px;position:sticky;top:12px}
+nav a{color:#d9f99d;text-decoration:none;padding:10px 12px;border-radius:12px;font-weight:700;transition:.15s}
+nav a:hover{background:#84cc16;color:#14391f;transform:translateX(4px)}
+#msg{grid-area:m;min-height:1.4em;font-weight:800;color:#b45309}
+#main{grid-area:c;min-width:0}
+h2{color:#14532d;border-bottom:4px solid #84cc16;display:inline-block;padding-bottom:2px}
+label{font-weight:700;font-size:.9rem}
+input,select,textarea{display:block;width:100%;padding:10px 12px;margin:4px 0 12px;border:2px solid #86c99a;border-radius:12px;background:#fff;color:#14391f;font:inherit}
+input:focus,select:focus,textarea:focus{outline:3px solid #84cc1688}
+button{background:#16a34a;color:#fff;border:0;border-radius:999px;padding:9px 18px;font:inherit;font-weight:800;cursor:pointer;transition:.15s}
+button:hover{background:#14532d;transform:scale(1.04)}
+.card{background:#fff;border-radius:18px;border-left:10px solid #84cc16;padding:14px 16px;margin:12px 0;box-shadow:0 6px 16px #14532d1a}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 6px 16px #14532d1a}
+th{background:#14532d;color:#d9f99d}td,th{padding:10px;text-align:left;border-bottom:1px solid #d2efd9}
+.row{display:flex;gap:8px}
+@media(max-width:760px){body{grid-template-columns:1fr;grid-template-areas:"h" "n" "m" "c"}nav{flex-direction:row;flex-wrap:wrap;position:static}}
+</style></head><body>
+<div class="hero"><h1>♻️ EcoRoute</h1><p>Smart solid waste management: segregate, collect, transport.</p><span class="truck">🚛</span></div><nav id="nav"></nav><div id="msg"></div><div id="main"></div>
+<script>
+/* ===== core (same in all 5 projects): localStorage acts as the database ===== */
+const P='P22_',$=s=>document.querySelector(s);
+const L=k=>JSON.parse(localStorage.getItem(P+k)||'[]'),S=(k,v)=>localStorage.setItem(P+k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),id=()=>Date.now()+Math.floor(Math.random()*999);
+let me=JSON.parse(sessionStorage.getItem('me'+P)||'null');const V={},H={},AFTER={};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',3500)};
+function fm(name,fields,btn,hid={}){return `<form onsubmit="return go(event,'${name}')">`+Object.entries(hid).map(([k,v])=>`<input type=hidden name=${k} value="${esc(v)}">`).join('')+fields.map(([n,l,t='text',o])=>`<label>${l}</label>`+(t=='select'?`<select name=${n}>${o.map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t=='textarea'?`<textarea name=${n} ${n[0]=='_'?'':'required'}></textarea>`:`<input name=${n} type=${t} step=any ${n[0]=='_'?'':'required'}>`)).join('')+`<button>${btn}</button></form>`}
+function go(e,n){e.preventDefault();H[n](Object.fromEntries(new FormData(e.target)));return false}
+function show(v,a){$('#main').innerHTML=V[v](a);nav();AFTER[v]&&AFTER[v](a)}
+function nav(){$('#nav').innerHTML=(me?MENU[me.role]:PUB).map(([l,v,a])=>`<a href="#" onclick="show('${v}'${a?`,'${a}'`:''});return false">${l}</a>`).join('')+(me?`<a href="#" onclick="logout();return false">Logout (${me.role})</a>`:'')}
+function logout(){me=null;sessionStorage.removeItem('me'+P);show('home')}
+V.login=r=>`<h2>${r[0].toUpperCase()+r.slice(1)} Login</h2>`+fm('login',[['u','Email / Username'],['p','Password','password']],'Login',{r});
+H.login=d=>{const t=L(d.r).find(x=>(x.email||x.username)==d.u&&x.password==d.p);if(!t)return msg('Invalid credentials');if(t.status&&t.status!='approved')return msg('Account not approved yet');me={role:d.r,id:t.id};sessionStorage.setItem('me'+P,JSON.stringify(me));show(d.r+'_home')};
+V.reg=r=>`<h2>Register ${r}</h2>`+fm('reg',REGF[r],'Register',{r});
+H.reg=d=>{const r=d.r;delete d.r;const a=L(r);if(a.some(x=>x.email==d.email))return msg('Email already registered');a.push({id:id(),...d,...(EXTRA[r]||{})});S(r,a);msg('Registered. Please login.');show('login',r)};
+const tb=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+if(!L('admin').length)S('admin',[{id:1,username:'admin',password:'admin123'}]);
+
+/* ===== project 22 ===== */
+const MENU={admin:[['Garbage Bins','bins'],['Drivers','drivers'],['Assign Best Route','routes'],['Garbage Report','reports'],['Complaints','complaints']],
+public:[['Register Complaint','public_home'],['My Complaints & Status','mine']],driver:[["Today's Work",'driver_home']]};
+const PUB=[['Home','home'],['Public Login','login','public'],['Public Register','reg','public'],['Driver Login','login','driver'],['Admin Login','login','admin']];
+const REGF={public:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['address','Address']]};
+const EXTRA={};
+const DEPOT=[12.9675,80.1491],DUMP=[12.9000,80.2300]; /* change to your depot & dumping site */
+const hav=(a,b)=>{const r=Math.PI/180,x=Math.sin((b[0]-a[0])*r/2)**2+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin((b[1]-a[1])*r/2)**2;return 12742*Math.asin(Math.sqrt(x))};
+const bestRoute=bins=>{let pos=DEPOT,left=[...bins],out=[];while(left.length){left.sort((a,b)=>hav(pos,[a.lat,a.lng])-hav(pos,[b.lat,b.lng]));const n=left.shift();out.push(n);pos=[n.lat,n.lng]}return out};
+const bn=i=>esc(L('bin').find(b=>b.id==i)?.code),dn=i=>esc(L('driver').find(d=>d.id==i)?.name);
+V.home=()=>`<h2>Smart Solid Waste Management</h2><p>Segregation, collection and transportation made efficient. Citizens can register complaints; drivers get optimised routes; admins monitor everything.</p>`;
+/* admin: bins */
+V.admin_home=()=>V.bins();
+V.bins=()=>`<h2>Create Garbage Bin</h2>`+fm('bin',[['code','Bin code'],['loc','Location name'],['lat','Latitude','number'],['lng','Longitude','number'],['cap','Capacity (kg)','number']],'Create')+`<h2>All Bins</h2>`+tb(['Code','Location','Lat,Lng','Load/Capacity','Actions'],L('bin').map(b=>[esc(b.code),esc(b.loc),b.lat+','+b.lng,b.load+' / '+b.cap+' kg',`<button onclick="editBin(${b.id})">Update</button> <button onclick="delBin(${b.id})">Delete</button>`]));
+H.bin=d=>{const a=L('bin');if(a.some(b=>b.code==d.code))return msg('Bin code exists');a.push({id:id(),code:d.code,loc:d.loc,lat:+d.lat,lng:+d.lng,cap:+d.cap,load:0});S('bin',a);msg('Bin created');show('bins')};
+const editBin=i=>{const b=L('bin').find(x=>x.id==i),loc=prompt('Location name',b.loc);if(loc===null)return;const cap=prompt('Capacity (kg)',b.cap);if(cap===null)return;S('bin',L('bin').map(x=>x.id==i?{...x,loc,cap:+cap}:x));show('bins')};
+const delBin=i=>{S('bin',L('bin').filter(b=>b.id!=i));show('bins')};
+/* admin: drivers */
+V.drivers=()=>`<h2>Add Driver</h2>`+fm('drv',[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['vehicle','Vehicle no']],'Add')+`<h2>Drivers</h2>`+tb(['Name','Email','Phone','Vehicle',''],L('driver').map(d=>[esc(d.name),esc(d.email),esc(d.phone),esc(d.vehicle),`<button onclick="delDrv(${d.id})">Remove</button>`]));
+H.drv=d=>{const a=L('driver');if(a.some(x=>x.email==d.email))return msg('Email exists');a.push({id:id(),...d});S('driver',a);msg('Driver added');show('drivers')};
+const delDrv=i=>{S('driver',L('driver').filter(d=>d.id!=i));show('drivers')};
+/* admin: assign best route */
+V.routes=()=>`<h2>Assign Best Route (bins 70%+ full pre-selected)</h2><label>Driver</label><select id=rd>${L('driver').map(d=>`<option value=${d.id}>${esc(d.name)} (${esc(d.vehicle)})</option>`).join('')}</select><label>Date</label><input type=date id=rdt>`+(L('bin').map(b=>`<label style="display:block"><input type=checkbox style="display:inline;width:auto" class=bc value=${b.id} ${b.load>=.7*b.cap?'checked':''}> ${esc(b.code)} - ${esc(b.loc)} (${b.load}/${b.cap} kg)</label>`).join('')||'<p>No bins yet.</p>')+`<br><button onclick="assign()">Generate best route &amp; assign</button><h2>Assignments</h2>`+tb(['Driver','Date','Bin order','Status'],L('route').map(r=>[dn(r.driver),r.date,r.seq.map(bn).join(' → '),r.status]));
+const assign=()=>{const ids=[...document.querySelectorAll('.bc:checked')].map(c=>+c.value),d=$('#rd').value,dt=$('#rdt').value;if(!ids.length||!d||!dt)return msg('Select driver, date and at least one bin');
+const seq=bestRoute(L('bin').filter(b=>ids.includes(b.id))).map(b=>b.id),a=L('route');a.push({id:id(),driver:+d,date:dt,seq,status:'assigned'});S('route',a);msg('Best route assigned');show('routes')};
+V.reports=()=>`<h2>Garbage Report</h2><p>Total reported: <b>${L('report').reduce((s,r)=>s+r.load,0)} kg</b></p>`+tb(['Time','Driver','Bin','Load (kg)'],L('report').map(r=>[r.on,dn(r.driver),bn(r.bin),r.load]));
+V.complaints=()=>`<h2>Complaints from Public</h2>`+(L('complaint').map(c=>`<div class=card><b>${esc(c.subject)}</b> by ${esc(L('public').find(u=>u.id==c.uid)?.name)} - <i>${c.status}</i><p>${esc(c.description)}</p><button onclick="cst(${c.id},'in_progress')">In progress</button> <button onclick="cst(${c.id},'resolved')">Resolved</button></div>`).join('')||'<p>No complaints.</p>');
+const cst=(i,s)=>{S('complaint',L('complaint').map(c=>c.id==i?{...c,status:s}:c));show('complaints')};
+/* public */
+V.public_home=()=>`<h2>Register Complaint</h2>`+fm('cmp',[['subject','Subject'],['description','Details','textarea']],'Submit');
+H.cmp=d=>{const a=L('complaint');a.push({id:id(),uid:me.id,...d,status:'open',on:new Date().toLocaleString()});S('complaint',a);msg('Complaint registered');show('mine')};
+V.mine=()=>`<h2>My Complaints & Status</h2>`+(L('complaint').filter(c=>c.uid==me.id).map(c=>`<div class=card><b>${esc(c.subject)}</b> - <i>${c.status}</i><p>${esc(c.description)}</p><small>${c.on}</small></div>`).join('')||'<p>None.</p>');
+/* driver */
+V.driver_home=()=>{const today=new Date().toLocaleDateString('en-CA');return `<h2>Today's Work (${today})</h2>`+(L('route').filter(r=>r.driver==me.id&&r.date==today).map(r=>{const st=r.seq.map(i=>L('bin').find(b=>b.id==i)).filter(Boolean),
+url='https://www.google.com/maps/dir/?api=1&origin='+DEPOT+'&destination='+DUMP+'&waypoints='+encodeURIComponent(st.map(b=>b.lat+','+b.lng).join('|'))+'&travelmode=driving';
+return `<div class=card><h3>Route #${String(r.id).slice(-4)} - ${r.status}</h3><a target=_blank href="${url}">Open best route in Google Maps</a><ol>`+st.map(b=>`<li>${esc(b.code)} - ${esc(b.loc)} (load ${b.load} kg) <input id=ld${b.id} type=number placeholder="new load kg" style="display:inline;width:130px"> <button onclick="upd(${b.id})">Update load</button></li>`).join('')+`</ol><button onclick="rst(${r.id},'in_progress')">Start</button> <button onclick="rst(${r.id},'completed')">Complete</button></div>`}).join('')||'<p>No route assigned for today.</p>')};
+const upd=b=>{const v=+$('#ld'+b).value;if(isNaN(v)||$('#ld'+b).value==='')return msg('Enter load');S('bin',L('bin').map(x=>x.id==b?{...x,load:v}:x));const a=L('report');a.push({id:id(),driver:me.id,bin:b,load:v,on:new Date().toLocaleString()});S('report',a);msg('Load updated');show('driver_home')};
+const rst=(i,s)=>{S('route',L('route').map(r=>r.id==i?{...r,status:s}:r));show('driver_home')};
+
+/* ===== built-in database viewer ===== */
+const tbls=()=>Object.keys(localStorage).filter(k=>k.startsWith(P)).map(k=>k.slice(P.length)).sort();
+const cols=r=>[...new Set(r.flatMap(o=>Object.keys(o)))];
+const dl=(n,t)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()};
+const dlJSON=()=>dl('database.json',JSON.stringify(Object.fromEntries(tbls().map(k=>[k,L(k)])),null,2));
+const sq=v=>typeof v=='number'?v:`'${String(typeof v=='object'?JSON.stringify(v):v??'').replace(/'/g,"''")}'`;
+const dlSQL=()=>dl('database.sql',tbls().map(k=>{const r=L(k);if(!r.length)return `-- ${k}: empty`;const c=cols(r);return r.map(o=>`INSERT INTO \`${k}\` (${c.map(x=>'`'+x+'`').join(',')}) VALUES (${c.map(x=>sq(o[x])).join(',')});`).join('\n')}).join('\n\n'));
+V.db=()=>`<h2>🗄️ Database Viewer</h2><p>Live data stored in this browser: <b>${tbls().length}</b> tables. Passwords are masked.</p><button onclick="dlSQL()">Download SQL (INSERTs)</button> <button onclick="dlJSON()">Download JSON</button> <button onclick="show('db')">Refresh</button> <button onclick="if(confirm('Delete ALL data in this project?')){tbls().forEach(k=>localStorage.removeItem(P+k));sessionStorage.clear();location.reload()}">Reset database</button>`+
+(tbls().map(k=>{const r=L(k),c=cols(r);return `<h3>${esc(k)} <small>(${r.length} rows)</small></h3>`+(r.length?`<div style="overflow-x:auto">`+tb(c.map(esc),r.map(o=>c.map(x=>x=='password'?'••••••':esc(typeof o[x]=='object'?JSON.stringify(o[x]):o[x]))))+`</div>`:'<small>empty table</small>')}).join('')||'<p>No data yet.</p>');
+const _nav=nav;nav=function(){_nav();$('#nav').innerHTML+=`<a href="#" onclick="show('db');return false">🗄️ Database</a>`};
+show(me?me.role+'_home':'home');
+</script></body></html>

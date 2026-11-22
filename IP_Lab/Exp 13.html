@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BlossomGifts | Flowers & Gifts</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#fff9f8;color:#493d45}
+header{background:#fff;color:#5c3d50;padding:17px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;box-shadow:0 2px 12px #0000000b;position:sticky;top:0;z-index:5}
+.logo{font-size:26px;font-weight:bold;color:#d65d83}
+nav{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+nav a,nav button{color:#624456;text-decoration:none;background:none;border:0;cursor:pointer;font-size:14px}
+nav a:hover{color:#d65d83}
+button,.btn{background:#d65d83;color:white;border:0;padding:11px 16px;border-radius:7px;cursor:pointer;font-weight:bold}
+button:hover,.btn:hover{background:#b9436a}
+.hero{background:linear-gradient(120deg,#ffe1e9,#f4e7fa);padding:65px 7%;text-align:center}
+.hero h1{font-size:42px;color:#a83f67;margin-bottom:12px}
+.hero p{color:#765c6a;font-size:17px;margin-bottom:22px}
+.hero button{margin:5px}
+section{padding:42px 7%}
+.heading{text-align:center;margin-bottom:25px}
+.heading h2{font-size:28px;color:#a83f67}
+.heading p{margin-top:8px;color:#8c7781}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.card,.panel{background:white;border-radius:12px;overflow:hidden;box-shadow:0 3px 15px #a83f6710}
+.card img{width:100%;height:190px;object-fit:cover}
+.card-body{padding:16px}
+.card h3,.panel h3{color:#a83f67;margin-bottom:9px}
+.card p{font-size:13px;color:#887781;line-height:1.6}
+.price{font-size:20px;color:#d65d83;font-weight:bold;margin:10px 0}
+.tag{display:inline-block;background:#ffedf2;color:#b9436a;padding:5px 9px;border-radius:5px;font-size:12px;margin-bottom:9px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.actions button{font-size:12px;padding:9px 11px}
+.form-group{margin-bottom:14px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px;color:#705363}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ead7df;border-radius:7px;font-size:14px;background:white;color:#493d45}
+textarea{min-height:80px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+.filters input,.filters select{flex:1;min-width:150px}
+.panel{padding:22px;margin-bottom:20px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.notice{background:#fcebf1;color:#a83f67;padding:13px;border-radius:7px;margin:12px 0}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;background:#0008;display:flex;justify-content:center;align-items:center;padding:15px;z-index:20}
+.modal-content{background:white;padding:25px;border-radius:13px;width:100%;max-width:500px;max-height:90vh;overflow:auto}
+.close{float:right;background:#eee;color:#555;padding:6px 10px}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #f0e2e7;font-size:13px}
+th{background:#ffedf2;color:#a83f67}
+.table-wrap{overflow-x:auto}
+.ad{background:linear-gradient(120deg,#ffe6ed,#f3e8fa);padding:28px;border-radius:12px;text-align:center}
+footer{background:#6d4058;color:white;text-align:center;padding:32px;line-height:2}
+footer h2{color:#ffe0eb}
+@media(max-width:600px){.hero h1{font-size:30px}header{justify-content:center}nav{justify-content:center}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">🌸 BlossomGifts</div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#categories">Categories</a>
+  <a href="#products">Shop</a>
+  <a href="#cart">Cart 🛒</a>
+  <a href="#orders">My Orders</a>
+  <button onclick="showLogin()">Login</button>
+  <button onclick="showRegister()">Register</button>
+  <button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
+ </nav>
+</header>
+
+<div class="hero" id="home">
+ <h1>Make Every Moment Bloom 🌷</h1>
+ <p>Beautiful flowers and thoughtful gifts delivered with love.</p>
+ <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+ <button onclick="showRegister()">Create Account</button>
+</div>
+
+<section id="categories">
+ <div class="heading">
+  <h2>Shop by Category</h2>
+  <p>Find the perfect gift for every special moment.</p>
+ </div>
+ <div class="grid">
+  <div class="card"><div class="card-body"><h3>🌹 Flowers</h3><p>Rose bouquets, lilies, orchids and mixed flowers.</p><button onclick="selectCategory('Flowers')">Explore</button></div></div>
+  <div class="card"><div class="card-body"><h3>🎁 Gift Baskets</h3><p>Chocolate baskets, fruit baskets and luxury hampers.</p><button onclick="selectCategory('Gift Baskets')">Explore</button></div></div>
+  <div class="card"><div class="card-body"><h3>🍫 Chocolates</h3><p>Chocolate boxes, assorted treats and sweet gifts.</p><button onclick="selectCategory('Chocolates')">Explore</button></div></div>
+  <div class="card"><div class="card-body"><h3>🎂 Cakes</h3><p>Birthday cakes, celebration cakes and desserts.</p><button onclick="selectCategory('Cakes')">Explore</button></div></div>
+  <div class="card"><div class="card-body"><h3>💝 Personalized Gifts</h3><p>Customized mugs, photo frames and keepsakes.</p><button onclick="selectCategory('Personalized Gifts')">Explore</button></div></div>
+  <div class="card"><div class="card-body"><h3>🧸 Soft Toys</h3><p>Soft toys, teddy bears and adorable surprises.</p><button onclick="selectCategory('Soft Toys')">Explore</button></div></div>
+ </div>
+</section>
+
+<section>
+ <div class="heading"><h2>Shop by Occasion</h2><p>Choose a gift for the moment that matters.</p></div>
+ <div class="grid">
+  <div class="card"><div class="card-body"><h3>🎂 Birthday</h3><button onclick="selectOccasion('Birthday')">Shop Birthday</button></div></div>
+  <div class="card"><div class="card-body"><h3>❤️ Anniversary</h3><button onclick="selectOccasion('Anniversary')">Shop Anniversary</button></div></div>
+  <div class="card"><div class="card-body"><h3>💍 Wedding</h3><button onclick="selectOccasion('Wedding')">Shop Wedding</button></div></div>
+  <div class="card"><div class="card-body"><h3>🌼 Thank You</h3><button onclick="selectOccasion('Thank You')">Shop Thank You</button></div></div>
+ </div>
+</section>
+
+<section id="products">
+ <div class="heading"><h2>Our Products</h2><p>Explore our beautiful collection.</p></div>
+ <div class="filters">
+  <input id="search" placeholder="Search products..." oninput="renderProducts()">
+  <select id="categoryFilter" onchange="renderProducts()">
+   <option value="">All Categories</option>
+   <option>Flowers</option><option>Gift Baskets</option><option>Chocolates</option>
+   <option>Cakes</option><option>Personalized Gifts</option><option>Soft Toys</option>
+  </select>
+  <select id="priceFilter" onchange="renderProducts()">
+   <option value="">All Prices</option>
+   <option value="500">Below ₹500</option>
+   <option value="1000">Below ₹1000</option>
+   <option value="2000">Below ₹2000</option>
+  </select>
+  <select id="occasionFilter" onchange="renderProducts()">
+   <option value="">All Occasions</option>
+   <option>Birthday</option><option>Anniversary</option><option>Wedding</option><option>Thank You</option>
+  </select>
+ </div>
+ <div class="grid" id="productGrid"></div>
+</section>
+
+<section id="cart">
+ <div class="heading"><h2>🛒 Shopping Cart</h2><p>Review your selected gifts before checkout.</p></div>
+ <div class="panel">
+  <div id="cartItems"></div>
+  <div id="cartTotal" class="price"></div>
+  <button onclick="checkout()">Proceed to Checkout</button>
+ </div>
+</section>
+
+<section id="orders">
+ <div class="heading"><h2>My Orders</h2><p>Track your gifts and delivery status.</p></div>
+ <div class="panel" id="orderList">Login to view your orders.</div>
+</section>
+
+<section id="profile">
+ <div class="heading"><h2>My Account</h2><p>Manage your customer information.</p></div>
+ <div class="panel" id="profilePanel">Login to manage your profile.</div>
+</section>
+
+<section>
+ <div class="ad">
+  <h2>🌸 Special Offer – 10% OFF!</h2>
+  <p style="margin:12px">Use coupon code <b>BLOOM10</b> during checkout.</p>
+  <p>Share happiness with beautiful gifts at special prices.</p>
+ </div>
+</section>
+
+<section id="contact">
+ <div class="heading"><h2>Contact Us</h2><p>Have a question? Send us an enquiry.</p></div>
+ <div class="panel" style="max-width:600px;margin:auto">
+  <div class="form-group"><label>Your Name</label><input id="contactName"></div>
+  <div class="form-group"><label>Email</label><input id="contactEmail" type="email"></div>
+  <div class="form-group"><label>Message</label><textarea id="contactMessage"></textarea></div>
+  <button onclick="sendEnquiry()">Submit Enquiry</button>
+ </div>
+</section>
+
+<section id="admin">
+ <div class="heading"><h2>Admin Dashboard</h2><p>Manage products, customers and orders.</p></div>
+ <div id="adminLoginPanel" class="panel">
+  <button onclick="showAdminLogin()">Admin Login</button>
+ </div>
+ <div id="adminDashboard" class="hidden">
+  <div class="grid">
+   <div class="card"><div class="card-body"><h3>Total Products</h3><h2 id="productCount">0</h2></div></div>
+   <div class="card"><div class="card-body"><h3>Total Customers</h3><h2 id="customerCount">0</h2></div></div>
+   <div class="card"><div class="card-body"><h3>Total Orders</h3><h2 id="orderCount">0</h2></div></div>
+  </div>
+  <br>
+  <div class="panel">
+   <h3>Add / Edit Product</h3>
+   <input type="hidden" id="editId">
+   <div class="row">
+    <div class="form-group"><label>Product Name</label><input id="newName"></div>
+    <div class="form-group"><label>Price (₹)</label><input id="newPrice" type="number"></div>
+    <div class="form-group"><label>Category</label><select id="newCategory">
+     <option>Flowers</option><option>Gift Baskets</option><option>Chocolates</option><option>Cakes</option><option>Personalized Gifts</option><option>Soft Toys</option>
+    </select></div>
+    <div class="form-group"><label>Occasion</label><select id="newOccasion">
+     <option>Birthday</option><option>Anniversary</option><option>Wedding</option><option>Thank You</option>
+    </select></div>
+    <div class="form-group"><label>Subcategory</label><input id="newSubcategory" placeholder="Example: Rose Bouquet"></div>
+    <div class="form-group"><label>Stock Quantity</label><input id="newStock" type="number" value="10"></div>
+    <div class="form-group"><label>Image URL</label><input id="newImage" placeholder="Paste image URL"></div>
+   </div>
+   <div class="form-group"><label>Description</label><textarea id="newDescription"></textarea></div>
+   <button onclick="saveProduct()">Save Product</button>
+   <button onclick="clearProductForm()">Clear</button>
+  </div>
+  <div class="panel"><h3>Manage Inventory</h3><div id="inventoryTable" class="table-wrap"></div></div>
+  <div class="panel"><h3>Customer Details</h3><div id="customerTable" class="table-wrap"></div></div>
+  <div class="panel"><h3>Order Summary</h3><div id="adminOrderTable" class="table-wrap"></div></div>
+  <div class="panel"><h3>Customer Enquiries</h3><div id="enquiryTable" class="table-wrap"></div></div>
+ </div>
+</section>
+
+<footer>
+ <h2>🌸 BlossomGifts</h2>
+ <p>Send love, happiness and beautiful memories.</p>
+ <p>Contact: support@blossomgifts.example | +91 98765 43210</p>
+ <p>© 2026 BlossomGifts. All rights reserved.</p>
+</footer>
+
+<div id="modal" class="modal hidden">
+ <div class="modal-content">
+  <button class="close" onclick="closeModal()">✕</button>
+  <div id="modalContent"></div>
+ </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
+const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const money=n=>"₹"+Number(n).toLocaleString("en-IN");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+let products=read("bg_products",[
+ {id:1,name:"Classic Red Rose Bouquet",price:599,category:"Flowers",subcategory:"Rose Bouquet",occasion:"Anniversary",stock:20,image:"https://images.unsplash.com/photo-1494972308805-463bc619d34e?w=700",description:"A beautiful bouquet of fresh red roses wrapped in elegant paper."},
+ {id:2,name:"Pink Lily Bouquet",price:899,category:"Flowers",subcategory:"Lily Bouquet",occasion:"Birthday",stock:15,image:"https://images.unsplash.com/photo-1520763185298-1b434c919102?w=700",description:"Fresh pink lilies arranged beautifully for your loved ones."},
+ {id:3,name:"Luxury Chocolate Hamper",price:1299,category:"Gift Baskets",subcategory:"Chocolate Basket",occasion:"Birthday",stock:12,image:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=700",description:"A premium collection of delicious assorted chocolates."},
+ {id:4,name:"Birthday Chocolate Box",price:499,category:"Chocolates",subcategory:"Chocolate Box",occasion:"Birthday",stock:25,image:"https://images.unsplash.com/photo-1511381939415-e44015466834?w=700",description:"A delightful chocolate gift box for birthday celebrations."},
+ {id:5,name:"Celebration Cake",price:799,category:"Cakes",subcategory:"Birthday Cake",occasion:"Birthday",stock:10,image:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=700",description:"A delicious celebration cake for your special day."},
+ {id:6,name:"Personalized Photo Frame",price:699,category:"Personalized Gifts",subcategory:"Photo Frame",occasion:"Anniversary",stock:18,image:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=700",description:"A personalized photo frame to preserve your favourite memories."},
+ {id:7,name:"Cute Teddy Bear",price:599,category:"Soft Toys",subcategory:"Teddy Bear",occasion:"Thank You",stock:14,image:"https://images.unsplash.com/photo-1559454403-b8fb88521f11?w=700",description:"A soft and adorable teddy bear for someone special."},
+ {id:8,name:"Wedding Floral Arrangement",price:1899,category:"Flowers",subcategory:"Wedding Flowers",occasion:"Wedding",stock:8,image:"https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=700",description:"An elegant floral arrangement for wedding celebrations."}
+]);
+let users=read("bg_users",[]);
+let orders=read("bg_orders",[]);
+let cart=read("bg_cart",[]);
+let enquiries=read("bg_enquiries",[]);
+let current=read("bg_current",null);
+let isAdmin=false;
+
+function persist(){
+ save("bg_products",products);save("bg_users",users);
+ save("bg_orders",orders);save("bg_cart",cart);
+ save("bg_enquiries",enquiries);save("bg_current",current);
+}
+function showModal(html){$("modalContent").innerHTML=html;$("modal").classList.remove("hidden");}
+function closeModal(){$("modal").classList.add("hidden");}
+function requireLogin(){
+ if(!current){alert("Please login first.");showLogin();return false;}
+ return true;
+}
+function showRegister(){
+ showModal(`<h2>Create Account 🌸</h2><br>
+ <div class="form-group"><label>Full Name</label><input id="regName"></div>
+ <div class="form-group"><label>Email</label><input id="regEmail" type="email"></div>
+ <div class="form-group"><label>Phone</label><input id="regPhone"></div>
+ <div class="form-group"><label>Password</label><input id="regPassword" type="password"></div>
+ <button onclick="register()">Register</button>`);
+}
+function register(){
+ let name=$("regName").value.trim(),email=$("regEmail").value.trim().toLowerCase(),phone=$("regPhone").value.trim(),password=$("regPassword").value;
+ if(!name||!email||!phone||!password){alert("Please fill all fields.");return;}
+ if(users.some(u=>u.email===email)){alert("Email already registered.");return;}
+ users.push({id:Date.now(),name,email,phone,password});
+ persist();alert("Registration successful. Please login.");showLogin();
+}
+function showLogin(){
+ showModal(`<h2>Customer Login</h2><br>
+ <div class="form-group"><label>Email</label><input id="loginEmail" type="email"></div>
+ <div class="form-group"><label>Password</label><input id="loginPassword" type="password"></div>
+ <button onclick="login()">Login</button>`);
+}
+function login(){
+ let email=$("loginEmail").value.trim().toLowerCase(),password=$("loginPassword").value;
+ let user=users.find(u=>u.email===email&&u.password===password);
+ if(!user){alert("Invalid email or password.");return;}
+ current={id:user.id,name:user.name,email:user.email};persist();closeModal();refresh();alert("Welcome "+user.name+"!");
+}
+function logout(){
+ current=null;isAdmin=false;persist();refresh();
+}
+function refresh(){
+ $("logoutBtn").classList.toggle("hidden",!current);
+ renderProducts();renderCart();renderOrders();renderProfile();
+}
+function selectCategory(category){
+ $("categoryFilter").value=category;$("occasionFilter").value="";
+ $("products").scrollIntoView({behavior:"smooth"});renderProducts();
+}
+function selectOccasion(occasion){
+ $("occasionFilter").value=occasion;$("categoryFilter").value="";
+ $("products").scrollIntoView({behavior:"smooth"});renderProducts();
+}
+function renderProducts(){
+ let q=$("search").value.toLowerCase(),cat=$("categoryFilter").value,occasion=$("occasionFilter").value,price=Number($("priceFilter").value)||Infinity;
+ let list=products.filter(p=>p.name.toLowerCase().includes(q)||p.description.toLowerCase().includes(q))
+ .filter(p=>(!cat||p.category===cat)&&(!occasion||p.occasion===occasion)&&p.price<=price);
+ $("productGrid").innerHTML=list.length?list.map(p=>`
+ <div class="card">
+ <img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.src='https://placehold.co/600x400?text=Gift'">
+ <div class="card-body">
+ <span class="tag">${esc(p.category)} • ${esc(p.subcategory)}</span>
+ <h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>
+ <div class="price">${money(p.price)}</div>
+ <p>Available stock: ${p.stock}</p>
+ <div class="actions"><button onclick="viewProduct(${p.id})">Details</button><button onclick="addCart(${p.id})">Add to Cart</button></div>
+ </div></div>`).join(""):"<p>No products found.</p>";
+}
+function viewProduct(id){
+ let p=products.find(x=>x.id===id);if(!p)return;
+ showModal(`<img src="${esc(p.image)}" style="width:100%;height:220px;object-fit:cover;border-radius:8px">
+ <br><br><span class="tag">${esc(p.category)} / ${esc(p.subcategory)}</span>
+ <h2>${esc(p.name)}</h2><br><p>${esc(p.description)}</p>
+ <h2 style="color:#d65d83;margin:12px 0">${money(p.price)}</h2>
+ <p>Occasion: ${esc(p.occasion)}</p><p>Available stock: ${p.stock}</p><br>
+ <button onclick="addCart(${p.id});closeModal()">Add to Cart</button>`);
+}
+function addCart(id){
+ if(!requireLogin())return;
+ let p=products.find(x=>x.id===id);
+ if(!p||p.stock<=0){alert("Product is out of stock.");return;}
+ let item=cart.find(x=>x.userId===current.id&&x.productId===id);
+ if(item){if(item.qty>=p.stock){alert("Maximum available stock reached.");return;}item.qty++;}
+ else cart.push({userId:current.id,productId:id,qty:1});
+ persist();renderCart();alert("Product added to cart.");
+}
+function renderCart(){
+ if(!current){$("cartItems").innerHTML="Login to view your cart.";$("cartTotal").textContent="";return;}
+ let list=cart.filter(x=>x.userId===current.id),total=0;
+ $("cartItems").innerHTML=list.length?list.map(item=>{
+  let p=products.find(x=>x.id===item.productId);if(!p)return "";
+  total+=p.price*item.qty;
+  return `<div class="row" style="padding:12px;border-bottom:1px solid #f0e2e7;align-items:center">
+  <div><b>${esc(p.name)}</b><p>${money(p.price)} each</p></div>
+  <div><label>Quantity</label><input type="number" min="1" max="${p.stock}" value="${item.qty}" onchange="changeQty(${p.id},this.value)"></div>
+  <div><b>${money(p.price*item.qty)}</b><br><button onclick="removeCart(${p.id})">Remove</button></div>
+  </div>`;
+ }).join(""):"Your shopping cart is empty.";
+ $("cartTotal").textContent=list.length?"Subtotal: "+money(total):"";
+}
+function changeQty(id,value){
+ let item=cart.find(x=>x.userId===current.id&&x.productId===id),p=products.find(x=>x.id===id);
+ let qty=Math.floor(Number(value));
+ if(!item||!p)return;
+ if(!Number.isFinite(qty)||qty<1||qty>p.stock){alert("Enter a valid quantity.");renderCart();return;}
+ item.qty=qty;persist();renderCart();
+}
+function removeCart(id){
+ cart=cart.filter(x=>!(x.userId===current.id&&x.productId===id));
+ persist();renderCart();
+}
+function checkout(){
+ if(!requireLogin())return;
+ let list=cart.filter(x=>x.userId===current.id);
+ if(!list.length){alert("Your cart is empty.");return;}
+ showModal(`<h2>Checkout 🎁</h2><br>
+ <div class="form-group"><label>Delivery Address</label><textarea id="deliveryAddress" placeholder="Enter complete address"></textarea></div>
+ <div class="row">
+ <div class="form-group"><label>Delivery Date</label><input type="date" id="deliveryDate" min="${new Date().toISOString().split("T")[0]}"></div>
+ <div class="form-group"><label>Delivery Time</label><select id="deliveryTime"><option>9 AM - 12 PM</option><option>12 PM - 3 PM</option><option>3 PM - 6 PM</option><option>6 PM - 9 PM</option></select></div>
+ </div>
+ <div class="form-group"><label>Coupon Code (BLOOM10)</label><input id="coupon" placeholder="Enter coupon code"></div>
+ <div class="form-group"><label>Payment Method</label><select id="paymentMethod"><option>Cash on Delivery</option><option>Demo Online Payment</option></select></div>
+ <button onclick="placeOrder()">Place Order</button>`);
+}
+function placeOrder(){
+ let address=$("deliveryAddress").value.trim(),date=$("deliveryDate").value,time=$("deliveryTime").value,coupon=$("coupon").value.trim().toUpperCase(),method=$("paymentMethod").value;
+ if(!address||!date){alert("Enter delivery address and date.");return;}
+ let list=cart.filter(x=>x.userId===current.id),total=0,items=[];
+ for(let item of list){
+  let p=products.find(x=>x.id===item.productId);
+  if(!p||p.stock<item.qty){alert("Insufficient stock for "+(p?.name||"a product"));return;}
+  total+=p.price*item.qty;items.push({name:p.name,price:p.price,qty:item.qty});
+ }
+ let discount=coupon==="BLOOM10"?total*.10:0;
+ let finalTotal=total-discount;
+ let order={id:Date.now(),userId:current.id,customer:current.name,email:current.email,items,address,date,time,subtotal:total,discount,total:finalTotal,payment:method,status:"Order Confirmed",paymentStatus:"Pending",created:new Date().toLocaleString()};
+ orders.push(order);
+ list.forEach(item=>{let p=products.find(x=>x.id===item.productId);p.stock-=item.qty;});
+ cart=cart.filter(x=>x.userId!==current.id);
+ persist();closeModal();refresh();
+ alert("Order placed successfully! Order ID: "+order.id+"\nTotal: "+money(finalTotal));
+}
+function renderOrders(){
+ if(!current){$("orderList").innerHTML="Login to view your orders.";return;}
+ let list=orders.filter(o=>o.userId===current.id);
+ $("orderList").innerHTML=list.length?list.map(o=>`
+ <div class="panel">
+ <h3>Order #${o.id}</h3>
+ <p>Delivery: ${esc(o.date)} | ${esc(o.time)}</p>
+ <p>Address: ${esc(o.address)}</p>
+ <p>Total: <b>${money(o.total)}</b></p>
+ <p>Status: <b>${esc(o.status)}</b></p>
+ <p>Payment: ${esc(o.payment)} (${esc(o.paymentStatus)})</p>
+ <p>Items: ${o.items.map(i=>esc(i.name)+" × "+i.qty).join(", ")}</p>
+ </div>`).join(""):"No orders placed yet.";
+}
+function renderProfile(){
+ if(!current){$("profilePanel").innerHTML="Login to manage your profile.";return;}
+ let u=users.find(x=>x.id===current.id);if(!u)return;
+ $("profilePanel").innerHTML=`<div class="form-group"><label>Name</label><input id="profileName" value="${esc(u.name)}"></div>
+ <div class="form-group"><label>Email</label><input value="${esc(u.email)}" disabled></div>
+ <div class="form-group"><label>Phone</label><input id="profilePhone" value="${esc(u.phone)}"></div>
+ <button onclick="updateProfile()">Update Profile</button>`;
+}
+function updateProfile(){
+ let u=users.find(x=>x.id===current.id);
+ if(!u)return;
+ let name=$("profileName").value.trim(),phone=$("profilePhone").value.trim();
+ if(!name||!phone){alert("Enter name and phone.");return;}
+ u.name=name;u.phone=phone;current.name=name;persist();refresh();alert("Profile updated.");
+}
+function sendEnquiry(){
+ let name=$("contactName").value.trim(),email=$("contactEmail").value.trim(),message=$("contactMessage").value.trim();
+ if(!name||!email||!message){alert("Fill all enquiry fields.");return;}
+ enquiries.push({name,email,message,date:new Date().toLocaleString()});
+ persist();alert("Enquiry submitted successfully.");
+ $("contactName").value="";$("contactEmail").value="";$("contactMessage").value="";
+}
+function showAdminLogin(){
+ showModal(`<h2>Administrator Login</h2><br>
+ <div class="form-group"><label>Username</label><input id="adminUser"></div>
+ <div class="form-group"><label>Password</label><input id="adminPass" type="password"></div>
+ <button onclick="adminLogin()">Login</button>
+ <p class="notice">Demo: admin / admin123</p>`);
+}
+function adminLogin(){
+ if($("adminUser").value==="admin"&&$("adminPass").value==="admin123"){
+  isAdmin=true;closeModal();$("adminLoginPanel").classList.add("hidden");
+  $("adminDashboard").classList.remove("hidden");renderAdmin();
+ }else alert("Invalid admin details.");
+}
+function clearProductForm(){
+ ["editId","newName","newPrice","newSubcategory","newStock","newImage","newDescription"].forEach(id=>$(id).value="");
+}
+function saveProduct(){
+ let id=Number($("editId").value),name=$("newName").value.trim(),price=Number($("newPrice").value),stock=Number($("newStock").value),image=$("newImage").value.trim(),description=$("newDescription").value.trim();
+ if(!name||price<=0||stock<0||!description){alert("Enter valid product details.");return;}
+ let data={name,price,stock,image:image||"https://placehold.co/600x400?text=Gift",description,category:$("newCategory").value,occasion:$("newOccasion").value,subcategory:$("newSubcategory").value.trim()||"General"};
+ if(id){
+  let p=products.find(x=>x.id===id);if(p)Object.assign(p,data);
+  alert("Product updated.");
+ }else{
+  products.push({id:Date.now(),...data});alert("Product added.");
+ }
+ persist();clearProductForm();renderProducts();renderAdmin();
+}
+function editProduct(id){
+ let p=products.find(x=>x.id===id);if(!p)return;
+ $("editId").value=p.id;$("newName").value=p.name;$("newPrice").value=p.price;
+ $("newCategory").value=p.category;$("newOccasion").value=p.occasion;
+ $("newSubcategory").value=p.subcategory;$("newStock").value=p.stock;
+ $("newImage").value=p.image;$("newDescription").value=p.description;
+ $("admin").scrollIntoView({behavior:"smooth"});
+}
+function deleteProduct(id){
+ if(!confirm("Are you sure you want to delete this product?"))return;
+ products=products.filter(p=>p.id!==id);
+ cart=cart.filter(x=>x.productId!==id);
+ persist();renderProducts();renderCart();renderAdmin();
+}
+function renderAdmin(){
+ $("productCount").textContent=products.length;
+ $("customerCount").textContent=users.length;
+ $("orderCount").textContent=orders.length;
+ $("inventoryTable").innerHTML=`<table><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>${products.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.category)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td><button onclick="editProduct(${p.id})">Edit</button> <button onclick="deleteProduct(${p.id})">Delete</button></td></tr>`).join("")}</table>`;
+ $("customerTable").innerHTML=`<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>${users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${esc(u.phone)}</td></tr>`).join("")}</table>`;
+ $("adminOrderTable").innerHTML=orders.length?`<table><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Delivery</th><th>Status</th><th>Action</th></tr>${orders.map(o=>`<tr><td>${o.id}</td><td>${esc(o.customer)}</td><td>${money(o.total)}</td><td>${esc(o.date)}</td><td>${esc(o.status)}</td><td><select onchange="updateOrder(${o.id},this.value)"><option ${o.status==="Order Confirmed"?"selected":""}>Order Confirmed</option><option ${o.status==="Preparing"?"selected":""}>Preparing</option><option ${o.status==="Out for Delivery"?"selected":""}>Out for Delivery</option><option ${o.status==="Delivered"?"selected":""}>Delivered</option><option ${o.status==="Cancelled"?"selected":""}>Cancelled</option></select></td></tr>`).join("")}</table>`:"No orders yet.";
+ $("enquiryTable").innerHTML=enquiries.length?`<table><tr><th>Name</th><th>Email</th><th>Message</th><th>Date</th></tr>${enquiries.map(e=>`<tr><td>${esc(e.name)}</td><td>${esc(e.email)}</td><td>${esc(e.message)}</td><td>${esc(e.date)}</td></tr>`).join("")}</table>`:"No enquiries yet.";
+}
+function updateOrder(id,status){
+ let o=orders.find(x=>x.id===id);if(o)o.status=status;
+ persist();renderAdmin();renderOrders();
+}
+renderProducts();
+refresh();
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ComplainEase – Register and track complaints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f4;--surface:#fff;--ink:#14272b;--muted:#5a6d70;--line:#d3ded9;--brand:#0f5c63;--brand-ink:#fff;--amber:#e8a317;--ok:#2f8f5b;--soft:#e2eeea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a1c;--surface:#15272a;--ink:#e6f0ee;--muted:#9bb2b0;--line:#27403f;--brand:#5cc3c8;--brand-ink:#08181a;--amber:#f0b53a;--ok:#5ccf96;--soft:#1b3234}}
+:root[data-theme="dark"]{--bg:#0e1a1c;--surface:#15272a;--ink:#e6f0ee;--muted:#9bb2b0;--line:#27403f;--brand:#5cc3c8;--brand-ink:#08181a;--amber:#f0b53a;--ok:#5ccf96;--soft:#1b3234}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;line-height:1.1;margin:0 0 .5em}
+h1{font-size:clamp(2.3rem,6vw,4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,3.5vw,2.3rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0 0 1em;max-width:62ch}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.3rem;color:var(--brand);text-decoration:none}
+nav a{color:var(--ink);text-decoration:none;margin-left:20px;font-size:.95rem}
+nav a:hover{color:var(--brand)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;padding:56px 0 40px;align-items:center}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:11px 20px;font:500 1rem "IBM Plex Sans",sans-serif;cursor:pointer;text-decoration:none}
+.btn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.sm{padding:6px 12px;font-size:.88rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.ticket{border-left:6px solid var(--amber)}
+.steps{display:flex;margin:18px 0 8px;padding:0;list-style:none}
+.steps li{flex:1;text-align:center;font-size:.8rem;color:var(--muted);position:relative}
+.steps li:before{content:"";display:block;width:18px;height:18px;border-radius:50%;background:var(--line);margin:0 auto 6px;position:relative;z-index:1}
+.steps li:after{content:"";position:absolute;top:8px;left:-50%;width:100%;height:2px;background:var(--line)}
+.steps li:first-child:after{display:none}
+.steps li.on{color:var(--ink);font-weight:500}
+.steps li.on:before,.steps li.on:after{background:var(--ok)}
+label{display:block;font-weight:500;font-size:.9rem;margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+.row{display:flex;gap:10px;align-items:end}
+.row>*{flex:1}.row .btn{flex:none}
+section{padding:44px 0}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 18px;font:700 1rem "Bricolage Grotesque",sans-serif;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--brand);border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
+ul.feat{padding-left:1.1em;margin:0}ul.feat li{margin-bottom:.4em}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.8rem;background:var(--soft);color:var(--brand);font-weight:500}
+.pill.done{background:var(--ok);color:var(--brand-ink)}
+.list{margin-top:16px;display:grid;gap:10px}
+.item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg)}
+.item b{font-family:"Bricolage Grotesque",sans-serif}
+.msg{margin-top:12px;font-size:.92rem;color:var(--ok);min-height:1.4em}
+.err{color:#c0392b}
+.muted{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:.9rem}
+@media(max-width:780px){.hero,.grid{grid-template-columns:1fr}nav a:not(.keep){display:none}.row{flex-direction:column;align-items:stretch}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="#top">ComplainEase</a>
+<nav><a href="#roles">Portals</a><a href="#faq">Common issues</a><a class="keep" href="#contact">Contact admin</a></nav></div></header>
+
+<main id="top" class="wrap">
+<div class="hero">
+ <div>
+  <h1>Say what went wrong. Watch it get fixed.</h1>
+  <p>ComplainEase lets you file a complaint with photos and a map pin, then follow it from first report to resolution, with updates by email or SMS.</p>
+  <a class="btn" href="#roles">File a complaint</a> <a class="btn alt" href="#roles">Officer or admin login</a>
+ </div>
+ <div class="card ticket" aria-live="polite">
+  <h3>Track a complaint</h3>
+  <p class="muted" style="margin-bottom:0">Try the sample ticket CE-1001.</p>
+  <div class="row"><div><label for="tid">Complaint ID</label><input id="tid" value="CE-1001"></div><button class="btn" id="tbtn">Track</button></div>
+  <div id="tout"></div>
+ </div>
+</div>
+
+<section id="roles">
+ <h2>Pick your portal</h2>
+ <div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-p="user">User</button>
+  <button role="tab" aria-selected="false" data-p="officer">Officer</button>
+  <button role="tab" aria-selected="false" data-p="admin">Admin</button>
+ </div>
+
+ <div id="p-user" class="grid">
+  <div>
+   <h3>What you can do</h3>
+   <ul class="feat"><li>Register and log in</li><li>Post a complaint with category, description and proof</li><li>Mark the location on Google Maps</li><li>View complaint status and history</li><li>Give feedback when it is resolved</li><li>See the admin’s contact details</li></ul>
+  </div>
+  <form class="card" id="cform">
+   <h3>Post a complaint</h3>
+   <label for="cn">Your name</label><input id="cn" required>
+   <label for="cc">Category</label>
+   <select id="cc"><option>Water supply</option><option>Roads and potholes</option><option>Electricity</option><option>Sanitation</option><option>Other</option></select>
+   <label for="cd">Description</label><textarea id="cd" rows="3" required></textarea>
+   <label for="cl">Location</label>
+   <div class="row"><input id="cl" placeholder="Street, area or lat, lng"><button type="button" class="btn alt sm" id="geo">Use my location</button></div>
+   <p class="muted" style="font-size:.85rem;margin:6px 0 0"><a id="maplink" href="https://www.google.com/maps" target="_blank" rel="noopener">Open this spot in Google Maps</a></p>
+   <label for="cf">Supporting document</label><input id="cf" type="file" accept="image/*,.pdf">
+   <p style="margin-top:14px"><button class="btn" type="submit">Submit complaint</button></p>
+   <div class="msg" id="cmsg"></div>
+  </form>
+ </div>
+
+ <div id="p-officer" class="grid hidden">
+  <div>
+   <h3>What you can do</h3>
+   <ul class="feat"><li>Register and log in with the ID the admin issues</li><li>View complaints assigned to you</li><li>Update the status</li><li>Upload proof of work</li></ul>
+  </div>
+  <div class="card"><h3>Assigned complaints</h3><div class="list" id="olist"></div></div>
+ </div>
+
+ <div id="p-admin" class="grid hidden">
+  <div>
+   <h3>What you can do</h3>
+   <ul class="feat"><li>Generate an ID and password for each officer</li><li>Create or delete accounts and view them</li><li>Change passwords</li><li>Hide features from users and officers</li><li>Add information available on the system</li><li>Open any officer’s account</li></ul>
+  </div>
+  <div class="card">
+   <h3>Officer accounts</h3>
+   <div class="row"><div><label for="on">Officer name</label><input id="on"></div><button class="btn" id="mk">Generate login</button></div>
+   <div class="msg" id="amsg"></div>
+   <div class="list" id="alist"></div>
+   <h3 style="margin-top:22px">Feature switches</h3>
+   <label style="font-weight:400"><input type="checkbox" id="hf" style="width:auto"> Hide the feedback form from users</label>
+  </div>
+ </div>
+</section>
+
+<section id="faq">
+ <h2>Common issues and solutions</h2>
+ <div class="card">
+  <label for="q">Search</label><input id="q" placeholder="Try “water” or “pothole”">
+  <div class="list" id="faqs"></div>
+ </div>
+</section>
+
+<section id="contact">
+ <h2>Contact the admin</h2>
+ <div class="card"><p style="margin:0">Email: admin@complainease.example<br>Phone: +91 00000 00000<br>Hours: Monday to Saturday, 9:00 to 17:00</p></div>
+</section>
+</main>
+<footer><div class="wrap">ComplainEase · Demo page. Data lives in your browser tab only and is cleared on reload.</div></footer>
+
+<script>
+var STAGES=["Filed","Assigned","In progress","Resolved"];
+var data=[{id:"CE-1001",name:"Asha",cat:"Roads and potholes",desc:"Deep pothole near the bus stop.",loc:"Anna Salai",stage:2,proof:"",fb:""}];
+var officers=[{name:"R. Kumar",id:"OFF-101",pw:"k7Xq2mPa"}];
+var n=1002;
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function steps(s){return '<ol class="steps">'+STAGES.map(function(t,i){return '<li'+(i<=s?' class="on"':'')+'>'+t+'</li>'}).join("")+'</ol>'}
+function track(){var id=$("tid").value.trim().toUpperCase(),c=data.filter(function(x){return x.id===id})[0],o=$("tout");
+ o.innerHTML=c?'<p style="margin:14px 0 0"><b>'+c.id+'</b> · '+esc(c.cat)+'</p>'+steps(c.stage)+'<span class="pill'+(c.stage==3?' done':'')+'">'+STAGES[c.stage]+'</span>':'<p class="err" style="margin-top:14px">No complaint found with that ID. Check the ID and try again.</p>'}
+$("tbtn").onclick=track;track();
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){
+ document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b)});
+ ["user","officer","admin"].forEach(function(p){$("p-"+p).classList.toggle("hidden",p!==b.dataset.p)});render()}});
+$("cl").oninput=function(){$("maplink").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(this.value)};
+$("geo").onclick=function(){if(!navigator.geolocation){$("cmsg").textContent="Location is not available in this browser. Type the address instead.";return}
+ navigator.geolocation.getCurrentPosition(function(p){$("cl").value=p.coords.latitude.toFixed(5)+", "+p.coords.longitude.toFixed(5);$("cl").oninput()},function(){$("cmsg").textContent="Location permission was denied. Type the address instead."})};
+$("cform").onsubmit=function(e){e.preventDefault();var id="CE-"+(n++);
+ data.push({id:id,name:$("cn").value,cat:$("cc").value,desc:$("cd").value,loc:$("cl").value,stage:0,proof:"",fb:""});
+ $("cmsg").textContent="Complaint submitted. Your ID is "+id+". We will email or text you with updates.";
+ $("tid").value=id;track();this.reset();render()};
+function render(){
+ $("olist").innerHTML=data.map(function(c,i){return '<div class="item"><b>'+c.id+'</b> · '+esc(c.cat)+'<br><span class="muted">'+esc(c.desc)+'</span><br><span class="pill'+(c.stage==3?' done':'')+'">'+STAGES[c.stage]+'</span> '+
+  (c.stage<3?'<button class="btn sm" data-i="'+i+'">Move to '+STAGES[c.stage+1]+'</button>':'<span class="muted">Proof: '+(esc(c.proof)||'none uploaded')+'</span>')+'</div>'}).join("");
+ document.querySelectorAll("#olist button").forEach(function(b){b.onclick=function(){var c=data[b.dataset.i];c.stage++;
+  if(c.stage==3){c.proof=prompt("Describe or name the proof of work (photo or file):")||""}
+  track();render()}});
+ $("alist").innerHTML=officers.map(function(o,i){return '<div class="item"><b>'+esc(o.name)+'</b><br>ID: '+o.id+' · Password: '+o.pw+' <button class="btn alt sm" data-d="'+i+'">Delete</button></div>'}).join("")||'<p class="muted">No officer accounts yet. Add one above.</p>';
+ document.querySelectorAll("#alist button").forEach(function(b){b.onclick=function(){officers.splice(b.dataset.d,1);render()}})}
+$("mk").onclick=function(){var v=$("on").value.trim();if(!v){$("amsg").className="msg err";$("amsg").textContent="Enter the officer’s name first.";return}
+ var pw=Math.random().toString(36).slice(2,10),id="OFF-"+(100+officers.length+Math.floor(Math.random()*800));
+ officers.push({name:v,id:id,pw:pw});$("amsg").className="msg";$("amsg").textContent="Login created for "+v+".";$("on").value="";render()};
+$("hf").onchange=function(){$("amsg").className="msg";$("amsg").textContent=this.checked?"Feedback is now hidden from users.":"Feedback is visible to users again."};
+var FAQ=[["Water supply is low or dirty","Report the street and time of day. Officers check the line pressure and test the water."],["Pothole or damaged road","Add a photo and drop a map pin so the crew can find the exact spot."],["Streetlight not working","Pick Electricity and note the pole number if you can see it."],["Garbage not collected","Choose Sanitation and mention the days it was missed."],["I forgot my complaint ID","Log in and open your complaint history, or contact the admin."]];
+function faq(){var q=$("q").value.toLowerCase(),r=FAQ.filter(function(f){return (f[0]+f[1]).toLowerCase().indexOf(q)>-1});
+ $("faqs").innerHTML=r.map(function(f){return '<div class="item"><b>'+f[0]+'</b><br><span class="muted">'+f[1]+'</span></div>'}).join("")||'<p class="muted">Nothing matches. File a new complaint and we will look into it.</p>'}
+$("q").oninput=faq;faq();render();
+</script>
+</body>
+</html>

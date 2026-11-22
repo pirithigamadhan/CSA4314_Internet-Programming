@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VetCure – Vet advice for your animals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf4f8;--surface:#fff;--ink:#12263f;--muted:#586b82;--line:#d1dfe9;--brand:#1c6db0;--brand-ink:#fff;--lime:#8cc63f;--bad:#c23b2e;--soft:#dcebf5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a29;--surface:#16263a;--ink:#e5eef7;--muted:#9bb0c6;--line:#2a4160;--brand:#6bb4ee;--brand-ink:#08182a;--lime:#a5dc5c;--bad:#ff8878;--soft:#1e3350}}
+:root[data-theme="dark"]{--bg:#0e1a29;--surface:#16263a;--ink:#e5eef7;--muted:#9bb0c6;--line:#2a4160;--brand:#6bb4ee;--brand-ink:#08182a;--lime:#a5dc5c;--bad:#ff8878;--soft:#1e3350}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Karla,system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.1rem,5.5vw,3.4rem);font-weight:800}h2{font-size:clamp(1.4rem,3.2vw,1.9rem)}h3{font-size:1.05rem}
+p{margin:0 0 1em}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:58px}
+.logo{font-family:Sora,sans-serif;font-weight:800;font-size:1.25rem;color:var(--brand)}
+nav button{background:none;border:0;font:700 .95rem Karla,sans-serif;color:var(--ink);padding:8px 12px;border-radius:6px;cursor:pointer}
+nav button[aria-current="true"]{background:var(--soft);color:var(--brand)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:10px 18px;font:700 .95rem Karla,sans-serif;cursor:pointer}
+.btn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.sm{padding:5px 11px;font-size:.84rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;padding:44px 0 20px;align-items:center}
+.hero p{color:var(--muted);max-width:56ch}
+.demo{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.88rem;margin:10px 0}
+label{display:block;font-weight:700;font-size:.88rem;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+input[type=radio]{width:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.portal{display:grid;grid-template-columns:190px 1fr;gap:22px;padding:22px 0 40px}
+.side{display:flex;flex-direction:column;gap:4px}
+.side button{text-align:left;background:none;border:0;border-left:4px solid transparent;padding:9px 12px;font:700 .95rem Karla,sans-serif;color:var(--muted);cursor:pointer}
+.side button[aria-current="true"]{border-color:var(--lime);color:var(--ink);background:var(--surface)}
+.pill{display:inline-block;padding:1px 10px;border-radius:99px;font-size:.78rem;font-weight:700;background:var(--soft);color:var(--brand)}
+.pill.ok{background:var(--lime);color:#12263f}.pill.warn{background:#f6d77a;color:#3a2c00}
+.muted{color:var(--muted);font-size:.9rem}
+.msg{min-height:1.3em;font-size:.9rem;margin-top:8px;color:var(--brand)}.msg.err{color:var(--bad)}
+.tile{height:96px;border-radius:8px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:2.8rem;overflow:hidden;margin-bottom:10px}
+.tile img{width:100%;height:100%;object-fit:cover}
+.media{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.media img,.media video{max-width:200px;max-height:140px;border-radius:8px}.media audio{max-width:240px}
+.bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden;margin:4px 0 10px}.bar i{display:block;height:100%;background:var(--brand)}
+.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+.hidden{display:none}
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:.88rem}
+@media(max-width:780px){.hero,.two,.portal{grid-template-columns:1fr}.side{flex-direction:row;overflow-x:auto}.side button{white-space:nowrap;border-left:0;border-bottom:3px solid transparent}.side button[aria-current="true"]{border-bottom-color:var(--lime)}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo">VetCure</span><nav id="nav"><button data-a="page" data-v="home" aria-current="true">Home</button><button data-a="page" data-v="farmer">Farmer</button><button data-a="page" data-v="doctor">Doctor</button></nav></div></header>
+<main class="wrap" id="main"></main>
+<footer><div class="wrap">VetCure demo · Accounts, payments and files are simulated. Data stays in this tab and resets on reload. Passwords are not protected here.</div></footer>
+
+<script>
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function find(a,k,v){return a.filter(function(x){return x[k]==v})[0]}
+function rs(n){return "Rs "+Number(n).toLocaleString("en-IN")}
+var IC={Cattle:"🐄",Goat:"🐐",Poultry:"🐔",Buffalo:"🐃",Dog:"🐕"},ANIMALS=Object.keys(IC);
+var farmers=[{id:1,name:"Rashid Khan",user:"farmer1",pw:"farm123",area:"Riverside"},{id:2,name:"Sana Bibi",user:"sana",pw:"x",area:"North Village"},{id:3,name:"Imtiaz Ali",user:"imtiaz",pw:"x",area:"Hill Town"}];
+var docs=[{id:1,name:"Dr. Hina Malik",user:"doc1",pw:"doc123",type:"Govt CVH",clinic:"Central Veterinary Hospital",fee:0,bank:"",acct:"",title:"",ep:""},
+ {id:2,name:"Dr. Bilal Ahmed",user:"doc2",pw:"doc123",type:"Private",clinic:"PawCare Clinic",fee:500,bank:"Sunrise Bank",acct:"0123456789",title:"Bilal Ahmed",ep:"0300 1234567"}];
+var subs=[{f:1,d:1,st:"active"},{f:2,d:1,st:"active"},{f:3,d:2,st:"active"}];
+var pays=[],fbs=[{id:1,f:1,d:1,rate:5,text:"Quick reply and the medicine worked."}];
+var cures=[{id:1,disease:"Foot-and-mouth disease",animal:"Cattle",rx:"Isolate the animal. Wash mouth and hooves with mild antiseptic. Give soft feed and clean water. Vaccinate the herd after recovery.",img:""},
+ {id:2,disease:"Mastitis",animal:"Cattle",rx:"Milk out the affected quarter often. Apply warm compress. Intramammary antibiotic as prescribed by the vet. Keep the shed dry.",img:""},
+ {id:3,disease:"Newcastle disease",animal:"Poultry",rx:"No cure once severe. Isolate sick birds, give vitamins and electrolytes, and vaccinate the flock on schedule.",img:""},
+ {id:4,disease:"PPR",animal:"Goat",rx:"Supportive care with fluids and an antibiotic against secondary infection. Vaccinate kids at 4 months.",img:""},
+ {id:5,disease:"Mange",animal:"Dog",rx:"Medicated bath weekly for 4 weeks. Ivermectin dose only as prescribed by the vet. Wash bedding in hot water.",img:""}];
+var news=[{id:1,title:"Free FMD vaccination camp",body:"Central Veterinary Hospital runs a free foot-and-mouth vaccination camp this Saturday at the district ground.",by:1},{id:2,title:"Keep animals cool in heat waves",body:"Provide shade and clean water at least three times a day. Avoid moving cattle at midday.",by:2}];
+var comps=[];var cid=1;
+[["Cattle","Riverside","Foot-and-mouth disease"],["Cattle","Riverside","Foot-and-mouth disease"],["Cattle","Riverside","Mastitis"],["Goat","North Village","PPR"],["Goat","North Village","PPR"],["Poultry","North Village","Newcastle disease"],["Dog","Hill Town","Mange"],["Cattle","Hill Town","Mastitis"]].forEach(function(r,i){
+ comps.push({id:cid++,f:(i%3)+1,d:1,animal:r[0],area:r[1],sym:"Seeded record",files:[],disease:r[2],rx:"See VetCure details.",st:"Answered"})});
+var pid=1,cu=3,nw=3,fb=2,F=null,Dr=null,page="home",T={farmer:"complaint",doctor:"cmp"},AM={farmer:"login",doctor:"login"},pend=[],cureImg="",flash={};
+var FT=[["complaint","Post complaint"],["status","My complaints"],["doctors","View doctors"],["pay","Make payment"],["cures","VetCure details"],["news","View news"],["report","View report"],["feedback","Post feedback"],["profile","My profile"]];
+var DT=[["cmp","View complaints"],["cure","Manage cure"],["news","Manage news"],["users","User details"],["pays","Payment details"],["fb","Feedback details"]];
+function msg(k){var f=flash[k];return '<div class="msg'+(f&&f[1]?' err':'')+'">'+(f?esc(f[0]):"")+'</div>'}
+function say(k,m,e){flash[k]=[m,e];draw()}
+function activeDocs(){return F?subs.filter(function(s){return s.f==F.id&&s.st=="active"}).map(function(s){return find(docs,"id",s.d)}):[]}
+function media(files){return '<div class="media">'+files.map(function(x){return x.kind=="image"?'<img src="'+x.url+'" alt="'+esc(x.name)+'">':x.kind=="video"?'<video controls src="'+x.url+'"></video>':'<audio controls src="'+x.url+'"></audio>'}).join("")+'</div>'}
+function cureCard(c){return '<div class="card" style="margin:0"><div class="tile">'+(c.img?'<img src="'+c.img+'" alt="'+esc(c.disease)+'">':IC[c.animal])+'</div><b>'+esc(c.disease)+'</b> <span class="pill">'+c.animal+'</span><p class="muted" style="margin:6px 0 0"><b>Prescription:</b> '+esc(c.rx)+'</p></div>'}
+function draw(){
+ document.querySelectorAll("#nav button").forEach(function(b){b.setAttribute("aria-current",b.dataset.v==page)});
+ var m=$("main");
+ if(page=="home")m.innerHTML=home();
+ else{var r=page,U=r=="farmer"?F:Dr;
+  if(!U)m.innerHTML='<div style="max-width:460px;margin:30px auto">'+auth(r)+'</div>';
+  else{var tabs=r=="farmer"?FT:DT;m.innerHTML='<div class="portal"><div><p style="margin:0 0 10px"><b>'+esc(U.name)+'</b><br><span class="muted">'+(r=="doctor"?U.type+' · '+esc(U.clinic):'Farmer · '+esc(U.area))+'</span></p><div class="side">'+tabs.map(function(t){return '<button data-a="tab" data-v="'+t[0]+'" aria-current="'+(T[r]==t[0])+'">'+t[1]+'</button>'}).join("")+'<button data-a="out">Log out</button></div></div><div>'+(r=="farmer"?ftab():dtab())+'</div></div>'}}}
+function home(){return '<div class="hero"><div><h1>Describe the sick animal. Get a vet’s answer.</h1><p>Send symptoms as text, photos, audio or video to a government veterinary hospital or a private clinic. Follow the reply, pay doctors directly, and see which diseases are spreading in your area.</p><button class="btn" data-a="page" data-v="farmer">I am a farmer</button> <button class="btn alt" data-a="page" data-v="doctor">I am a doctor</button><div class="demo"><b>Demo logins:</b> farmer1 / farm123 · doctor doc1 / doc123 (Govt CVH) · doctor doc2 / doc123 (private)</div></div><div class="card" style="margin:0"><h3>Two ways to get care</h3><p><span class="pill ok">Free</span> Subscribe to any government Central Veterinary Hospital.</p><p style="margin:0"><span class="pill warn">Fee</span> Subscribe to a private clinic doctor and pay by bank transfer or Easypaisa.</p></div></div><h2>Common diseases and prescriptions</h2><div class="three">'+cures.map(cureCard).join("")+'</div>'}
+function auth(r){var m=AM[r],d=r=="doctor",h='<div class="card"><h3>'+(d?"Doctor ":"Farmer ")+(m=="login"?"login":"registration")+'</h3><button class="btn sm'+(m=="login"?'':' alt')+'" data-a="mode" data-r="'+r+'" data-v="login">Login</button> <button class="btn sm'+(m=="register"?'':' alt')+'" data-a="mode" data-r="'+r+'" data-v="register">Register</button>';
+ if(m=="register")h+='<label for="rn">Full name</label><input id="rn">';
+ h+='<label for="ru">Username</label><input id="ru" autocomplete="off"><label for="rp">Password</label><input id="rp" type="password">';
+ if(m=="register"&&!d)h+='<label for="ra">Your area or village</label><input id="ra" placeholder="e.g. Riverside">';
+ if(m=="register"&&d)h+='<label for="rt">Doctor type</label><select id="rt"><option>Govt CVH</option><option>Private</option></select><label for="rc">Hospital or clinic name</label><input id="rc"><label for="rf">Monthly fee in Rs (private doctors only)</label><input id="rf" type="number" min="0" value="0"><label for="rb">Bank name</label><input id="rb"><label for="rac">Account number</label><input id="rac"><label for="rat">Account title</label><input id="rat"><label for="re">Easypaisa number (optional)</label><input id="re">';
+ return h+'<p style="margin-top:14px"><button class="btn" data-a="auth" data-r="'+r+'">'+(m=="login"?"Log in":"Create account")+'</button></p>'+msg("auth"+r)+'</div>'}
+function ftab(){var t=T.farmer,h="";
+ if(t=="complaint"){var ad=activeDocs();h='<div class="card"><h3>Post complaint</h3>'+(ad.length?'<label for="cd">Send to doctor</label><select id="cd">'+ad.map(function(d){return '<option value="'+d.id+'">'+esc(d.name)+' ('+d.type+')</option>'}).join("")+'</select><label for="ca">Animal</label><select id="ca">'+ANIMALS.map(function(a){return '<option>'+a+'</option>'}).join("")+'</select><label for="car">Area</label><input id="car" value="'+esc(F.area)+'"><label for="cs">Signs and symptoms</label><textarea id="cs" rows="4" placeholder="What do you see? Since when? Eating, milk, temperature…"></textarea><label for="cf">Photos, audio or video (optional)</label><input id="cf" type="file" accept="image/*,audio/*,video/*" multiple data-ch="files"><p class="muted">'+(pend.length?pend.length+' file(s) attached.':'')+'</p><button class="btn" data-a="post">Send to doctor</button>':'<p>You have no active subscription yet. Subscribe to a doctor first.</p><button class="btn" data-a="tab" data-v="doctors">View doctors</button>')+msg("c")+'</div>'}
+ if(t=="status"){var my=comps.filter(function(c){return c.f==F.id}).reverse();h='<h2>My complaints</h2>'+(my.map(function(c){var d=find(docs,"id",c.d);return '<div class="card"><b>#'+c.id+' · '+c.animal+'</b> <span class="pill'+(c.st=="Answered"?' ok':' warn')+'">'+c.st+'</span><p class="muted" style="margin:4px 0">To '+esc(d.name)+' · '+esc(c.area)+'</p><p>'+esc(c.sym)+'</p>'+media(c.files)+(c.st=="Answered"?'<div class="demo"><b>Diagnosis:</b> '+esc(c.disease)+'<br><b>Prescription:</b> '+esc(c.rx)+'</div>':'<p class="muted">Waiting for the doctor’s reply.</p>')+'</div>'}).join("")||'<p class="muted">No complaints yet. Post one when an animal looks unwell.</p>')}
+ if(t=="doctors"){h='<h2>Doctors</h2><div class="three">'+docs.map(function(d){var s=subs.filter(function(x){return x.f==F.id&&x.d==d.id})[0];return '<div class="card" style="margin:0"><b>'+esc(d.name)+'</b><br><span class="pill">'+d.type+'</span><p class="muted" style="margin:6px 0">'+esc(d.clinic)+'</p><p>'+(d.type=="Govt CVH"?'Free to subscribe':'Fee: '+rs(d.fee))+'</p>'+(s?'<span class="pill '+(s.st=="active"?'ok':'warn')+'">'+(s.st=="active"?'Subscribed':'Payment pending')+'</span>'+(s.st=="pending"?' <button class="btn sm" data-a="tab" data-v="pay">Pay now</button>':''):'<button class="btn sm" data-a="sub" data-id="'+d.id+'">Subscribe</button>')+'</div>'}).join("")+'</div>'+msg("d")}
+ if(t=="pay"){var pn=subs.filter(function(s){return s.f==F.id&&s.st=="pending"}),mp=pays.filter(function(p){return p.f==F.id});h='<h2>Make payment</h2>'+(pn.map(function(s){var d=find(docs,"id",s.d);return '<div class="card"><b>'+esc(d.name)+'</b> · '+esc(d.clinic)+' · <b>'+rs(d.fee)+'</b><div class="demo"><b>Bank transfer:</b> '+esc(d.bank)+', account '+esc(d.acct)+', title '+esc(d.title)+'<br><b>Easypaisa:</b> '+(esc(d.ep)||"Not provided")+'</div><label><input type="radio" name="pm'+d.id+'" value="Bank transfer" checked> Bank transfer</label><label><input type="radio" name="pm'+d.id+'" value="Easypaisa"> Easypaisa</label><label for="rf'+d.id+'">Transaction reference</label><input id="rf'+d.id+'"><p style="margin-top:12px"><button class="btn" data-a="pay" data-id="'+d.id+'">I have paid</button></p></div>'}).join("")||'<p class="muted">Nothing to pay. Private doctor subscriptions that need a fee will show here.</p>')+msg("p")+'<h3>Payment history</h3>'+(mp.map(function(p){return '<p>'+esc(find(docs,"id",p.d).name)+' · '+rs(p.amt)+' · '+p.method+' · <span class="pill '+(p.st=="Confirmed"?'ok':'warn')+'">'+p.st+'</span></p>'}).join("")||'<p class="muted">No payments yet.</p>')}
+ if(t=="cures")h='<h2>VetCure details</h2><div class="three">'+cures.map(cureCard).join("")+'</div>';
+ if(t=="news")h='<h2>News</h2>'+news.map(function(n){return '<div class="card"><b>'+esc(n.title)+'</b><p class="muted" style="margin:2px 0 6px">By '+esc(find(docs,"id",n.by).name)+'</p><p style="margin:0">'+esc(n.body)+'</p></div>'}).join("");
+ if(t=="report"){var ar=[];comps.forEach(function(c){if(ar.indexOf(c.area)<0)ar.push(c.area)});var sel=flash.area==null?F.area:flash.area;
+  var l=comps.filter(function(c){return c.st=="Answered"&&(!sel||c.area==sel)}),cnt={};l.forEach(function(c){cnt[c.disease]=(cnt[c.disease]||0)+1});var ks=Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a]});
+  h='<h2>Disease report</h2><div class="card"><label for="rarea">Area</label><select id="rarea" data-ch="area"><option value="">All areas</option>'+ar.map(function(a){return '<option'+(a==sel?' selected':'')+'>'+esc(a)+'</option>'}).join("")+'</select>'+(ks.length?'<p style="margin-top:14px"><b>Most common in '+(sel?esc(sel):"all areas")+': '+esc(ks[0])+'</b> ('+cnt[ks[0]]+' of '+l.length+' cases)</p>'+ks.map(function(k){return '<div>'+esc(k)+' <b>'+cnt[k]+'</b><div class="bar"><i style="width:'+Math.round(cnt[k]/l.length*100)+'%"></i></div></div>'}).join(""):'<p class="muted" style="margin-top:14px">No answered complaints recorded for this area yet.</p>')+'</div>'}
+ if(t=="feedback"){var all=docs;h='<div class="card"><h3>Post feedback</h3><label for="fd">Doctor</label><select id="fd">'+all.map(function(d){return '<option value="'+d.id+'">'+esc(d.name)+'</option>'}).join("")+'</select><label for="fr">Rating</label><select id="fr"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select><label for="ft">Your feedback</label><textarea id="ft" rows="3"></textarea><p style="margin-top:12px"><button class="btn" data-a="fbk">Send feedback</button></p>'+msg("f")+'</div>'}
+ if(t=="profile"){h='<div class="card"><h3>My profile</h3><label for="pn">Name</label><input id="pn" value="'+esc(F.name)+'"><label for="pa">Area</label><input id="pa" value="'+esc(F.area)+'"><p class="muted">Username: '+esc(F.user)+'</p><button class="btn" data-a="psave">Save profile</button>'+msg("pr")+'</div><div class="card"><h3>My subscriptions</h3>'+(subs.filter(function(s){return s.f==F.id}).map(function(s){var d=find(docs,"id",s.d);return '<p>'+esc(d.name)+' · '+d.type+' · <span class="pill '+(s.st=="active"?'ok':'warn')+'">'+(s.st=="active"?'Active':'Payment pending')+'</span></p>'}).join("")||'<p class="muted">None yet.</p>')+'</div>'}
+ return h}
+function dtab(){var t=T.doctor,h="";
+ if(t=="cmp"){var l=comps.filter(function(c){return c.d==Dr.id&&c.sym!="Seeded record"}).reverse();h='<h2>Complaints</h2>'+(l.map(function(c){var f=find(farmers,"id",c.f);return '<div class="card"><b>#'+c.id+' · '+c.animal+'</b> <span class="pill'+(c.st=="Answered"?' ok':' warn')+'">'+c.st+'</span><p class="muted" style="margin:4px 0">From '+esc(f.name)+' · '+esc(c.area)+'</p><p>'+esc(c.sym)+'</p>'+media(c.files)+(c.st=="Answered"?'<div class="demo"><b>Diagnosis:</b> '+esc(c.disease)+'<br><b>Prescription:</b> '+esc(c.rx)+'</div>':'<label for="di'+c.id+'">Diagnosis</label><input id="di'+c.id+'" list="dl"><label for="rx'+c.id+'">Prescription and advice</label><textarea id="rx'+c.id+'" rows="3"></textarea><p style="margin-top:10px"><button class="btn sm" data-a="sol" data-id="'+c.id+'">Post solution</button></p>')+'</div>'}).join("")||'<p class="muted">No complaints for you yet.</p>')+'<datalist id="dl">'+cures.map(function(c){return '<option value="'+esc(c.disease)+'">'}).join("")+'</datalist>'+msg("s")}
+ if(t=="cure"){h='<h2>Manage cure</h2><div class="card"><label for="ud">Disease</label><input id="ud"><label for="ua">Animal</label><select id="ua">'+ANIMALS.map(function(a){return '<option>'+a+'</option>'}).join("")+'</select><label for="ux">Prescription</label><textarea id="ux" rows="3"></textarea><label for="ui">Image of affected animal (optional)</label><input id="ui" type="file" accept="image/*" data-ch="cimg"><p style="margin-top:12px"><button class="btn" data-a="cadd">Add cure</button></p>'+msg("cu")+'</div><div class="three">'+cures.map(function(c){return cureCard(c).replace(/<\/div>$/,'<p style="margin:8px 0 0"><button class="btn alt sm" data-a="cdel" data-id="'+c.id+'">Delete</button></p></div>')}).join("")+'</div>'}
+ if(t=="news"){h='<h2>Manage news</h2><div class="card"><label for="nt">Headline</label><input id="nt"><label for="nb">Details</label><textarea id="nb" rows="3"></textarea><p style="margin-top:12px"><button class="btn" data-a="nadd">Publish news</button></p>'+msg("n")+'</div>'+news.map(function(n){return '<div class="card"><b>'+esc(n.title)+'</b><p>'+esc(n.body)+'</p>'+(n.by==Dr.id?'<button class="btn alt sm" data-a="ndel" data-id="'+n.id+'">Delete</button>':'<span class="muted">By '+esc(find(docs,"id",n.by).name)+'</span>')+'</div>'}).join("")}
+ if(t=="users"){var us=subs.filter(function(s){return s.d==Dr.id});h='<h2>User details</h2><div class="card scroll"><table><thead><tr><th>Name</th><th>Username</th><th>Area</th><th>Subscription</th><th>Complaints</th></tr></thead><tbody>'+(us.map(function(s){var f=find(farmers,"id",s.f);return '<tr><td>'+esc(f.name)+'</td><td>'+esc(f.user)+'</td><td>'+esc(f.area)+'</td><td>'+(s.st=="active"?"Active":"Payment pending")+'</td><td>'+comps.filter(function(c){return c.f==f.id&&c.d==Dr.id}).length+'</td></tr>'}).join("")||'<tr><td colspan="5" class="muted">No farmers have subscribed yet.</td></tr>')+'</tbody></table></div>'}
+ if(t=="pays"){var pl=pays.filter(function(p){return p.d==Dr.id}).reverse();h='<h2>Payment details</h2>'+(Dr.type=="Govt CVH"?'<p class="muted">Government hospitals are free for farmers, so no payments are expected.</p>':'')+(pl.map(function(p){return '<div class="card"><b>'+esc(find(farmers,"id",p.f).name)+'</b> · '+rs(p.amt)+' · '+p.method+'<br><span class="muted">Reference: '+esc(p.ref)+'</span><p style="margin:8px 0 0"><span class="pill '+(p.st=="Confirmed"?'ok':'warn')+'">'+p.st+'</span> '+(p.st!="Confirmed"?'<button class="btn sm" data-a="conf" data-id="'+p.id+'">Confirm received</button>':'')+'</p></div>'}).join("")||'<p class="muted">No payments yet.</p>')+msg("q")}
+ if(t=="fb"){var fl=fbs.filter(function(x){return x.d==Dr.id});h='<h2>Feedback details</h2>'+(fl.map(function(x){return '<div class="card"><b>'+esc(find(farmers,"id",x.f).name)+'</b> · '+"★".repeat(x.rate)+'<p style="margin:6px 0 0">'+esc(x.text)+'</p></div>'}).join("")||'<p class="muted">No feedback yet.</p>')}
+ return h}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-a]");if(!b)return;var d=b.dataset,a=d.a,id=+d.id,r=d.r;flash={};
+ if(a=="page"){page=d.v;draw()}
+ if(a=="tab"){T[page]=d.v;draw()}
+ if(a=="mode"){AM[r]=d.v;draw()}
+ if(a=="out"){if(page=="farmer")F=null;else Dr=null;draw()}
+ if(a=="auth"){var u=$("ru").value.trim(),p=$("rp").value,L=r=="doctor"?docs:farmers;
+  if(!u||!p)return say("auth"+r,"Enter a username and password.",1);
+  if(AM[r]=="login"){var x=find(L,"user",u);if(!x||x.pw!=p)return say("auth"+r,"Username or password is wrong. Check both and try again.",1);if(r=="doctor")Dr=x;else F=x}
+  else{if(find(L,"user",u))return say("auth"+r,"That username is taken. Choose another.",1);var n=$("rn").value.trim();if(!n)return say("auth"+r,"Enter your full name.",1);var o;
+   if(r=="farmer"){if(!$("ra").value.trim())return say("auth"+r,"Enter your area so reports can use it.",1);o={id:farmers.length+1,name:n,user:u,pw:p,area:$("ra").value.trim()};farmers.push(o);F=o}
+   else{var ty=$("rt").value,fee=+$("rf").value||0;if(ty=="Private"&&(!$("rb").value.trim()||!$("rac").value.trim()))return say("auth"+r,"Private doctors must add bank name and account number for payments.",1);
+    o={id:docs.length+1,name:n,user:u,pw:p,type:ty,clinic:$("rc").value.trim(),fee:ty=="Private"?fee:0,bank:$("rb").value.trim(),acct:$("rac").value.trim(),title:$("rat").value.trim(),ep:$("re").value.trim()};docs.push(o);Dr=o}}
+  flash={};draw()}
+ if(a=="sub"){var dc=find(docs,"id",id);subs.push({f:F.id,d:id,st:dc.type=="Govt CVH"?"active":"pending"});if(dc.type=="Govt CVH")say("d","Subscribed to "+dc.name+" for free.");else{T.farmer="pay";draw()}}
+ if(a=="pay"){var ref=$("rf"+id).value.trim(),m=document.querySelector("input[name=pm"+id+"]:checked").value;if(!ref)return say("p","Enter the transaction reference from your bank or Easypaisa receipt.",1);
+  pays.push({id:pid++,f:F.id,d:id,amt:find(docs,"id",id).fee,method:m,ref:ref,st:"Awaiting confirmation"});subs.forEach(function(s){if(s.f==F.id&&s.d==id)s.st="pending"});say("p","Payment sent for confirmation. The doctor will activate your subscription.")}
+ if(a=="post"){var sy=$("cs").value.trim();if(!sy&&!pend.length)return say("c","Describe the symptoms or attach a photo, audio or video.",1);
+  comps.push({id:cid++,f:F.id,d:+$("cd").value,animal:$("ca").value,area:$("car").value.trim()||F.area,sym:sy||"(See attachments)",files:pend,disease:"",rx:"",st:"Pending"});pend=[];say("c","Complaint sent. Check My complaints for the doctor’s reply.")}
+ if(a=="fbk"){if(!$("ft").value.trim())return say("f","Write a few words of feedback first.",1);fbs.push({id:fb++,f:F.id,d:+$("fd").value,rate:+$("fr").value,text:$("ft").value.trim()});$("ft").value="";say("f","Thank you. Your feedback was sent.")}
+ if(a=="psave"){F.name=$("pn").value.trim()||F.name;F.area=$("pa").value.trim()||F.area;say("pr","Profile saved.")}
+ if(a=="sol"){var c=find(comps,"id",id),di=$("di"+id).value.trim(),rx=$("rx"+id).value.trim();if(!di||!rx)return say("s","Enter both a diagnosis and a prescription.",1);c.disease=di;c.rx=rx;c.st="Answered";say("s","Solution posted for complaint #"+id+".")}
+ if(a=="cadd"){var dn=$("ud").value.trim(),rx2=$("ux").value.trim();if(!dn||!rx2)return say("cu","Enter the disease and its prescription.",1);cures.push({id:cu++,disease:dn,animal:$("ua").value,rx:rx2,img:cureImg});cureImg="";say("cu","Cure added to VetCure details.")}
+ if(a=="cdel"){cures=cures.filter(function(c){return c.id!=id});draw()}
+ if(a=="nadd"){if(!$("nt").value.trim())return say("n","Enter a headline.",1);news.unshift({id:nw++,title:$("nt").value.trim(),body:$("nb").value.trim(),by:Dr.id});say("n","News published.")}
+ if(a=="ndel"){news=news.filter(function(n){return n.id!=id});draw()}
+ if(a=="conf"){var py=find(pays,"id",id);py.st="Confirmed";subs.forEach(function(s){if(s.f==py.f&&s.d==py.d)s.st="active"});say("q","Payment confirmed. The farmer’s subscription is now active.")}});
+document.addEventListener("change",function(ev){var t=ev.target,k=t.dataset.ch;if(!k)return;
+ if(k=="area"){flash={area:t.value};draw()}
+ if(k=="files"){pend=[];Array.prototype.forEach.call(t.files,function(f){pend.push({name:f.name,kind:f.type.split("/")[0],url:URL.createObjectURL(f)})})}
+ if(k=="cimg"&&t.files[0]){var r=new FileReader();r.onload=function(){cureImg=r.result};r.readAsDataURL(t.files[0])}});
+draw();
+</script>
+</body>
+</html>

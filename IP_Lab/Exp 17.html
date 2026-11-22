@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VoteOnline – Vote securely from anywhere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef0f7;--surface:#fff;--ink:#1a2140;--muted:#5d6584;--line:#d5d9ea;--brand:#2b3a8c;--brand-ink:#fff;--mark:#f2a900;--ok:#1f8a54;--bad:#c0392b;--soft:#e3e7f7;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111530;--surface:#1a2045;--ink:#e8ebfa;--muted:#a3abd0;--line:#2e3668;--brand:#8e9cf5;--brand-ink:#0f1330;--mark:#f5b92e;--ok:#4cd08b;--bad:#ff7b6b;--soft:#232b5c}}
+:root[data-theme="dark"]{--bg:#111530;--surface:#1a2045;--ink:#e8ebfa;--muted:#a3abd0;--line:#2e3668;--brand:#8e9cf5;--brand-ink:#0f1330;--mark:#f5b92e;--ok:#4cd08b;--bad:#ff7b6b;--soft:#232b5c}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Public Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:"Young Serif",Georgia,serif;font-weight:400;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.3rem,6vw,3.8rem)}h2{font-size:clamp(1.6rem,3.5vw,2.2rem)}h3{font-size:1.2rem}
+p{margin:0 0 1em;max-width:62ch}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+.logo{font-family:"Young Serif",serif;font-size:1.3rem;color:var(--brand);text-decoration:none}
+nav a{color:var(--ink);text-decoration:none;margin-left:20px;font-size:.95rem}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;padding:56px 0 30px;align-items:center}
+.btn{display:inline-block;background:var(--brand);color:var(--brand-ink);border:0;border-radius:8px;padding:11px 20px;font:600 1rem "Public Sans",sans-serif;cursor:pointer;text-decoration:none}
+.btn.alt{background:transparent;color:var(--brand);border:1.5px solid var(--brand)}
+.btn.sm{padding:5px 11px;font-size:.85rem}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+.ballot{border:2px dashed var(--brand);position:relative}
+.ballot:before{content:"";position:absolute;right:18px;top:-2px;width:26px;height:12px;background:var(--mark)}
+.bar{height:14px;border-radius:7px;background:var(--soft);overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--brand);transition:width .4s}
+section{padding:40px 0}
+label{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+input[type=radio]{width:auto}
+.row{display:flex;gap:10px;align-items:end}.row>*{flex:1}.row .btn{flex:none}
+.steps{display:flex;gap:6px;list-style:none;padding:0;margin:0 0 18px;font-size:.8rem;color:var(--muted)}
+.steps li{flex:1;border-top:4px solid var(--line);padding-top:6px}
+.steps li.on{border-color:var(--brand);color:var(--ink);font-weight:600}
+.steps li.done{border-color:var(--ok)}
+.demo{background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.88rem;margin:10px 0}
+.msg{min-height:1.4em;font-size:.92rem;margin-top:10px;color:var(--ok)}.msg.err{color:var(--bad)}
+.cand{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;background:var(--bg)}
+.cand:has(input:checked){border-color:var(--brand);background:var(--soft)}
+.cand b{font-family:"Young Serif",serif;font-weight:400}
+.muted{color:var(--muted)}
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:22px;flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;font:600 1rem "Public Sans",sans-serif;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{color:var(--brand);border-color:var(--brand)}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td select{padding:4px 6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pill{display:inline-block;padding:1px 10px;border-radius:99px;font-size:.8rem;background:var(--soft);color:var(--brand);font-weight:600}
+.pill.ok{background:var(--ok);color:var(--brand-ink)}
+ul.feat{padding-left:1.1em;margin:0}ul.feat li{margin-bottom:.4em}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.88rem}
+.hidden{display:none}
+@media(max-width:780px){.hero,.grid2{grid-template-columns:1fr}nav a:not(.keep){display:none}.row{flex-direction:column;align-items:stretch}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="logo" href="#top">VoteOnline</a>
+<nav><a href="#booth">Voter booth</a><a href="#admin">Admin console</a><a class="keep" href="#security">Security</a></nav></div></header>
+
+<main id="top" class="wrap">
+<div class="hero">
+ <div>
+  <h1>Cast your vote without leaving home.</h1>
+  <p>Log in with your voter ID, confirm it with a one-time code, pick your candidate and get a receipt. Turnout updates live while the election runs.</p>
+  <a class="btn" href="#booth">Go to the voter booth</a> <a class="btn alt" href="#admin">Open admin console</a>
+ </div>
+ <div class="card">
+  <h3>Turnout so far</h3>
+  <div class="bar"><i id="tbar" style="width:0"></i></div>
+  <p id="ttext" class="muted" style="margin:0"></p>
+ </div>
+</div>
+
+<section id="booth">
+ <h2>Voter booth</h2>
+ <div class="grid2">
+  <div>
+   <h3>What you can do</h3>
+   <ul class="feat"><li>Log in using your voter ID</li><li>Verify with a login OTP</li><li>Request a separate OTP before voting</li><li>Read candidate details and select one</li><li>Submit your vote and keep the receipt</li><li>See your voting history</li></ul>
+   <div class="demo"><b>Demo voter IDs:</b> VOT1001 (Ward 1), VOT1002 (Ward 2), VOT1003 (Ward 1). One-time codes appear in a grey box on screen, since this page cannot send SMS.</div>
+  </div>
+  <div class="card ballot" aria-live="polite" id="booth-card"></div>
+ </div>
+</section>
+
+<section id="admin">
+ <h2>Admin console</h2>
+ <div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-t="cands">Candidates</button>
+  <button role="tab" aria-selected="false" data-t="voters">Voter list</button>
+  <button role="tab" aria-selected="false" data-t="results">Results</button>
+ </div>
+ <div id="t-cands">
+  <div class="grid2">
+   <form class="card" id="cform">
+    <h3>Create candidate</h3>
+    <label for="cn">Name</label><input id="cn" required>
+    <label for="cp">Party or group</label><input id="cp" required>
+    <label for="cw">Allocate to ward</label><select id="cw"></select>
+    <label for="cb">Details voters will see</label><textarea id="cb" rows="2"></textarea>
+    <p style="margin-top:14px"><button class="btn" type="submit">Add candidate</button></p>
+    <div class="msg" id="cmsg"></div>
+   </form>
+   <div class="card"><h3>Candidates by ward</h3><div id="clist"></div></div>
+  </div>
+ </div>
+ <div id="t-voters" class="hidden">
+  <div class="grid2">
+   <div class="card">
+    <h3>Create or import voters</h3>
+    <div class="row"><div><label for="vn">Name</label><input id="vn"></div><div><label for="vw">Ward</label><select id="vw"></select></div><button class="btn" id="vadd">Add voter</button></div>
+    <label for="vcsv">Import voter list (one per line: name, ward number)</label>
+    <textarea id="vcsv" rows="4" placeholder="Meera Iyer, 1&#10;Karthik S, 2"></textarea>
+    <div class="row" style="margin-top:10px"><input type="file" id="vfile" accept=".csv,.txt"><button class="btn alt" id="vimp">Import</button></div>
+    <div class="msg" id="vmsg"></div>
+   </div>
+   <div class="card"><h3>View and update voter list</h3><div class="scroll"><table><thead><tr><th>Voter ID</th><th>Name</th><th>Ward</th><th>Status</th></tr></thead><tbody id="vbody"></tbody></table></div></div>
+  </div>
+ </div>
+ <div id="t-results" class="hidden">
+  <div class="card"><h3>Election results</h3><div id="rout"></div></div>
+ </div>
+</section>
+
+<section id="security">
+ <h2>How the real platform protects your vote</h2>
+ <div class="card"><ul class="feat"><li>Two-step login: voter ID plus a one-time code</li><li>A fresh code just before the ballot opens</li><li>Encrypted storage of voter details and ballots</li><li>Receipts that prove you voted without showing who you picked</li></ul>
+ <p class="muted" style="margin:12px 0 0">This page is a design demo. It does not encrypt anything or connect to a real voter roll.</p></div>
+</section>
+</main>
+<footer><div class="wrap">VoteOnline demo · Candidates and voters are made up. Data stays in this tab and resets on reload.</div></footer>
+
+<script>
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var WARDS=["Ward 1 North","Ward 2 South"];
+var cands=[
+ {id:1,name:"Asha Rao",party:"Civic Forward",ward:0,bio:"Teacher and ward committee member. Focus: school repairs and bus routes."},
+ {id:2,name:"Dev Malhotra",party:"People’s Alliance",ward:0,bio:"Small-business owner. Focus: market upgrades and street lighting."},
+ {id:3,name:"Lakshmi Nair",party:"Independent",ward:1,bio:"Retired engineer. Focus: drainage and clean water."},
+ {id:4,name:"Imran Sheikh",party:"Green Commons",ward:1,bio:"Community organiser. Focus: parks and waste recycling."}];
+var voters=[{id:"VOT1001",name:"Meera Iyer",ward:0,rec:""},{id:"VOT1002",name:"Karthik S",ward:1,rec:""},{id:"VOT1003",name:"Zoya Khan",ward:0,rec:""}];
+var votes={};var cid=5,vid=1004;
+var S={step:0,voter:null,otp:"",otp2:"",pick:null,msg:"",err:false,receipt:""};
+var STEPS=["Voter ID","Login OTP","Voting OTP","Candidate","Done"];
+function rnd(){return String(Math.floor(100000+Math.random()*900000))}
+function stepsHtml(){return '<ol class="steps">'+STEPS.map(function(t,i){return '<li class="'+(i<S.step?'done':i==S.step?'on':'')+'">'+t+'</li>'}).join("")+'</ol>'}
+function msgHtml(){return '<div class="msg'+(S.err?' err':'')+'">'+esc(S.msg)+'</div>'}
+function say(m,e){S.msg=m;S.err=!!e;booth()}
+function booth(){var h=stepsHtml(),v=S.voter,c=$("booth-card");
+ if(S.step==0)h+='<label for="vid">Voter ID</label><input id="vid" placeholder="VOT1001" autocomplete="off"><p style="margin-top:14px"><button class="btn" id="b0">Send login OTP</button></p>';
+ if(S.step==1)h+='<div class="demo">Demo OTP sent to your phone: <b>'+S.otp+'</b></div><label for="otp">Enter login OTP</label><input id="otp" inputmode="numeric" maxlength="6"><p style="margin-top:14px"><button class="btn" id="b1">Verify and log in</button></p>';
+ if(S.step==2){var past=v.rec?'<div class="demo">Your history: you voted in '+WARDS[v.ward]+'. Receipt <b>'+v.rec+'</b>.</div>':'';
+  h+='<p>Welcome, '+esc(v.name)+'. You are registered in '+WARDS[v.ward]+'.</p>'+past;
+  if(v.rec)h+='<p>You have already voted, so the ballot is closed for you.</p><button class="btn alt" id="bx">Log out</button>';
+  else h+=(S.otp2?'<div class="demo">Voting OTP: <b>'+S.otp2+'</b></div><label for="otp2">Enter voting OTP</label><input id="otp2" inputmode="numeric" maxlength="6"><p style="margin-top:14px"><button class="btn" id="b2">Open ballot</button></p>':'<p><button class="btn" id="b2g">Get OTP for voting</button></p>')}
+ if(S.step==3){h+='<h3>Choose one candidate in '+WARDS[v.ward]+'</h3>'+cands.filter(function(x){return x.ward==v.ward}).map(function(x){return '<label class="cand" style="font-weight:400;margin:0 0 10px"><input type="radio" name="pick" value="'+x.id+'"'+(S.pick==x.id?' checked':'')+'><span><b>'+esc(x.name)+'</b> <span class="pill">'+esc(x.party)+'</span><br><span class="muted">'+esc(x.bio)+'</span></span></label>'}).join("")+
+  '<label class="cand" style="font-weight:400"><input type="radio" name="pick" value="0"'+(S.pick==="0"?' checked':'')+'><span><b>None of the above</b></span></label><button class="btn" id="b3">Submit vote</button>'}
+ if(S.step==4)h+='<h3>Your vote is recorded</h3><p>Keep this receipt number. It shows that you voted but not who you chose.</p><p><span class="pill ok">'+S.receipt+'</span></p><button class="btn alt" id="bx">Log out</button>';
+ c.innerHTML=h+msgHtml();bind()}
+function bind(){var b;
+ if(b=$("b0"))b.onclick=function(){var id=$("vid").value.trim().toUpperCase(),f=voters.filter(function(x){return x.id==id})[0];
+  if(!f)return say("No voter found with that ID. Check the ID on your voter card.",1);S.voter=f;S.otp=rnd();S.step=1;say("")};
+ if(b=$("b1"))b.onclick=function(){if($("otp").value!=S.otp)return say("That OTP is wrong. Check the code and try again.",1);S.step=2;say("Logged in.")};
+ if(b=$("b2g"))b.onclick=function(){S.otp2=rnd();say("")};
+ if(b=$("b2"))b.onclick=function(){if($("otp2").value!=S.otp2)return say("That voting OTP is wrong. Check the code and try again.",1);S.step=3;S.pick=null;say("")};
+ if(b=$("b3"))b.onclick=function(){var r=document.querySelector("input[name=pick]:checked");if(!r)return say("Select a candidate or “None of the above” first.",1);
+  votes[r.value]=(votes[r.value]||0)+1;S.voter.rec="RC-"+Math.random().toString(36).slice(2,8).toUpperCase();S.receipt=S.voter.rec;S.step=4;say("");stats();results();vtable()};
+ if(b=$("bx"))b.onclick=function(){S={step:0,voter:null,otp:"",otp2:"",pick:null,msg:"",err:false,receipt:""};booth()};
+ document.querySelectorAll("input[name=pick]").forEach(function(r){r.onchange=function(){S.pick=r.value}})}
+function stats(){var t=voters.length,d=voters.filter(function(v){return v.rec}).length,p=t?Math.round(d/t*100):0;
+ $("tbar").style.width=p+"%";$("ttext").textContent=d+" of "+t+" registered voters have voted ("+p+"%).";return[d,t]}
+function opts(){return WARDS.map(function(w,i){return '<option value="'+i+'">'+w+'</option>'}).join("")}
+$("cw").innerHTML=opts();$("vw").innerHTML=opts();
+document.querySelectorAll(".tabs button").forEach(function(b){b.onclick=function(){
+ document.querySelectorAll(".tabs button").forEach(function(x){x.setAttribute("aria-selected",x===b)});
+ ["cands","voters","results"].forEach(function(t){$("t-"+t).classList.toggle("hidden",t!==b.dataset.t)});results()}});
+function clist(){$("clist").innerHTML=WARDS.map(function(w,i){var l=cands.filter(function(c){return c.ward==i});
+ return '<h3 style="font-size:1rem;margin-top:8px">'+w+'</h3>'+(l.map(function(c){return '<p style="margin:0 0 6px">'+esc(c.name)+' <span class="pill">'+esc(c.party)+'</span> <button class="btn alt sm" data-d="'+c.id+'">Delete</button></p>'}).join("")||'<p class="muted">No candidates yet.</p>')}).join("");
+ document.querySelectorAll("#clist button").forEach(function(b){b.onclick=function(){cands=cands.filter(function(c){return c.id!=b.dataset.d});clist();results();booth()}})}
+$("cform").onsubmit=function(e){e.preventDefault();cands.push({id:cid++,name:$("cn").value,party:$("cp").value,ward:+$("cw").value,bio:$("cb").value||"No details provided."});
+ $("cmsg").textContent="Candidate added to "+WARDS[$("cw").value]+".";this.reset();clist();results()};
+function vtable(){$("vbody").innerHTML=voters.map(function(v,i){return '<tr><td>'+v.id+'</td><td>'+esc(v.name)+'</td><td><select data-i="'+i+'"'+(v.rec?' disabled':'')+'>'+WARDS.map(function(w,j){return '<option value="'+j+'"'+(v.ward==j?' selected':'')+'>'+w+'</option>'}).join("")+'</select></td><td>'+(v.rec?'<span class="pill ok">Voted</span>':'<span class="pill">Not voted</span>')+'</td></tr>'}).join("");
+ document.querySelectorAll("#vbody select").forEach(function(s){s.onchange=function(){voters[s.dataset.i].ward=+s.value;$("vmsg").textContent="Ward updated for "+voters[s.dataset.i].id+"."}});stats()}
+function addV(n,w){voters.push({id:"VOT"+(vid++),name:n,ward:w,rec:""})}
+$("vadd").onclick=function(){var n=$("vn").value.trim();if(!n){$("vmsg").className="msg err";$("vmsg").textContent="Enter the voter’s name first.";return}
+ addV(n,+$("vw").value);$("vn").value="";$("vmsg").className="msg";$("vmsg").textContent="Voter added with ID VOT"+(vid-1)+".";vtable()};
+$("vfile").onchange=function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){$("vcsv").value=r.result};r.readAsText(f)};
+$("vimp").onclick=function(){var n=0;$("vcsv").value.split(/\n/).forEach(function(l){var p=l.split(",");if(p.length<2)return;var w=parseInt(p[1])-1;if(p[0].trim()&&WARDS[w]){addV(p[0].trim(),w);n++}});
+ $("vmsg").className="msg"+(n?"":" err");$("vmsg").textContent=n?n+" voters imported.":"Nothing imported. Use lines like “Meera Iyer, 1” with a ward number from 1 to "+WARDS.length+".";vtable()};
+function results(){var s=stats();$("rout").innerHTML='<p>Turnout: <b>'+s[0]+'</b> of '+s[1]+' voters.</p>'+WARDS.map(function(w,i){var l=cands.filter(function(c){return c.ward==i}),tot=0;
+ l.forEach(function(c){tot+=votes[c.id]||0}); var rows=l.map(function(c){var n=votes[c.id]||0;return row(c.name+' ('+c.party+')',n,tot)}).join("");
+ return '<h3 style="font-size:1rem;margin-top:14px">'+w+'</h3>'+(rows||'<p class="muted">No candidates.</p>')}).join("")+'<p class="muted" style="margin-top:14px">None of the above: '+(votes[0]||0)+' votes across all wards.</p>'}
+function row(l,n,t){var p=t?Math.round(n/t*100):0;return '<div>'+esc(l)+' <b>'+n+'</b> <span class="muted">'+p+'%</span><div class="bar"><i style="width:'+p+'%"></i></div></div>'}
+clist();vtable();results();booth();
+</script>
+</body>
+</html>

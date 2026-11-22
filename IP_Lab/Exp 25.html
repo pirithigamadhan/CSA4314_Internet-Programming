@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RoadRescue</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto+Mono:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+body{font-family:'Roboto Mono',ui-monospace,monospace;background:#1b1b1d;color:#eee;max-width:920px;margin:0 auto;padding:14px}
+.hero{position:relative;background:#26262a;padding:26px 24px 22px 70px;margin-bottom:16px;border-top:14px solid transparent;border-bottom:14px solid transparent;border-image:repeating-linear-gradient(-45deg,#ffc300 0 14px,#111 14px 28px) 14}
+.hero h1{margin:0;font:700 2.5rem 'Oswald',Impact,sans-serif;text-transform:uppercase;letter-spacing:3px;color:#ffc300}
+.hero p{margin:4px 0 0;font-size:.78rem;color:#bbb}
+.beacon{position:absolute;left:22px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;background:#ff3b30;animation:flash 1s steps(2) infinite;box-shadow:0 0 22px #ff3b30}
+@keyframes flash{50%{background:#ffc300;box-shadow:0 0 22px #ffc300}}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+nav a{background:#ffc300;color:#111;text-decoration:none;font:700 .85rem 'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase;padding:7px 14px;border:3px solid #111;outline:2px solid #ffc300;transition:.1s}
+nav a:hover{background:#fff;transform:skewX(-8deg)}
+h2{font:700 1.5rem 'Oswald',sans-serif;text-transform:uppercase;letter-spacing:2px;color:#ffc300;border-bottom:3px dashed #ffc300;padding-bottom:4px;display:inline-block}
+label{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:#ffc300}
+input,select,textarea{display:block;width:100%;padding:10px;margin:4px 0 12px;border:2px solid #555;background:#2b2b2e;color:#fff;font:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#ffc300;box-shadow:0 0 0 3px #ffc30055}
+button{background:#ffc300;color:#111;border:0;padding:9px 16px;font:700 .85rem 'Oswald',sans-serif;letter-spacing:1px;text-transform:uppercase;cursor:pointer;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+button:hover{background:#fff}
+.card{background:#26262a;border-left:8px solid #ffc300;border-bottom:3px dashed #555;padding:14px 16px;margin:14px 0}
+.card h3{font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:1px;color:#ffc300;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;background:#26262a}
+th{background:#ffc300;color:#111;text-transform:uppercase}td,th{padding:8px;text-align:left;border:1px solid #444}
+#msg{min-height:1.4em;color:#ff3b30;font-weight:700}
+a{color:#ffc300}.row{display:flex;gap:8px}
+</style></head><body>
+<div class="hero"><div class="beacon"></div><h1>RoadRescue</h1><p>BREAKDOWN ASSISTANCE // LICENSED MECHANICS, ONE TAP AWAY</p></div><nav id="nav"></nav><div id="msg"></div><div id="main"></div>
+<script>
+/* ===== core (same in all 5 projects): localStorage acts as the database ===== */
+const P='P25_',$=s=>document.querySelector(s);
+const L=k=>JSON.parse(localStorage.getItem(P+k)||'[]'),S=(k,v)=>localStorage.setItem(P+k,JSON.stringify(v));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),id=()=>Date.now()+Math.floor(Math.random()*999);
+let me=JSON.parse(sessionStorage.getItem('me'+P)||'null');const V={},H={},AFTER={};
+const msg=t=>{$('#msg').textContent=t;setTimeout(()=>$('#msg').textContent='',3500)};
+function fm(name,fields,btn,hid={}){return `<form onsubmit="return go(event,'${name}')">`+Object.entries(hid).map(([k,v])=>`<input type=hidden name=${k} value="${esc(v)}">`).join('')+fields.map(([n,l,t='text',o])=>`<label>${l}</label>`+(t=='select'?`<select name=${n}>${o.map(x=>`<option>${esc(x)}</option>`).join('')}</select>`:t=='textarea'?`<textarea name=${n} ${n[0]=='_'?'':'required'}></textarea>`:`<input name=${n} type=${t} step=any ${n[0]=='_'?'':'required'}>`)).join('')+`<button>${btn}</button></form>`}
+function go(e,n){e.preventDefault();H[n](Object.fromEntries(new FormData(e.target)));return false}
+function show(v,a){$('#main').innerHTML=V[v](a);nav();AFTER[v]&&AFTER[v](a)}
+function nav(){$('#nav').innerHTML=(me?MENU[me.role]:PUB).map(([l,v,a])=>`<a href="#" onclick="show('${v}'${a?`,'${a}'`:''});return false">${l}</a>`).join('')+(me?`<a href="#" onclick="logout();return false">Logout (${me.role})</a>`:'')}
+function logout(){me=null;sessionStorage.removeItem('me'+P);show('home')}
+V.login=r=>`<h2>${r[0].toUpperCase()+r.slice(1)} Login</h2>`+fm('login',[['u','Email / Username'],['p','Password','password']],'Login',{r});
+H.login=d=>{const t=L(d.r).find(x=>(x.email||x.username)==d.u&&x.password==d.p);if(!t)return msg('Invalid credentials');if(t.status&&t.status!='approved')return msg('Account not approved yet - wait for admin approval');me={role:d.r,id:t.id};sessionStorage.setItem('me'+P,JSON.stringify(me));show(d.r+'_home')};
+V.reg=r=>`<h2>Register ${r}</h2>`+fm('reg',REGF[r],'Register',{r});
+H.reg=d=>{const r=d.r;delete d.r;const a=L(r);if(a.some(x=>x.email==d.email))return msg('Email already registered');a.push({id:id(),...d,...(EXTRA[r]||{})});S(r,a);msg('Registered. Please login.'+(EXTRA[r]?' Wait for admin approval.':''));show('login',r)};
+const tb=(h,r)=>`<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${r.map(x=>`<tr>${x.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+if(!L('admin').length)S('admin',[{id:1,username:'admin',password:'admin123'}]);
+
+/* ===== project 25 ===== */
+const MENU={user:[['Search Mechanic','search'],['My Profile','profile']],admin:[['Provide Approval','admin_home']],
+mechanic:[['Post Business','bpost'],['Manage Business','mechanic_home'],['View Feedback','mfb']]};
+const PUB=[['Home','home'],['User Login','login','user'],['User Register','reg','user'],['Mechanic Login','login','mechanic'],['Mechanic Register','reg','mechanic'],['Admin Login','login','admin']];
+const REGF={user:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['vehicle','Vehicle details']],
+mechanic:[['name','Name'],['email','Email','email'],['password','Password','password'],['phone','Phone'],['license','Licence number']]};
+const EXTRA={mechanic:{status:'pending'}};
+V.home=()=>`<h2>Stuck on the road?</h2><p>Register, then search licensed mechanics near you and view their location on Google Maps. Only admin-approved licensed mechanics are listed.</p>`;
+/* user */
+V.user_home=()=>V.search();
+V.search=()=>`<h2>Search Mechanics</h2><div class=row><input id=c placeholder="City / area" oninput=run()><input id=s placeholder="Service (e.g. puncture)" oninput=run()></div><div id=res></div>`;
+function run(){const c=$('#c').value.toLowerCase(),s=$('#s').value.toLowerCase(),ok=L('mechanic').filter(m=>m.status=='approved').map(m=>m.id);
+$('#res').innerHTML=L('biz').filter(b=>ok.includes(b.mid)&&(b.city+b.address).toLowerCase().includes(c)&&b.services.toLowerCase().includes(s)).map(b=>{const m=L('mechanic').find(x=>x.id==b.mid),f=L('fb').filter(x=>x.mid==b.mid),avg=f.length?(f.reduce((t,x)=>t+x.rating,0)/f.length).toFixed(1):'no ratings';
+return `<div class=card><h3>${esc(b.shop)}</h3>Mechanic: ${esc(m.name)} | Phone: ${esc(m.phone)}<br>Services: ${esc(b.services)}<br>${esc(b.address)}, ${esc(b.city)}<br>Rating: ${avg}<br><br><button onclick="show('map',${b.id})">View Google location</button> <button onclick="show('fbk',${b.mid})">Post feedback</button></div>`}).join('')||'<p>No mechanics found.</p>'}
+AFTER.search=run;AFTER.user_home=run;
+V.map=i=>{const b=L('biz').find(x=>x.id==i);return `<h2>${esc(b.shop)}</h2><iframe width="100%" height="400" style="border:0" loading="lazy" src="https://maps.google.com/maps?q=${b.lat},${b.lng}&z=15&output=embed"></iframe><p><a target=_blank href="https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}">Get directions</a></p><button onclick="show('search')">Back</button>`};
+V.fbk=m=>`<h2>Post Feedback</h2>`+fm('fbk',[['rating','Rating','select',[5,4,3,2,1]],['comment','Comment','textarea']],'Submit',{mid:m});
+H.fbk=d=>{const a=L('fb');a.push({id:id(),uid:me.id,mid:+d.mid,rating:+d.rating,comment:d.comment,on:new Date().toLocaleString()});S('fb',a);msg('Thanks for your feedback');show('search')};
+V.profile=()=>{const u=L('user').find(x=>x.id==me.id);return `<h2>My Profile</h2><p>Email: ${esc(u.email)}</p><label>Name</label><input id=pn value="${esc(u.name)}"><label>Phone</label><input id=pp value="${esc(u.phone)}"><label>Vehicle details</label><input id=pv value="${esc(u.vehicle)}"><button onclick="saveP()">Update</button>`};
+const saveP=()=>{S('user',L('user').map(u=>u.id==me.id?{...u,name:$('#pn').value,phone:$('#pp').value,vehicle:$('#pv').value}:u));msg('Profile updated')};
+/* admin */
+V.admin_home=()=>`<h2>Mechanic Approvals</h2>`+(L('mechanic').map(m=>`<div class=card>${esc(m.name)} | ${esc(m.email)} | Licence: ${esc(m.license)} | <b>${m.status}</b> <button onclick="setSt(${m.id},'approved')">Approve</button> <button onclick="setSt(${m.id},'rejected')">Reject</button></div>`).join('')||'<p>No mechanics registered.</p>');
+const setSt=(i,s)=>{S('mechanic',L('mechanic').map(m=>m.id==i?{...m,status:s}:m));show('admin_home')};
+/* mechanic */
+V.bpost=()=>`<h2>Post Business</h2>`+fm('bpost',[['shop','Shop name'],['services','Services offered'],['city','City'],['address','Address'],['lat','Latitude','number'],['lng','Longitude','number']],'Post');
+H.bpost=d=>{const a=L('biz');a.push({id:id(),mid:me.id,...d,lat:+d.lat,lng:+d.lng});S('biz',a);msg('Business posted');show('mechanic_home')};
+V.mechanic_home=()=>`<h2>Manage Business</h2>`+(L('biz').filter(b=>b.mid==me.id).map(b=>`<div class=card><b>${esc(b.shop)}</b> | ${esc(b.services)} | ${esc(b.city)} | ${b.lat}, ${b.lng}<br><br><button onclick="editB(${b.id})">Edit</button> <button onclick="delB(${b.id})">Delete</button></div>`).join('')||'<p>No business posted yet.</p>');
+const editB=i=>{const b=L('biz').find(x=>x.id==i),shop=prompt('Shop name',b.shop);if(shop===null)return;const services=prompt('Services',b.services);if(services===null)return;S('biz',L('biz').map(x=>x.id==i?{...x,shop,services}:x));show('mechanic_home')};
+const delB=i=>{S('biz',L('biz').filter(b=>b.id!=i));show('mechanic_home')};
+V.mfb=()=>`<h2>Customer Feedback</h2>`+(L('fb').filter(f=>f.mid==me.id).map(f=>`<div class=card>${'★'.repeat(f.rating)} by ${esc(L('user').find(u=>u.id==f.uid)?.name)}<p>${esc(f.comment)}</p><small>${f.on}</small></div>`).join('')||'<p>No feedback yet.</p>');
+
+/* ===== built-in database viewer ===== */
+const tbls=()=>Object.keys(localStorage).filter(k=>k.startsWith(P)).map(k=>k.slice(P.length)).sort();
+const cols=r=>[...new Set(r.flatMap(o=>Object.keys(o)))];
+const dl=(n,t)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t]));a.download=n;a.click()};
+const dlJSON=()=>dl('database.json',JSON.stringify(Object.fromEntries(tbls().map(k=>[k,L(k)])),null,2));
+const sq=v=>typeof v=='number'?v:`'${String(typeof v=='object'?JSON.stringify(v):v??'').replace(/'/g,"''")}'`;
+const dlSQL=()=>dl('database.sql',tbls().map(k=>{const r=L(k);if(!r.length)return `-- ${k}: empty`;const c=cols(r);return r.map(o=>`INSERT INTO \`${k}\` (${c.map(x=>'`'+x+'`').join(',')}) VALUES (${c.map(x=>sq(o[x])).join(',')});`).join('\n')}).join('\n\n'));
+V.db=()=>`<h2>🗄️ Database Viewer</h2><p>Live data stored in this browser: <b>${tbls().length}</b> tables. Passwords are masked.</p><button onclick="dlSQL()">Download SQL (INSERTs)</button> <button onclick="dlJSON()">Download JSON</button> <button onclick="show('db')">Refresh</button> <button onclick="if(confirm('Delete ALL data in this project?')){tbls().forEach(k=>localStorage.removeItem(P+k));sessionStorage.clear();location.reload()}">Reset database</button>`+
+(tbls().map(k=>{const r=L(k),c=cols(r);return `<h3>${esc(k)} <small>(${r.length} rows)</small></h3>`+(r.length?`<div style="overflow-x:auto">`+tb(c.map(esc),r.map(o=>c.map(x=>x=='password'?'••••••':esc(typeof o[x]=='object'?JSON.stringify(o[x]):o[x]))))+`</div>`:'<small>empty table</small>')}).join('')||'<p>No data yet.</p>');
+const _nav=nav;nav=function(){_nav();$('#nav').innerHTML+=`<a href="#" onclick="show('db');return false">🗄️ Database</a>`};
+show(me?me.role+'_home':'home');
+</script></body></html>

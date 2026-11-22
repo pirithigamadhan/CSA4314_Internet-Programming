@@ -1,0 +1,992 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkyConnect - Flight Reservation System</title>
+
+<style>
+:root {
+  --navy: #102A43;
+  --blue: #168AAD;
+  --sky: #D9F0FF;
+  --white: #FFFFFF;
+  --light: #F3F8FC;
+  --text: #243B53;
+  --border: #D9E2EC;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: var(--light);
+  color: var(--text);
+}
+
+header {
+  background: var(--navy);
+  color: white;
+  padding: 18px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+nav button {
+  background: transparent;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+nav button:hover {
+  background: var(--blue);
+  border-radius: 5px;
+}
+
+.hero {
+  background: linear-gradient(120deg, #102A43, #168AAD);
+  color: white;
+  padding: 65px 8%;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 38px;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  font-size: 17px;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 30px auto;
+}
+
+.section {
+  display: none;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px #102a4315;
+  margin-bottom: 25px;
+}
+
+.section.active {
+  display: block;
+}
+
+h2 {
+  color: var(--navy);
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 8px 0 15px;
+  background: white;
+}
+
+label {
+  font-weight: bold;
+  color: var(--navy);
+}
+
+.btn {
+  background: var(--blue);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 5px 3px;
+}
+
+.btn:hover {
+  background: var(--navy);
+}
+
+.btn-secondary {
+  background: var(--navy);
+}
+
+.card {
+  background: var(--sky);
+  padding: 18px;
+  border-radius: 9px;
+  margin: 12px 0;
+  border-left: 5px solid var(--blue);
+}
+
+.flight-card {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 10px;
+  margin: 15px 0;
+  box-shadow: 0 2px 8px #102a4310;
+}
+
+.flight-card strong {
+  color: var(--navy);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.seat-map {
+  display: grid;
+  grid-template-columns: repeat(6, 45px);
+  gap: 9px;
+  margin: 20px 0;
+}
+
+.seat {
+  padding: 12px 5px;
+  border: none;
+  border-radius: 5px;
+  background: #D9F0FF;
+  cursor: pointer;
+  color: var(--navy);
+}
+
+.seat.selected {
+  background: #168AAD;
+  color: white;
+}
+
+.seat.booked {
+  background: #AAB7C4;
+  color: white;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  background: var(--navy);
+  color: white;
+}
+
+footer {
+  background: var(--navy);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media(max-width:600px) {
+  header {
+    justify-content: center;
+  }
+  .hero h1 {
+    font-size: 27px;
+  }
+  nav {
+    justify-content: center;
+  }
+  .seat-map {
+    grid-template-columns: repeat(6, 38px);
+    gap: 6px;
+  }
+  .section {
+    padding: 16px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✈ SkyConnect</div>
+  <nav>
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('search')">Search Flights</button>
+    <button onclick="showSection('login')">Login</button>
+    <button onclick="showSection('register')">Register</button>
+    <button onclick="showSection('mybookings')">My Tickets</button>
+    <button onclick="showSection('status')">Booking Status</button>
+    <button onclick="showSection('feedback')">Feedback</button>
+    <button onclick="showSection('adminlogin')">Admin</button>
+  </nav>
+</header>
+
+<div class="hero" id="hero">
+  <h1>Welcome to SkyConnect</h1>
+  <p>Your Journey Begins Here. Book Your Flights Easily and Safely.</p>
+  <br>
+  <button class="btn" onclick="showSection('search')">Book Your Flight</button>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <h2>Online Flight Reservation System</h2>
+  <p>SkyConnect provides a simple and convenient platform for searching and booking flight tickets.</p>
+  <div class="grid">
+    <div class="card"><h3>✈ Flight Search</h3><p>Search flights based on destination and travel date.</p></div>
+    <div class="card"><h3>🎫 Easy Booking</h3><p>Select seats and enter passenger details.</p></div>
+    <div class="card"><h3>💳 Online Payment</h3><p>Complete your booking using demo payment options.</p></div>
+    <div class="card"><h3>📄 E-Ticket</h3><p>View and print your booking confirmation.</p></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="section">
+  <h2>Customer Registration</h2>
+  <label>Full Name</label>
+  <input id="regname" placeholder="Enter your name">
+  <label>Email</label>
+  <input id="regemail" type="email" placeholder="Enter email">
+  <label>Password</label>
+  <input id="regpass" type="password" placeholder="Create password">
+  <label>Phone Number</label>
+  <input id="regphone" placeholder="Enter phone number">
+  <button class="btn" onclick="register()">Register</button>
+  <p id="regmsg"></p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+  <h2>Customer Login</h2>
+  <label>Email</label>
+  <input id="loginemail" type="email" placeholder="Enter email">
+  <label>Password</label>
+  <input id="loginpass" type="password" placeholder="Enter password">
+  <button class="btn" onclick="login()">Login</button>
+  <button class="btn btn-secondary" onclick="showSection('forgot')">Forgot Password?</button>
+  <p id="loginmsg"></p>
+</div>
+
+<!-- FORGOT PASSWORD -->
+<div id="forgot" class="section">
+  <h2>Forgot Password</h2>
+  <label>Registered Email</label>
+  <input id="forgotemail" type="email" placeholder="Enter registered email">
+  <label>New Password</label>
+  <input id="newpass" type="password" placeholder="Enter new password">
+  <button class="btn" onclick="resetPassword()">Reset Password</button>
+  <p id="forgotmsg"></p>
+</div>
+
+<!-- SEARCH -->
+<div id="search" class="section">
+  <h2>Search Flights</h2>
+  <div class="grid">
+    <div>
+      <label>From</label>
+      <select id="from">
+        <option value="Chennai">Chennai</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Hyderabad">Hyderabad</option>
+      </select>
+    </div>
+    <div>
+      <label>To</label>
+      <select id="to">
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Hyderabad">Hyderabad</option>
+      </select>
+    </div>
+    <div>
+      <label>Travel Date</label>
+      <input type="date" id="traveldate">
+    </div>
+    <div>
+      <label>Travel Class</label>
+      <select id="travelclass">
+        <option>Economy</option>
+        <option>Business</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn" onclick="searchFlights()">Search Flights</button>
+  <div id="flightresults"></div>
+</div>
+
+<!-- BOOKING -->
+<div id="booking" class="section">
+  <h2>Book Your Ticket</h2>
+  <div id="selectedflight"></div>
+
+  <h3>Select Your Seat</h3>
+  <div id="seatmap" class="seat-map"></div>
+  <p id="seatmsg">Please select a seat.</p>
+
+  <h3>Passenger Details</h3>
+  <label>Passenger Name</label>
+  <input id="passengername" placeholder="Full name">
+  <label>Age</label>
+  <input id="passengerage" type="number" placeholder="Age">
+  <label>Gender</label>
+  <select id="passengergender">
+    <option>Male</option>
+    <option>Female</option>
+    <option>Other</option>
+  </select>
+  <label>Contact Email</label>
+  <input id="passengeremail" type="email" placeholder="Email address">
+
+  <h3>Payment Details</h3>
+  <label>Payment Method</label>
+  <select id="paymentmethod">
+    <option>UPI</option>
+    <option>Credit Card</option>
+    <option>Debit Card</option>
+    <option>Net Banking</option>
+  </select>
+
+  <button class="btn" onclick="confirmBooking()">Pay & Confirm Booking</button>
+  <p id="bookingmsg"></p>
+</div>
+
+<!-- TICKET -->
+<div id="ticket" class="section">
+  <h2>Booking Confirmation</h2>
+  <div id="ticketdetails"></div>
+  <button class="btn" onclick="window.print()">Print Ticket</button>
+  <button class="btn btn-secondary" onclick="showSection('home')">Home</button>
+</div>
+
+<!-- MY BOOKINGS -->
+<div id="mybookings" class="section">
+  <h2>My Tickets / Booking History</h2>
+  <div id="bookinghistory"></div>
+</div>
+
+<!-- CANCEL -->
+<div id="cancel" class="section">
+  <h2>Cancel Ticket</h2>
+  <label>Enter PNR Number</label>
+  <input id="cancelpnr" placeholder="Enter PNR">
+  <button class="btn" onclick="cancelTicket()">Cancel Ticket</button>
+  <p id="cancelmsg"></p>
+</div>
+
+<!-- STATUS -->
+<div id="status" class="section">
+  <h2>Booking Status</h2>
+  <label>Enter PNR Number</label>
+  <input id="statuspnr" placeholder="Enter PNR">
+  <button class="btn" onclick="checkStatus()">Check Status</button>
+  <div id="statusresult"></div>
+</div>
+
+<!-- FEEDBACK -->
+<div id="feedback" class="section">
+  <h2>Customer Feedback</h2>
+  <label>Name</label>
+  <input id="feedbackname" placeholder="Your name">
+  <label>Email</label>
+  <input id="feedbackemail" type="email" placeholder="Your email">
+  <label>Rating</label>
+  <select id="rating">
+    <option>Excellent</option>
+    <option>Good</option>
+    <option>Average</option>
+    <option>Poor</option>
+  </select>
+  <label>Comments</label>
+  <textarea id="comments" placeholder="Write your feedback"></textarea>
+  <button class="btn" onclick="submitFeedback()">Submit Feedback</button>
+  <p id="feedbackmsg"></p>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminlogin" class="section">
+  <h2>Administrator Login</h2>
+  <label>Email</label>
+  <input id="adminemail" placeholder="Admin email">
+  <label>Password</label>
+  <input id="adminpass" type="password" placeholder="Password">
+  <button class="btn" onclick="adminLogin()">Login as Admin</button>
+  <p id="adminmsg"></p>
+  <p><small>Demo: admin@sky.com / admin123</small></p>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin" class="section">
+  <h2>Admin Dashboard</h2>
+  <div class="grid">
+    <div class="card"><h3>Total Flights</h3><h2 id="totalflights">0</h2></div>
+    <div class="card"><h3>Total Bookings</h3><h2 id="totalbookings">0</h2></div>
+    <div class="card"><h3>Total Customers</h3><h2 id="totalusers">0</h2></div>
+  </div>
+
+  <h3>Add New Flight</h3>
+  <label>Flight Name</label>
+  <input id="newflightname" placeholder="Airline name">
+  <label>Flight Number</label>
+  <input id="newflightno" placeholder="Flight number">
+  <label>From</label>
+  <input id="newfrom" placeholder="Departure city">
+  <label>To</label>
+  <input id="newto" placeholder="Destination city">
+  <label>Departure Time</label>
+  <input id="newtime" type="time">
+  <label>Price</label>
+  <input id="newprice" type="number" placeholder="Ticket price">
+  <label>Available Seats</label>
+  <input id="newseats" type="number" min="1" max="48" value="48">
+  <button class="btn" onclick="addFlight()">Add Flight</button>
+
+  <h3>Flight Inventory</h3>
+  <div id="adminflights"></div>
+
+  <h3>All Bookings Report</h3>
+  <div id="adminbookings"></div>
+
+  <h3>Registered Customers</h3>
+  <div id="adminusers"></div>
+
+  <h3>Customer Feedback</h3>
+  <div id="adminfeedback"></div>
+
+  <button class="btn btn-secondary" onclick="adminLogout()">Logout</button>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+  <h2>Contact Us</h2>
+  <p>Email: support@skyconnect.com</p>
+  <p>Phone: +91 98765 43210</p>
+  <p>Address: Chennai, Tamil Nadu, India</p>
+</div>
+
+</div>
+
+<footer>
+  <p>© 2026 SkyConnect Flight Reservation System</p>
+  <p>Designed for easy and convenient flight booking.</p>
+</footer>
+
+<script>
+// DATA STORAGE
+let users = JSON.parse(localStorage.getItem("skyUsers")) || [];
+let flights = JSON.parse(localStorage.getItem("skyFlights")) || [
+  {id:1,name:"Air India",number:"AI101",from:"Chennai",to:"Delhi",time:"08:00",price:5500,seats:48,bookedSeats:[]},
+  {id:2,name:"IndiGo",number:"6E205",from:"Chennai",to:"Mumbai",time:"10:30",price:4200,seats:48,bookedSeats:[]},
+  {id:3,name:"Vistara",number:"UK301",from:"Bangalore",to:"Delhi",time:"14:00",price:6200,seats:48,bookedSeats:[]},
+  {id:4,name:"Air India Express",number:"IX402",from:"Chennai",to:"Hyderabad",time:"18:00",price:3500,seats:48,bookedSeats:[]}
+];
+let bookings = JSON.parse(localStorage.getItem("skyBookings")) || [];
+let feedbacks = JSON.parse(localStorage.getItem("skyFeedbacks")) || [];
+
+let currentUser = JSON.parse(sessionStorage.getItem("skyCurrentUser")) || null;
+let selectedFlight = null;
+let selectedSeat = null;
+
+function saveData() {
+  localStorage.setItem("skyUsers",JSON.stringify(users));
+  localStorage.setItem("skyFlights",JSON.stringify(flights));
+  localStorage.setItem("skyBookings",JSON.stringify(bookings));
+  localStorage.setItem("skyFeedbacks",JSON.stringify(feedbacks));
+}
+
+function showSection(id) {
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.getElementById("hero").style.display =
+    id === "home" ? "block" : "none";
+
+  if(id==="mybookings") showBookings();
+  if(id==="admin") loadAdmin();
+}
+
+function register() {
+  let name=regname.value.trim();
+  let email=regemail.value.trim().toLowerCase();
+  let password=regpass.value;
+  let phone=regphone.value.trim();
+
+  if(!name || !email || !password || !phone) {
+    regmsg.innerText="Please fill all fields.";
+    return;
+  }
+  if(users.some(u=>u.email===email)) {
+    regmsg.innerText="Email already registered.";
+    return;
+  }
+
+  users.push({name,email,password,phone});
+  saveData();
+  regmsg.innerText="Registration successful! Please login.";
+  regname.value=regemail.value=regpass.value=regphone.value="";
+}
+
+function login() {
+  let email=loginemail.value.trim().toLowerCase();
+  let password=loginpass.value;
+  let user=users.find(u=>u.email===email && u.password===password);
+
+  if(user) {
+    currentUser=user;
+    sessionStorage.setItem("skyCurrentUser",JSON.stringify(user));
+    loginmsg.innerText="Login successful. Welcome "+user.name;
+    showSection("search");
+  } else {
+    loginmsg.innerText="Invalid email or password.";
+  }
+}
+
+function resetPassword() {
+  let email=forgotemail.value.trim().toLowerCase();
+  let password=newpass.value;
+  let user=users.find(u=>u.email===email);
+
+  if(!user || !password) {
+    forgotmsg.innerText="Enter a valid registered email and new password.";
+    return;
+  }
+  user.password=password;
+  saveData();
+  forgotmsg.innerText="Password changed successfully. Please login.";
+}
+
+function searchFlights() {
+  let from=document.getElementById("from").value;
+  let to=document.getElementById("to").value;
+  let date=document.getElementById("traveldate").value;
+  let travelClass=document.getElementById("travelclass").value;
+
+  if(from===to) {
+    flightresults.innerHTML="<p>Please select different departure and destination cities.</p>";
+    return;
+  }
+  if(!date) {
+    flightresults.innerHTML="<p>Please select a travel date.</p>";
+    return;
+  }
+  if(date < new Date().toISOString().split("T")[0]) {
+    flightresults.innerHTML="<p>Please select a future date.</p>";
+    return;
+  }
+
+  let results=flights.filter(f=>f.from===from && f.to===to && f.seats>0);
+
+  if(results.length===0) {
+    flightresults.innerHTML="<p>No flights available for this route.</p>";
+    return;
+  }
+
+  flightresults.innerHTML="<h3>Available Flights</h3>";
+  results.forEach(f=>{
+    flightresults.innerHTML+=`
+      <div class="flight-card">
+        <h3>${f.name} (${f.number})</h3>
+        <p><strong>From:</strong> ${f.from}</p>
+        <p><strong>To:</strong> ${f.to}</p>
+        <p><strong>Departure:</strong> ${f.time}</p>
+        <p><strong>Date:</strong> ${date}</p>
+        <p><strong>Class:</strong> ${travelClass}</p>
+        <p><strong>Available Seats:</strong> ${f.seats}</p>
+        <h3>₹${f.price}</h3>
+        <button class="btn" onclick="selectFlight(${f.id},'${date}','${travelClass}')">Book Now</button>
+      </div>`;
+  });
+}
+
+function selectFlight(id,date,travelClass) {
+  if(!currentUser) {
+    alert("Please login before booking.");
+    showSection("login");
+    return;
+  }
+
+  selectedFlight=flights.find(f=>f.id===id);
+  selectedFlight.date=date;
+  selectedFlight.travelClass=travelClass;
+  selectedSeat=null;
+
+  selectedflight.innerHTML=`
+    <div class="card">
+      <h3>${selectedFlight.name} - ${selectedFlight.number}</h3>
+      <p>${selectedFlight.from} → ${selectedFlight.to}</p>
+      <p>Date: ${date}</p>
+      <p>Class: ${travelClass}</p>
+      <p>Price: ₹${selectedFlight.price}</p>
+    </div>`;
+
+  generateSeats();
+  passengeremail.value=currentUser.email;
+  passengername.value=currentUser.name;
+  showSection("booking");
+}
+
+function generateSeats() {
+  seatmap.innerHTML="";
+  let count=48;
+  for(let i=1;i<=count;i++) {
+    let seat="S"+i;
+    let btn=document.createElement("button");
+    btn.innerText=seat;
+    btn.className="seat";
+
+    if(selectedFlight.bookedSeats.includes(seat)) {
+      btn.classList.add("booked");
+      btn.disabled=true;
+    } else {
+      btn.onclick=()=>{
+        document.querySelectorAll(".seat").forEach(s=>s.classList.remove("selected"));
+        btn.classList.add("selected");
+        selectedSeat=seat;
+        seatmsg.innerText="Selected seat: "+seat;
+      };
+    }
+    seatmap.appendChild(btn);
+  }
+}
+
+function confirmBooking() {
+  if(!currentUser) {
+    alert("Please login first.");
+    return;
+  }
+  if(!selectedFlight || !selectedSeat) {
+    bookingmsg.innerText="Please select a seat.";
+    return;
+  }
+
+  let name=passengername.value.trim();
+  let age=passengerage.value;
+  let email=passengeremail.value.trim();
+
+  if(!name || !age || Number(age)<=0 || !email) {
+    bookingmsg.innerText="Please enter valid passenger details.";
+    return;
+  }
+
+  if(selectedFlight.bookedSeats.includes(selectedSeat)) {
+    bookingmsg.innerText="This seat is already booked. Select another seat.";
+    generateSeats();
+    return;
+  }
+
+  let pnr="SKY"+Math.floor(100000+Math.random()*900000);
+
+  let booking={
+    pnr,
+    user:currentUser.email,
+    passenger:name,
+    age,
+    email,
+    gender:passengergender.value,
+    flightId:selectedFlight.id,
+    flight:selectedFlight.name,
+    number:selectedFlight.number,
+    from:selectedFlight.from,
+    to:selectedFlight.to,
+    date:selectedFlight.date,
+    time:selectedFlight.time,
+    travelClass:selectedFlight.travelClass,
+    seat:selectedSeat,
+    price:selectedFlight.price,
+    payment:paymentmethod.value,
+    status:"Confirmed"
+  };
+
+  selectedFlight.bookedSeats.push(selectedSeat);
+  selectedFlight.seats=Math.max(0,selectedFlight.seats-1);
+  bookings.push(booking);
+  saveData();
+
+  ticketdetails.innerHTML=`
+    <div class="flight-card" id="printableTicket">
+      <h2>✈ SKYCONNECT E-TICKET</h2>
+      <h3>Booking Confirmed</h3>
+      <p><strong>PNR:</strong> ${pnr}</p>
+      <hr>
+      <p><strong>Passenger:</strong> ${name}</p>
+      <p><strong>Flight:</strong> ${booking.flight} (${booking.number})</p>
+      <p><strong>Route:</strong> ${booking.from} → ${booking.to}</p>
+      <p><strong>Date:</strong> ${booking.date}</p>
+      <p><strong>Time:</strong> ${booking.time}</p>
+      <p><strong>Class:</strong> ${booking.travelClass}</p>
+      <p><strong>Seat:</strong> ${booking.seat}</p>
+      <p><strong>Payment:</strong> ${booking.payment}</p>
+      <h3>Total Amount: ₹${booking.price}</h3>
+      <p>Status: Confirmed</p>
+      <hr>
+      <p>Thank you for booking with SkyConnect!</p>
+    </div>`;
+
+  showSection("ticket");
+  selectedSeat=null;
+  selectedFlight=null;
+}
+
+function showBookings() {
+  let mine=bookings.filter(b=>currentUser && b.user===currentUser.email);
+  bookinghistory.innerHTML="";
+
+  if(!currentUser) {
+    bookinghistory.innerHTML="<p>Please login to view your tickets.</p>";
+    return;
+  }
+
+  if(mine.length===0) {
+    bookinghistory.innerHTML="<p>No bookings found.</p>";
+    return;
+  }
+
+  mine.forEach(b=>{
+    bookinghistory.innerHTML+=`
+      <div class="flight-card">
+        <h3>${b.flight} (${b.number})</h3>
+        <p>${b.from} → ${b.to}</p>
+        <p>Date: ${b.date}</p>
+        <p>Seat: ${b.seat}</p>
+        <p>PNR: <strong>${b.pnr}</strong></p>
+        <p>Status: ${b.status}</p>
+        ${b.status==="Confirmed" ?
+        `<button class="btn" onclick="openCancel('${b.pnr}')">Cancel Ticket</button>`:""}
+      </div>`;
+  });
+}
+
+function openCancel(pnr) {
+  cancelpnr.value=pnr;
+  showSection("cancel");
+}
+
+function cancelTicket() {
+  let pnr=cancelpnr.value.trim();
+  let booking=bookings.find(b=>b.pnr===pnr);
+
+  if(!booking) {
+    cancelmsg.innerText="Booking not found.";
+    return;
+  }
+  if(currentUser && booking.user!==currentUser.email) {
+    cancelmsg.innerText="You can only cancel your own booking.";
+    return;
+  }
+  if(booking.status==="Cancelled") {
+    cancelmsg.innerText="Ticket is already cancelled.";
+    return;
+  }
+
+  booking.status="Cancelled";
+
+  let flight=flights.find(f=>f.id===booking.flightId);
+  if(flight) {
+    flight.bookedSeats=flight.bookedSeats.filter(s=>s!==booking.seat);
+    flight.seats++;
+  }
+
+  saveData();
+  cancelmsg.innerText="Ticket cancelled successfully.";
+}
+
+function checkStatus() {
+  let pnr=statuspnr.value.trim();
+  let booking=bookings.find(b=>b.pnr===pnr);
+
+  if(booking) {
+    statusresult.innerHTML=`
+      <div class="card">
+        <h3>Booking Details</h3>
+        <p>Passenger: ${booking.passenger}</p>
+        <p>Flight: ${booking.flight}</p>
+        <p>Route: ${booking.from} → ${booking.to}</p>
+        <p>PNR: ${booking.pnr}</p>
+        <p>Status: <strong>${booking.status}</strong></p>
+      </div>`;
+  } else {
+    statusresult.innerHTML="<p>No booking found with this PNR.</p>";
+  }
+}
+
+function submitFeedback() {
+  if(!feedbackname.value.trim() || !feedbackemail.value.trim() || !comments.value.trim()) {
+    feedbackmsg.innerText="Please fill all fields.";
+    return;
+  }
+
+  feedbacks.push({
+    name:feedbackname.value,
+    email:feedbackemail.value,
+    rating:rating.value,
+    comments:comments.value
+  });
+
+  saveData();
+  feedbackmsg.innerText="Thank you for your feedback!";
+  feedbackname.value="";
+  feedbackemail.value="";
+  comments.value="";
+}
+
+function adminLogin() {
+  if(adminemail.value==="admin@sky.com" && adminpass.value==="admin123") {
+    adminmsg.innerText="Admin login successful.";
+    showSection("admin");
+  } else {
+    adminmsg.innerText="Invalid administrator credentials.";
+  }
+}
+
+function adminLogout() {
+  showSection("home");
+}
+
+function addFlight() {
+  let name=newflightname.value.trim();
+  let number=newflightno.value.trim();
+  let from=newfrom.value.trim();
+  let to=newto.value.trim();
+  let time=newtime.value;
+  let price=Number(newprice.value);
+  let seats=Number(newseats.value);
+
+  if(!name || !number || !from || !to || !time || price<=0 || seats<1 || seats>48 || from===to) {
+    alert("Please enter valid flight details. Seat count must be between 1 and 48.");
+    return;
+  }
+
+  flights.push({
+    id:Date.now(),
+    name,number,from,to,time,price,seats,
+    bookedSeats:[]
+  });
+
+  saveData();
+  loadAdmin();
+  alert("Flight added successfully.");
+}
+
+function deleteFlight(id) {
+  if(bookings.some(b=>b.flightId===id && b.status==="Confirmed")) {
+    alert("Cannot delete a flight with confirmed bookings.");
+    return;
+  }
+  flights=flights.filter(f=>f.id!==id);
+  saveData();
+  loadAdmin();
+}
+
+function loadAdmin() {
+  totalflights.innerText=flights.length;
+  totalbookings.innerText=bookings.length;
+  totalusers.innerText=users.length;
+
+  adminflights.innerHTML=`
+    <table>
+      <tr><th>Flight</th><th>Route</th><th>Price</th><th>Seats</th><th>Action</th></tr>
+      ${flights.map(f=>`
+        <tr>
+          <td>${f.name} (${f.number})</td>
+          <td>${f.from} → ${f.to}</td>
+          <td>₹${f.price}</td>
+          <td>${f.seats}</td>
+          <td><button class="btn" onclick="deleteFlight(${f.id})">Delete</button></td>
+        </tr>`).join("")}
+    </table>`;
+
+  adminbookings.innerHTML=bookings.length ? `
+    <table>
+      <tr><th>PNR</th><th>Passenger</th><th>Flight</th><th>Date</th><th>Status</th></tr>
+      ${bookings.map(b=>`
+        <tr>
+          <td>${b.pnr}</td>
+          <td>${b.passenger}</td>
+          <td>${b.flight}</td>
+          <td>${b.date}</td>
+          <td>${b.status}</td>
+        </tr>`).join("")}
+    </table>`:"<p>No bookings available.</p>";
+
+  adminusers.innerHTML=users.length ? `
+    <table>
+      <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+      ${users.map(u=>`
+        <tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone}</td></tr>`).join("")}
+    </table>`:"<p>No registered customers.</p>";
+
+  adminfeedback.innerHTML=feedbacks.length ? `
+    <table>
+      <tr><th>Name</th><th>Rating</th><th>Comments</th></tr>
+      ${feedbacks.map(f=>`
+        <tr><td>${f.name}</td><td>${f.rating}</td><td>${f.comments}</td></tr>`).join("")}
+    </table>`:"<p>No feedback received.</p>";
+}
+
+// INITIALIZATION
+saveData();
+
+if(currentUser) {
+  let existing=users.find(u=>u.email===currentUser.email);
+  if(!existing) {
+    currentUser=null;
+    sessionStorage.removeItem("skyCurrentUser");
+  } else {
+    currentUser=existing;
+  }
+}
+
+let today=new Date().toISOString().split("T")[0];
+traveldate.min=today;
+traveldate.value=today;
+
+</script>
+
+</body>
+</html>

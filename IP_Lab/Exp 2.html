@@ -1,0 +1,1179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Stay - Hotel Booking</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, serif;
+    background: #faf7fc;
+    color: #382344;
+    line-height: 1.6;
+}
+
+header {
+    background: #35134d;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    color: #f5d78e;
+    font-size: 28px;
+}
+
+nav {
+    background: #54246b;
+    padding: 13px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+nav a:hover {
+    color: #f5d78e;
+}
+
+.hero {
+    min-height: 350px;
+    background: linear-gradient(90deg, rgba(53,19,77,.88), rgba(53,19,77,.35)),
+    url("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600")
+    center/cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 8%;
+}
+
+.hero h2 {
+    font-size: 42px;
+    color: #f5d78e;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+h2, h3 {
+    color: #54246b;
+    margin-bottom: 15px;
+}
+
+.section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 14px rgba(53,19,77,.08);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0 15px;
+    border: 1px solid #d8c7e1;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background: #75418b;
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 3px;
+}
+
+button:hover {
+    background: #54246b;
+}
+
+.gold-btn {
+    background: #f5d78e;
+    color: #35134d;
+}
+
+.gold-btn:hover {
+    background: #e8c36b;
+}
+
+.danger {
+    background: #b83250;
+}
+
+.danger:hover {
+    background: #8d1f39;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 22px;
+}
+
+.room-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(53,19,77,.12);
+}
+
+.room-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.room-info {
+    padding: 18px;
+}
+
+.room-info p {
+    margin: 7px 0;
+}
+
+.price {
+    color: #75418b;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.message {
+    padding: 12px;
+    background: #f7effa;
+    border-left: 4px solid #75418b;
+    margin: 12px 0;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+}
+
+th, td {
+    padding: 12px;
+    border: 1px solid #e4d8eb;
+    text-align: left;
+}
+
+th {
+    background: #54246b;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #faf7fc;
+}
+
+footer {
+    background: #35134d;
+    color: white;
+    padding: 30px 7%;
+    text-align: center;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #f5d78e;
+    margin: 0 8px;
+}
+
+.small-text {
+    font-size: 13px;
+    color: #76647f;
+}
+
+@media(max-width: 650px) {
+    header {
+        justify-content: center;
+        text-align: center;
+        gap: 10px;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 6px;
+        font-size: 14px;
+    }
+
+    .hero h2 {
+        font-size: 30px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 7px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>ROYAL STAY</h1>
+    <div>Luxury Hotel Booking</div>
+</header>
+
+<nav>
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('rooms')">Rooms</a>
+    <a onclick="showPage('bookings')">My Bookings</a>
+    <a onclick="showPage('about')">About</a>
+    <a onclick="showPage('contact')">Contact</a>
+    <a onclick="showPage('login')">Login</a>
+    <a onclick="logout()">Logout</a>
+    <a onclick="showPage('adminLogin')">Admin</a>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page">
+
+    <section class="hero">
+        <h2>Experience Luxury & Comfort</h2>
+        <p>Find your perfect stay. Enjoy unforgettable moments.</p>
+        <br>
+        <button class="gold-btn" onclick="showPage('rooms')">
+            Explore Rooms
+        </button>
+    </section>
+
+    <div class="container">
+        <div class="section">
+            <h2>Find Your Stay</h2>
+
+            <div class="form-grid">
+                <div>
+                    <label>Destination</label>
+                    <input type="text" id="searchLocation"
+                           placeholder="Enter city">
+                </div>
+
+                <div>
+                    <label>Check-in Date</label>
+                    <input type="date" id="searchCheckin">
+                </div>
+
+                <div>
+                    <label>Check-out Date</label>
+                    <input type="date" id="searchCheckout">
+                </div>
+
+                <div>
+                    <label>Guests</label>
+                    <select id="searchGuests">
+                        <option value="1">1 Guest</option>
+                        <option value="2" selected>2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="searchRooms()">Search Rooms</button>
+            <p id="searchMessage"></p>
+        </div>
+
+        <div class="section">
+            <h2>Why Choose Royal Stay?</h2>
+            <div class="room-grid">
+                <div>
+                    <h3>Luxury Rooms</h3>
+                    <p>Comfortable and well-maintained rooms.</p>
+                </div>
+                <div>
+                    <h3>Easy Booking</h3>
+                    <p>Book your room through a simple online process.</p>
+                </div>
+                <div>
+                    <h3>24/7 Support</h3>
+                    <p>Our team is available to assist you.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ROOMS -->
+<div id="rooms" class="page hidden">
+    <div class="container">
+        <h2>Available Rooms</h2>
+        <div id="roomList" class="room-grid"></div>
+    </div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>Create Account</h2>
+
+            <label>Full Name</label>
+            <input type="text" id="regName" placeholder="Enter your name">
+
+            <label>Email</label>
+            <input type="email" id="regEmail" placeholder="Enter email">
+
+            <label>Phone Number</label>
+            <input type="tel" id="regPhone" placeholder="Enter phone number">
+
+            <label>Password</label>
+            <input type="password" id="regPassword"
+                   placeholder="Create password">
+
+            <button onclick="registerUser()">Register</button>
+            <p>Already registered?
+                <a onclick="showPage('login')">Login here</a>
+            </p>
+            <p id="registerMessage"></p>
+        </div>
+    </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>User Login</h2>
+
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter email">
+
+            <label>Password</label>
+            <input type="password" id="loginPassword"
+                   placeholder="Enter password">
+
+            <button onclick="loginUser()">Login</button>
+
+            <p>New user?
+                <a onclick="showPage('register')">Create an account</a>
+            </p>
+
+            <p id="loginMessage"></p>
+        </div>
+    </div>
+</div>
+
+<!-- BOOKING HISTORY -->
+<div id="bookings" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>My Bookings</h2>
+            <div id="myBookings"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>About Royal Stay</h2>
+            <p>
+                Royal Stay is an online hotel booking platform designed
+                to make room reservations simple and convenient.
+                Users can explore rooms, check availability, and manage
+                their bookings through one website.
+            </p>
+            <br>
+            <h3>Our Services</h3>
+            <p>• Comfortable accommodation</p>
+            <p>• Online room reservations</p>
+            <p>• Booking management</p>
+            <p>• Customer support</p>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>Contact Us</h2>
+
+            <label>Name</label>
+            <input type="text" id="contactName" placeholder="Your name">
+
+            <label>Email</label>
+            <input type="email" id="contactEmail" placeholder="Your email">
+
+            <label>Message</label>
+            <textarea id="contactMessage" rows="5"
+                      placeholder="Write your message"></textarea>
+
+            <button onclick="sendMessage()">Send Message</button>
+            <p id="contactStatus"></p>
+
+            <hr>
+            <br>
+            <p>Email: support@royalstay.com</p>
+            <p>Phone: +91 98765 43210</p>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin" class="page hidden">
+    <div class="container">
+        <div class="section">
+            <h2>Admin Login</h2>
+
+            <label>Admin Email</label>
+            <input type="email" id="adminEmail"
+                   placeholder="Enter admin email">
+
+            <label>Password</label>
+            <input type="password" id="adminPassword"
+                   placeholder="Enter password">
+
+            <button onclick="adminLogin()">Login as Admin</button>
+            <p id="adminLoginMessage"></p>
+
+            <p class="small-text">
+                Demo login: admin@hotel.com / admin123
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminDashboard" class="page hidden">
+    <div class="container">
+
+        <div class="section">
+            <h2>Admin Dashboard</h2>
+            <p>Manage hotel rooms, bookings and registered users.</p>
+
+            <div class="room-grid">
+                <div class="message">
+                    <h3>Total Rooms</h3>
+                    <h2 id="totalRooms">0</h2>
+                </div>
+
+                <div class="message">
+                    <h3>Total Bookings</h3>
+                    <h2 id="totalBookings">0</h2>
+                </div>
+
+                <div class="message">
+                    <h3>Registered Users</h3>
+                    <h2 id="totalUsers">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Manage Rooms</h2>
+
+            <label>Room Type</label>
+            <select id="adminRoomType">
+                <option value="Standard">Standard</option>
+                <option value="Deluxe">Deluxe</option>
+                <option value="Executive">Executive</option>
+                <option value="Suite">Suite</option>
+            </select>
+
+            <label>Price Per Night (₹)</label>
+            <input type="number" id="adminRoomPrice">
+
+            <label>Total Rooms</label>
+            <input type="number" id="adminRoomQuantity">
+
+            <button onclick="updateRoom()">Update Room</button>
+            <div id="adminRoomList"></div>
+        </div>
+
+        <div class="section">
+            <h2>Manage All Bookings</h2>
+            <div id="allBookings"></div>
+        </div>
+
+        <div class="section">
+            <h2>Registered Users</h2>
+            <div id="allUsers"></div>
+        </div>
+
+        <button class="danger" onclick="adminLogout()">Admin Logout</button>
+    </div>
+</div>
+
+<footer>
+    <h2 style="color:#f5d78e">ROYAL STAY</h2>
+    <p>Your comfort is our priority.</p>
+    <p>© 2026 Royal Stay. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// INITIAL ROOM DATA
+
+let rooms = JSON.parse(localStorage.getItem("rooms")) || [
+    {
+        id: 1,
+        name: "Standard",
+        price: 2000,
+        quantity: 10,
+        image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=700",
+        description: "Comfortable room with essential facilities."
+    },
+    {
+        id: 2,
+        name: "Deluxe",
+        price: 3500,
+        quantity: 8,
+        image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=700",
+        description: "Spacious room with premium facilities."
+    },
+    {
+        id: 3,
+        name: "Executive",
+        price: 5000,
+        quantity: 5,
+        image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=700",
+        description: "Elegant room with additional comfort."
+    },
+    {
+        id: 4,
+        name: "Suite",
+        price: 8000,
+        quantity: 3,
+        image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=700",
+        description: "Luxury suite with premium accommodation."
+    }
+];
+
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+let currentUser = JSON.parse(sessionStorage.getItem("currentUser")) || null;
+let isAdmin = sessionStorage.getItem("isAdmin") === "true";
+
+let selectedCheckin = "";
+let selectedCheckout = "";
+let selectedGuests = 2;
+let selectedLocation = "";
+
+function saveData() {
+    localStorage.setItem("rooms", JSON.stringify(rooms));
+    localStorage.setItem("users", JSON.stringify(users));
+    localStorage.setItem("bookings", JSON.stringify(bookings));
+}
+
+function showPage(pageId) {
+
+    if (pageId === "bookings" && !currentUser) {
+        alert("Please login to view your bookings.");
+        pageId = "login";
+    }
+
+    if (pageId === "adminDashboard" && !isAdmin) {
+        pageId = "adminLogin";
+    }
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.add("hidden");
+    });
+
+    document.getElementById(pageId).classList.remove("hidden");
+
+    if (pageId === "rooms") displayRooms();
+    if (pageId === "bookings") displayMyBookings();
+    if (pageId === "adminDashboard") displayAdminDashboard();
+}
+
+function registerUser() {
+
+    let name = document.getElementById("regName").value.trim();
+    let email = document.getElementById("regEmail").value.trim().toLowerCase();
+    let phone = document.getElementById("regPhone").value.trim();
+    let password = document.getElementById("regPassword").value;
+
+    if (!name || !email || !phone || !password) {
+        alert("Please fill all fields.");
+        return;
+    }
+
+    if (users.some(user => user.email === email)) {
+        alert("Email already registered.");
+        return;
+    }
+
+    users.push({
+        id: Date.now(),
+        name,
+        email,
+        phone,
+        password
+    });
+
+    saveData();
+
+    document.getElementById("registerMessage").innerText =
+        "Registration successful! Please login.";
+
+    document.getElementById("regName").value = "";
+    document.getElementById("regEmail").value = "";
+    document.getElementById("regPhone").value = "";
+    document.getElementById("regPassword").value = "";
+
+    setTimeout(() => showPage("login"), 1000);
+}
+
+function loginUser() {
+
+    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    let password = document.getElementById("loginPassword").value;
+
+    let user = users.find(
+        u => u.email === email && u.password === password
+    );
+
+    if (!user) {
+        document.getElementById("loginMessage").innerText =
+            "Invalid email or password.";
+        return;
+    }
+
+    currentUser = user;
+    sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+    alert("Login successful. Welcome " + user.name);
+
+    showPage("home");
+}
+
+function logout() {
+
+    currentUser = null;
+    sessionStorage.removeItem("currentUser");
+
+    alert("Logged out successfully.");
+    showPage("home");
+}
+
+// ROOM SEARCH
+
+function searchRooms() {
+
+    selectedLocation = document.getElementById("searchLocation").value.trim();
+    selectedCheckin = document.getElementById("searchCheckin").value;
+    selectedCheckout = document.getElementById("searchCheckout").value;
+    selectedGuests = Number(document.getElementById("searchGuests").value);
+
+    if (!selectedLocation || !selectedCheckin || !selectedCheckout) {
+        alert("Please enter destination and travel dates.");
+        return;
+    }
+
+    let start = new Date(selectedCheckin + "T00:00:00");
+    let end = new Date(selectedCheckout + "T00:00:00");
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (start < today || end <= start) {
+        alert("Please select valid check-in and check-out dates.");
+        return;
+    }
+
+    document.getElementById("searchMessage").innerText =
+        "Showing rooms for " + selectedLocation;
+
+    showPage("rooms");
+}
+
+// CHECK ROOM AVAILABILITY
+
+function getAvailableRooms(room) {
+
+    if (!selectedCheckin || !selectedCheckout) {
+        return room.quantity;
+    }
+
+    let occupied = bookings.filter(booking => {
+
+        if (booking.roomId !== room.id || booking.status !== "Confirmed") {
+            return false;
+        }
+
+        return selectedCheckin < booking.checkout &&
+               selectedCheckout > booking.checkin;
+
+    }).length;
+
+    return Math.max(0, room.quantity - occupied);
+}
+
+// DISPLAY ROOMS
+
+function displayRooms() {
+
+    let roomList = document.getElementById("roomList");
+    roomList.innerHTML = "";
+
+    rooms.forEach(room => {
+
+        let available = getAvailableRooms(room);
+
+        roomList.innerHTML += `
+            <div class="room-card">
+
+                <img src="${room.image}" alt="${room.name} room">
+
+                <div class="room-info">
+
+                    <h3>${room.name} Room</h3>
+
+                    <p>${room.description}</p>
+
+                    <p class="price">₹${room.price} / night</p>
+
+                    <p>Available Rooms: ${available}</p>
+
+                    <button onclick="bookRoom(${room.id})"
+                    ${available <= 0 ? "disabled" : ""}>
+                    Book Now
+                    </button>
+
+                </div>
+            </div>
+        `;
+    });
+}
+
+// BOOK ROOM
+
+function bookRoom(roomId) {
+
+    if (!currentUser) {
+        alert("Please login before booking.");
+        showPage("login");
+        return;
+    }
+
+    if (!selectedCheckin || !selectedCheckout) {
+        alert("Please search for rooms with your travel dates first.");
+        showPage("home");
+        return;
+    }
+
+    let room = rooms.find(r => r.id === roomId);
+    let available = getAvailableRooms(room);
+
+    if (available <= 0) {
+        alert("Sorry, this room is not available.");
+        return;
+    }
+
+    let nights = Math.ceil(
+        (new Date(selectedCheckout) - new Date(selectedCheckin)) /
+        (1000 * 60 * 60 * 24)
+    );
+
+    let total = nights * room.price;
+
+    let confirmation = confirm(
+        "Room: " + room.name +
+        "\nDestination: " + selectedLocation +
+        "\nCheck-in: " + selectedCheckin +
+        "\nCheck-out: " + selectedCheckout +
+        "\nGuests: " + selectedGuests +
+        "\nNights: " + nights +
+        "\nTotal Amount: ₹" + total +
+        "\n\nConfirm Booking?"
+    );
+
+    if (!confirmation) return;
+
+    let booking = {
+        id: Date.now(),
+        userId: currentUser.id,
+        userName: currentUser.name,
+        email: currentUser.email,
+        roomId: room.id,
+        roomName: room.name,
+        location: selectedLocation,
+        checkin: selectedCheckin,
+        checkout: selectedCheckout,
+        guests: selectedGuests,
+        nights,
+        total,
+        status: "Confirmed",
+        createdAt: new Date().toLocaleDateString()
+    };
+
+    bookings.push(booking);
+    saveData();
+
+    alert("Booking confirmed successfully!");
+
+    displayRooms();
+    showPage("bookings");
+}
+
+// USER BOOKING HISTORY
+
+function displayMyBookings() {
+
+    let output = document.getElementById("myBookings");
+
+    let myList = bookings.filter(
+        b => b.userId === currentUser.id
+    );
+
+    if (myList.length === 0) {
+        output.innerHTML = "<p>No bookings found.</p>";
+        return;
+    }
+
+    output.innerHTML = `
+        <table>
+            <tr>
+                <th>Booking ID</th>
+                <th>Room</th>
+                <th>Destination</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            ${myList.map(b => `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>${b.roomName}</td>
+                    <td>${b.location}</td>
+                    <td>${b.checkin}</td>
+                    <td>${b.checkout}</td>
+                    <td>₹${b.total}</td>
+                    <td>${b.status}</td>
+                    <td>
+                        ${b.status === "Confirmed" ?
+                        `<button class="danger"
+                        onclick="cancelBooking(${b.id})">
+                        Cancel</button>` : "-"}
+                    </td>
+                </tr>
+            `).join("")}
+        </table>
+    `;
+}
+
+// CANCEL BOOKING
+
+function cancelBooking(bookingId) {
+
+    let booking = bookings.find(b => b.id === bookingId);
+
+    if (!booking) return;
+
+    let checkinDate = new Date(booking.checkin + "T00:00:00");
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let daysLeft = Math.ceil(
+        (checkinDate - today) / (1000 * 60 * 60 * 24)
+    );
+
+    if (daysLeft < 3) {
+        alert("Cancellation is allowed only 3 or more days before check-in.");
+        return;
+    }
+
+    if (confirm("Are you sure you want to cancel this booking?")) {
+
+        booking.status = "Cancelled";
+
+        saveData();
+        displayMyBookings();
+
+        alert("Booking cancelled successfully.");
+    }
+}
+
+// ADMIN LOGIN
+
+function adminLogin() {
+
+    let email = document.getElementById("adminEmail").value;
+    let password = document.getElementById("adminPassword").value;
+
+    if (email === "admin@hotel.com" && password === "admin123") {
+
+        isAdmin = true;
+        sessionStorage.setItem("isAdmin", "true");
+
+        alert("Admin login successful.");
+
+        showPage("adminDashboard");
+
+    } else {
+
+        document.getElementById("adminLoginMessage").innerText =
+            "Invalid admin credentials.";
+    }
+}
+
+function adminLogout() {
+
+    isAdmin = false;
+    sessionStorage.removeItem("isAdmin");
+
+    alert("Admin logged out.");
+    showPage("home");
+}
+
+// ADMIN DASHBOARD
+
+function displayAdminDashboard() {
+
+    document.getElementById("totalRooms").innerText =
+        rooms.reduce((sum, room) => sum + Number(room.quantity), 0);
+
+    document.getElementById("totalBookings").innerText =
+        bookings.length;
+
+    document.getElementById("totalUsers").innerText =
+        users.length;
+
+    displayAdminRooms();
+    displayAllBookings();
+    displayAllUsers();
+}
+
+// UPDATE ROOM DETAILS
+
+function updateRoom() {
+
+    if (!isAdmin) return;
+
+    let type = document.getElementById("adminRoomType").value;
+    let price = Number(document.getElementById("adminRoomPrice").value);
+    let quantity = Number(document.getElementById("adminRoomQuantity").value);
+
+    if (!price || !quantity || price < 0 || quantity < 0 ||
+        !Number.isInteger(quantity)) {
+        alert("Enter valid price and room quantity.");
+        return;
+    }
+
+    let room = rooms.find(r => r.name === type);
+
+    if (room) {
+
+        room.price = price;
+        room.quantity = quantity;
+
+        saveData();
+
+        alert("Room details updated successfully.");
+
+        displayAdminDashboard();
+    }
+}
+
+function displayAdminRooms() {
+
+    let output = document.getElementById("adminRoomList");
+
+    output.innerHTML = `
+        <table>
+            <tr>
+                <th>Room Type</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+
+            ${rooms.map(room => `
+                <tr>
+                    <td>${room.name}</td>
+                    <td>₹${room.price}</td>
+                    <td>${room.quantity}</td>
+                </tr>
+            `).join("")}
+        </table>
+    `;
+}
+
+// ADMIN BOOKING MANAGEMENT
+
+function displayAllBookings() {
+
+    let output = document.getElementById("allBookings");
+
+    if (bookings.length === 0) {
+        output.innerHTML = "<p>No bookings available.</p>";
+        return;
+    }
+
+    output.innerHTML = `
+        <table>
+            <tr>
+                <th>Booking ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            ${bookings.map(b => `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>${b.userName}</td>
+                    <td>${b.email}</td>
+                    <td>${b.roomName}</td>
+                    <td>${b.checkin}</td>
+                    <td>${b.checkout}</td>
+                    <td>₹${b.total}</td>
+                    <td>${b.status}</td>
+                    <td>
+                        ${b.status === "Confirmed" ?
+                        `<button class="danger"
+                        onclick="adminCancelBooking(${b.id})">
+                        Cancel</button>` : "-"}
+                    </td>
+                </tr>
+            `).join("")}
+        </table>
+    `;
+}
+
+function adminCancelBooking(id) {
+
+    let booking = bookings.find(b => b.id === id);
+
+    if (!booking) return;
+
+    if (confirm("Admin: Cancel this booking?")) {
+
+        booking.status = "Cancelled";
+
+        saveData();
+        displayAdminDashboard();
+
+        alert("Booking cancelled.");
+    }
+}
+
+// ADMIN USER MANAGEMENT
+
+function displayAllUsers() {
+
+    let output = document.getElementById("allUsers");
+
+    if (users.length === 0) {
+        output.innerHTML = "<p>No registered users.</p>";
+        return;
+    }
+
+    output.innerHTML = `
+        <table>
+            <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+
+            ${users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                </tr>
+            `).join("")}
+        </table>
+    `;
+}
+
+// CONTACT FORM
+
+function sendMessage() {
+
+    let name = document.getElementById("contactName").value.trim();
+    let email = document.getElementById("contactEmail").value.trim();
+    let message = document.getElementById("contactMessage").value.trim();
+
+    if (!name || !email || !message) {
+        alert("Please complete all contact form fields.");
+        return;
+    }
+
+    alert("Thank you! Your message has been submitted.");
+
+    document.getElementById("contactName").value = "";
+    document.getElementById("contactEmail").value = "";
+    document.getElementById("contactMessage").value = "";
+
+    document.getElementById("contactStatus").innerText =
+        "Your message was submitted successfully.";
+}
+
+// INITIAL PAGE
+
+displayRooms();
+
+if (currentUser) {
+    sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+}
+
+</script>
+
+</body>
+</html>
